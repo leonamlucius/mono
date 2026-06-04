@@ -3,6 +3,41 @@
   height: 90dvh;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   justify-content: flex-start;
+  overflow:hidden;
+  overflow-y: scroll;
+  scrollbar-color: #b8b7b7 transparent;
+}
+
+.message{
+  max-width: 60%;
+  padding: 10px 15px;
+  margin: 10px;
+  border-radius: 50px;
+  background-color: #fff;
+}
+.bot {
+  background-color: #071A45;
+  color: #fff;
+  align-self: flex-start;
+}
+.user {
+  background-color: #F95903;
+  color: #fff;
+  align-self: flex-end;
+}
+
+
+@media (max-width: 600px) {
+
+  :host {
+  gap: 5px;
+}
+  .message{
+  max-width: 80%;
+  height: auto;
+  padding: 0px 10px;
+  box-sizing: border-box;
+  border-radius: 30px;
+}
 }

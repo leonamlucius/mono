@@ -1,1 +1,3 @@
-
+<div *ngFor="let item of mockUp" [class.bot]="item.sendBy === 'Bot'" [class.user]="item.sendBy === 'User'" class="message">
+  <p>{{ item.text }}</p>
+</div>
