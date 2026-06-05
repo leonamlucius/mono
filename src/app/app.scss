@@ -1,7 +1,21 @@
 :host{
     position: relative;
 }
+.logo-container{
+    position: absolute;
+    top: 10px;
+    left: -15px;
+    background-color: #fcfcfc;
+    width: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 5px 20px;
+    box-sizing: border-box;
+    border-radius: 0 25px 25px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
+}
 :host .send-button{
     display: flex;
     align-items: center;
@@ -9,8 +23,8 @@
     position: absolute;
     width: 40px;
     height: 40px;
-    bottom: 10px;
-    right: 5px;
+    bottom: 15px;
+    right: 10px;
     box-sizing: border-box;
     background-color: #F95903;
     color: #071A45;
@@ -39,5 +53,11 @@
     animation: slideIn 0.4s ease-in;
     border-radius: 50%;
 
+}
+
+@media screen and (max-width: 600px) {
+    .logo-container{
+       width: 35%;
+    }
 }
 

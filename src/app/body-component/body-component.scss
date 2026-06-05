@@ -13,17 +13,18 @@
   max-width: 60%;
   padding: 10px 15px;
   margin: 10px;
-  border-radius: 50px;
+  border-radius: 30px;
   background-color: #fff;
+  color: #fcfcfc;;
+  font-size: 15px;
+  font-weight: 500;
 }
 .bot {
   background-color: #071A45;
-  color: #fff;
   align-self: flex-start;
 }
 .user {
   background-color: #F95903;
-  color: #fff;
   align-self: flex-end;
 }
 
@@ -34,10 +35,10 @@
   gap: 5px;
 }
   .message{
-  max-width: 80%;
+  max-width: 70%;
   height: auto;
-  padding: 0px 10px;
-  box-sizing: border-box;
-  border-radius: 30px;
+  padding: 0px 15px;
+  font-weight: 300;
+  font-size: 14px;
 }
 }
