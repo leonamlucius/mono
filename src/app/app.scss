@@ -16,23 +16,6 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
 }
-:host .send-button{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    bottom: 15px;
-    right: 10px;
-    box-sizing: border-box;
-    background-color: #F95903;
-    color: #071A45;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-}
 
 @keyframes slideIn {
     from {
@@ -45,10 +28,55 @@
     }
 }
 
+.logo-container img{
+    width: 80px;
+}
+
+@keyframes tilt {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(120deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.logo-container img:hover{
+    animation: tilt 0.4s ease-in-out;
+}
+:host .send-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    bottom: 13px;
+    right: 20px;
+    box-sizing: border-box;
+    background-color: #F95903;
+    color: #fcfcfc;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+
+
+
+
+
 :host .send-button:hover{
     border-radius: 50%;
 
 }
+
+
 :host .send-button:hover span {
     animation: slideIn 0.4s ease-in;
     border-radius: 50%;
