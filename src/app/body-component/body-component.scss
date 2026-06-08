@@ -9,6 +9,88 @@
   scrollbar-color: #b8b7b7 transparent;
 }
 
+@keyframes popUp {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes tilt {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(120deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.01);
+    }
+    100% {
+        transform: scale(1);
+    }
+ 
+}
+.logo-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100dvh;
+  }
+
+.logo-container img{
+  width: 150px;
+  background-color: #fcfcfc;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  animation: popUp 0.5s ease;
+}
+
+.logo-container p{
+  width: 40%;
+  height: 70px;
+  padding: 10px 15px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fcfcfc;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: #071A45;
+  animation: fadeIn 1s ease;
+}
+
+.logo-container img:hover{
+    scale: 1.1;
+}
 .message{
   max-width: 60%;
   padding: 10px 15px;
@@ -18,6 +100,7 @@
   color: #fcfcfc;;
   font-size: 15px;
   font-weight: 500;
+  z-index: -10;
 }
 .bot {
   background-color: #071A45;
@@ -26,6 +109,12 @@
 .user {
   background-color: #F95903;
   align-self: flex-end;
+}
+.loading {
+  opacity: 0.8;
+  color: transparent;
+  animation: pulse 1s infinite;
+
 }
 
 
@@ -41,4 +130,12 @@
   font-weight: 300;
   font-size: 14px;
 }
+
+.logo-container p{
+  width: 100%;
+  animation: fadeIn 1s ease;
+  font-size: 15px;
+}
+
+
 }

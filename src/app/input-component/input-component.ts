@@ -1,9 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-input-component',
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './input-component.html',
-  styleUrl: './input-component.scss',
+  styleUrls: ['./input-component.scss'],
 })
-export class InputComponent {}
+export class InputComponent {
+  @Output() textoChange = new EventEmitter<boolean>();
+
+  
+public onInput(event: Event) {
+  const valor = (event.target as HTMLTextAreaElement).value;
+  this.textoChange.emit(valor.trim().length > 0);
+}
+}

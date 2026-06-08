@@ -1,3 +1,16 @@
-<div *ngFor="let item of mockUp" [class.bot]="item.sendBy === 'Bot'" [class.user]="item.sendBy === 'User'" class="message">
-  <p>{{ item.text }}</p>
-</div>
+
+
+
+<ng-container *ngIf="!isInitialized">
+
+  <div class="logo-container">
+    <img src="/img/mono.svg" alt="Logo" class="logo">
+    
+    <p>Faça sua pergunta, dúvidas, curiosidades e conversas com o Mono!</p>
+  </div>
+</ng-container>
+<ng-container *ngIf="isInitialized">
+    <div *ngFor="let item of mockUp" [class.bot]="item.sendBy === 'Bot'" [class.user]="item.sendBy === 'User'" [class.loading]="item.loading" class="message">
+      <p>{{ item.text }}</p>
+    </div>
+</ng-container>
