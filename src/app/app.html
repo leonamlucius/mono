@@ -13,17 +13,24 @@
     </span>
 </button>
 
-<div class="information">
-    <span class="material-symbols-outlined">
+<div *ngIf="!isInitialized()" class="information">
+    <span class="material-symbols-outlined" (click)="createModalInfo()">
         info
     </span>
 </div>
 
-
-<div class="madeBy">
+<div *ngIf="!isInitialized()" class="madeBy">
    <ng-icon name="bootstrapLinkedin" title="LinkedIn" (click)="goTolinkedin()"/>
    <ng-icon name="bootstrapGithub" title="GitHub" (click)="goToGithub()"/>
   
+</div>
+
+
+<div class="modalInfo" *ngIf="showModal">
+    <div class="modalContent">
+        <span class="close" (click)="closeModalInfo()">&times;</span>
+        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minus omnis fugiat fuga eveniet. Quis, veritatis ullam! Odio in cum vero. Vitae architecto sequi assumenda ipsum commodi? Similique illum tempora voluptas.</p>
+    </div>
 </div>
 
 <router-outlet />

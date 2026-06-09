@@ -51,12 +51,16 @@
   max-width: 60%;
   padding: 10px 15px;
   margin: 10px;
-  border-radius: 30px;
-  background-color: #fff;
+  border-radius: 25px;
   color: #fcfcfc;;
   font-size: 15px;
   font-weight: 500;
   z-index: -10;
+  background-image:url('/img/pngtree-vintage-crumpled-craft-package-wrapping-paper-texture-as-a-transparent-background-png-image_11989598.png');
+  background-size: cover;      /* ou contain */
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 .bot {
   background-color: #071A45;

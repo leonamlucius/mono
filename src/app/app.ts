@@ -22,6 +22,8 @@ export class App {
 
   public isTypeSomething = signal(false);
 
+  public showModal = false;
+
 
   public iniciar(): void {
 
@@ -37,7 +39,15 @@ export class App {
     window.open('https://www.linkedin.com/in/leonamlucius/', '_blank');
   }
 
-    public goToGithub(): void {
+  public goToGithub(): void {
     window.open('https://github.com/leonamlucius', '_blank');
+  }
+
+  public createModalInfo(): void {
+    this.showModal = true;
+  }
+
+  public closeModalInfo(): void {
+    this.showModal = false;
   }
 }
