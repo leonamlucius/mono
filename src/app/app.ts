@@ -8,6 +8,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { featherAirplay } from '@ng-icons/feather-icons';
 import { heroUsers } from '@ng-icons/heroicons/outline';
 import { bootstrapLinkedin, bootstrapGithub } from '@ng-icons/bootstrap-icons';
+import { ServiceAi } from './shared/service-ai';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, BodyComponent, InputComponent, ɵEmptyOutletComponent, NgIf, NgClass, NgIcon],
@@ -20,16 +21,43 @@ export class App {
 
   public isInitialized = signal(false);
 
+
+  public chatHistory = signal<{ text: string, sendBy: 'User' | 'Bot', loading: boolean }[]>([]);
+
   public isTypeSomething = signal(false);
 
+  public textoValue = signal('');
+
   public showModal = false;
+
+  constructor(private serviceAi: ServiceAi) {}
 
 
   public iniciar(): void {
 
+    const textArea = document.querySelector('textarea');
+    if (textArea) {
+      textArea.value = '';
+    }
+
     if (!this.isTypeSomething()){
       alert('Digite algo para iniciar a conversa');
       return;
+    }
+
+    this.chatHistory.set([...this.chatHistory(), { text: this.textoValue(), sendBy: 'User', loading: false }]);
+    this.chatHistory.set([...this.chatHistory(), { text: '', sendBy: 'Bot', loading: true }]);
+
+    try{
+      this.serviceAi.sendMessage(this.textoValue())
+        .then(response => {
+          console.log('Response:', response);
+          this.chatHistory.set([...this.chatHistory().slice(0, -1), { text: response, sendBy: 'Bot', loading: false }]);
+
+          console.log('Chat History:', this.chatHistory());
+        });
+    }catch(error){
+      console.error('Error:', error);
     }
     console.log('Iniciar');
     this.isInitialized.set(true);

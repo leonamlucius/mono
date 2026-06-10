@@ -4,8 +4,8 @@
     </div>
 </ng-container>
 
-<app-body-component [isInitialized]="isInitialized()"></app-body-component>
-<app-input-component (textoChange)="isTypeSomething.set($event)"></app-input-component>
+<app-body-component [isInitialized]="isInitialized()" [chatHistory]="chatHistory()"></app-body-component>
+<app-input-component (textoChange)="isTypeSomething.set($event)" (textoValueChange)="textoValue.set($event)"></app-input-component>
 
 <button class="send-button" (click)="iniciar()">
     <span class="material-symbols-outlined">

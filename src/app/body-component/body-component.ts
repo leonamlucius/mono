@@ -24,6 +24,8 @@ export class BodyComponent {
 
   @Input() isInitialized = false;
 
+  @Input() chatHistory: { text: string, sendBy: 'User' | 'Bot', loading: boolean }[] = [];
+
   public mockUp = [
     {
       text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.',

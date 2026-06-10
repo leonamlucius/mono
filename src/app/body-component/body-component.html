@@ -9,7 +9,7 @@
   </div>
 </ng-container>
 <ng-container *ngIf="isInitialized">
-    <div *ngFor="let item of mockUp" [class.bot]="item.sendBy === 'Bot'" [class.user]="item.sendBy === 'User'" [class.loading]="item.loading" class="message">
+    <div *ngFor="let item of chatHistory" [class.bot]="item.sendBy === 'Bot'" [class.user]="item.sendBy === 'User'" [class.loading]="item.loading" class="message">
       <p >{{ item.text }}</p>
     </div>
 </ng-container>
