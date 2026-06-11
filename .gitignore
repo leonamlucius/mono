@@ -1,5 +1,8 @@
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
+# Spring Boot build output
+mono-api/target/
+
 # Compiled output
 /dist
 /tmp
@@ -42,3 +45,6 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+
+mono-api/.mvn/wrapper/maven-wrapper.jar

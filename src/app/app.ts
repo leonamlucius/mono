@@ -33,6 +33,19 @@ export class App {
   constructor(private serviceAi: ServiceAi) {}
 
 
+
+  public scrollToBottom(): void {
+    setTimeout(() => {
+      const chatContainer = document.querySelector('.chat-container') as HTMLElement;
+      if (chatContainer) {
+        chatContainer.scrollTo({
+          top: chatContainer.scrollHeight,
+          behavior: 'smooth'
+        });
+      }
+
+    }, 100);
+  }
   public iniciar(): void {
 
     const textArea = document.querySelector('textarea');
@@ -55,8 +68,11 @@ export class App {
           this.chatHistory.set([...this.chatHistory().slice(0, -1), { text: response, sendBy: 'Bot', loading: false }]);
 
           console.log('Chat History:', this.chatHistory());
+
+          this.scrollToBottom();
         });
     }catch(error){
+      this.scrollToBottom();
       console.error('Error:', error);
     }
     console.log('Iniciar');
