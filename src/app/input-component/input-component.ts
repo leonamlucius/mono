@@ -13,8 +13,10 @@ export class InputComponent {
   @Output() textoValueChange = new EventEmitter<string>();
 
   
-public onInput(event: Event) {
-  const valor = (event.target as HTMLTextAreaElement).value;
+public onInput(event: HTMLTextAreaElement) {
+  const valor = event.value;
+
+  event.style.height = event.scrollHeight + 'px';
 
   this.textoValueChange.emit(valor);
   this.textoChange.emit(valor.trim().length > 0);

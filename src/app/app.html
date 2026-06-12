@@ -14,14 +14,21 @@
 </button>
 
 <div *ngIf="!isInitialized()" class="information">
-    <span class="material-symbols-outlined" (click)="createModalInfo()">
-        info
-    </span>
+    <button (click)="createModalInfo()">
+        <span class="material-symbols-outlined" >
+            info
+        </span>
+    </button>
 </div>
 
 <div *ngIf="!isInitialized()" class="madeBy">
-   <ng-icon name="bootstrapLinkedin" title="LinkedIn" (click)="goTolinkedin()"/>
-   <ng-icon name="bootstrapGithub" title="GitHub" (click)="goToGithub()"/>
+    <button  (click)="goTolinkedin()" >
+    <ng-icon name="bootstrapLinkedin" title="LinkedIn"/>
+   </button>
+   
+   <button (click)="goToGithub()">
+   <ng-icon name="bootstrapGithub" title="GitHub"/>
+    </button>
   
 </div>
 

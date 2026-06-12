@@ -1,3 +1,3 @@
-<textarea (input)="onInput($event)" placeholder="Sobre o que é a sua dúvida?"  (keydown.enter)="$event.preventDefault()"></textarea>
+<textarea #meuTextarea (input)="onInput(meuTextarea)" placeholder="Sobre o que é a sua dúvida?"  (keydown.enter)="$event.preventDefault()"></textarea>
 
 

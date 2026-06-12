@@ -3,25 +3,41 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-}
-
-textarea{
-    width: 100%;
-    height: 67px;
+    align-items: flex-start;
+    background-color: #fcfcfc;
+    min-height: 50px;
     padding: 20px;
     box-sizing: border-box;
     font-size: 16px;
-    border: none;
     border-radius: 25px;
-    resize: none;
-    background-color: #fcfcfc;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    bottom: -64px;
+    transition: all 0.3s ease;
+}
+
+textarea{
+    border-radius: 0px !important;
+    width: 96%;
+    border: none;
+    resize: none;
     transition: all 0.3s ease;
     font-family: 'Arvo', serif;
+    font-size: 16px;
+    overflow: hidden;
+    height: auto;
+    max-height: 90px;
+    overflow-y: auto;
 }
 
 textarea:focus{
     outline: none;
     border-radius: 15px;
+}
+
+@media screen and (max-width: 600px) {
+    textarea{
+        width: 80%;
+    }
+    
 }

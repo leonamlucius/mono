@@ -49,6 +49,13 @@
 }
 .message{
   min-width: 80px;
+  overflow: hidden;
+  white-space: normal;
+  width: fit-content;
+  word-break: break-all;
+
+  height: auto;
+  max-width: 50%;
   text-align: center;
   padding: 10px 15px;
   margin: 10px;
