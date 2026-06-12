@@ -46,12 +46,20 @@ export class App {
 
     }, 100);
   }
+
+  public limparEResetar(meuTextarea: HTMLTextAreaElement): void {
+   
+      const textarea = meuTextarea;
+      textarea.value = '';
+      textarea.style.height = 'auto'; // Reseta a altura para o min-height do CSS
+      
+    
+  }
   public iniciar(): void {
 
     const textArea = document.querySelector('textarea');
-    if (textArea) {
-      textArea.value = '';
-    }
+    
+    this.limparEResetar(textArea as HTMLTextAreaElement);
 
     if (!this.isTypeSomething()){
       alert('Digite algo para iniciar a conversa');
