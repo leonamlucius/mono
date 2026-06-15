@@ -94,6 +94,11 @@
     animation: slideIn 0.4s ease-in;
     border-radius: 50%;
 }
+:host .send-button.disabled{
+    background-color: #ccc;
+    cursor: not-allowed;
+    pointer-events: none;
+}
 .information{
     position: absolute;
     top: 10px;
@@ -221,6 +226,12 @@
     top: 70px;
     right: 20px;  
 }
+
+
+:host .send-button{
+    bottom: -70px;
+}
+
 }
 
 

@@ -52,14 +52,17 @@ export class App {
       const textarea = meuTextarea;
       textarea.value = '';
       textarea.style.height = 'auto'; // Reseta a altura para o min-height do CSS
+      this.textoValue.set('');
+      
       
     
   }
-  public iniciar(): void {
+  public iniciar(buttonEnviar: HTMLButtonElement): void {
+
+    buttonEnviar.classList.add('disabled');
 
     const textArea = document.querySelector('textarea');
     
-    this.limparEResetar(textArea as HTMLTextAreaElement);
 
     if (!this.isTypeSomething()){
       alert('Digite algo para iniciar a conversa');
@@ -70,6 +73,14 @@ export class App {
     this.chatHistory.set([...this.chatHistory(), { text: '', sendBy: 'Bot', loading: true }]);
 
     try{
+
+      if(this.textoValue().trim() === ''){
+        alert('Digite algo para iniciar a conversa');
+        buttonEnviar.classList.remove('disabled');
+        this.chatHistory.set(this.chatHistory().slice(0, -2));
+        return;
+      }
+      
       this.serviceAi.sendMessage(this.textoValue())
         .then(response => {
           console.log('Response:', response);
@@ -77,11 +88,15 @@ export class App {
 
           console.log('Chat History:', this.chatHistory());
 
+          buttonEnviar.classList.remove('disabled');
+          this.limparEResetar(textArea as HTMLTextAreaElement);
+
           this.scrollToBottom();
         });
     }catch(error){
       this.scrollToBottom();
       console.error('Error:', error);
+      buttonEnviar.classList.remove('disabled');
     }
     console.log('Iniciar');
     this.isInitialized.set(true);
