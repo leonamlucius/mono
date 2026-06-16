@@ -8,8 +8,12 @@
 <app-input-component (textoChange)="isTypeSomething.set($event)" (textoValueChange)="textoValue.set($event)" (keyup.enter)="iniciar(buttonEnviar)"> </app-input-component>
 
 <button #buttonEnviar class="send-button" (click)="iniciar(buttonEnviar)">
-    <span class="material-symbols-outlined">
+    <span *ngIf="!showLoading()" class="material-symbols-outlined">
      chevron_right
+    </span>
+
+    <span *ngIf="showLoading()" class="material-symbols-outlined" id="loadingIcon">
+        progress_activity
     </span>
 </button>
 

@@ -111,6 +111,19 @@
     cursor: not-allowed;
     pointer-events: none;
 }
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+:host .send-button #loadingIcon {
+    animation: rotate 1s linear infinite;
+}
 .information{
     position: absolute;
     top: 10px;
@@ -244,7 +257,15 @@
        width: 35%;
 }
 
- .information{
+.modalErrorPai{
+    width: 90%;
+    left: 5%;
+    right: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.information{
     position: absolute;
     top: 10px;
     right: 20px;
@@ -259,7 +280,6 @@
     cursor: pointer;
     
 }
-
 .madeBy{
     height: 6%;
     width: 110px;
@@ -274,7 +294,6 @@
     top: 70px;
     right: 20px;  
 }
-
 
 :host .send-button{
     bottom: -70px;

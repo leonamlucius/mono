@@ -31,13 +31,26 @@ export class App {
   public showModal = false;
 
   public showModalErrorPai = signal(false);
+
   public isClosingModalPai = signal(false);
+
   public modalErrorTextPai = '';
+
   private modalTimerPai: any;
+
+  public showLoading = signal(false);
 
   
   constructor(private serviceAi: ServiceAi) {}
 
+
+  showLoadingIndicator() {
+    this.showLoading.set(true);
+  }
+
+  hideLoadingIndicator() {
+    this.showLoading.set(false);
+  }
 
   public mostrarModalErroPai(texto: string): void {
   if (this.modalTimerPai) {
@@ -93,6 +106,7 @@ private fecharModalPaiComAnimacao(): void {
   public iniciar(buttonEnviar: HTMLButtonElement): void {
 
     buttonEnviar.classList.add('disabled');
+    this.showLoadingIndicator();
 
     const textArea = document.querySelector('textarea');
     
@@ -100,6 +114,7 @@ private fecharModalPaiComAnimacao(): void {
     if (!this.isTypeSomething()){
       this.mostrarModalErroPai('Digite algo para iniciar a conversa');
       buttonEnviar.classList.remove('disabled');
+      this.hideLoadingIndicator();
       return;
     }
 
@@ -112,6 +127,7 @@ private fecharModalPaiComAnimacao(): void {
         this.mostrarModalErroPai('Digite algo para continuar a conversa');
         buttonEnviar.classList.remove('disabled');
         this.chatHistory.set(this.chatHistory().slice(0, -2));
+        this.hideLoadingIndicator();
         return;
       }
       
@@ -125,6 +141,7 @@ private fecharModalPaiComAnimacao(): void {
             this.chatHistory.set([...this.chatHistory().slice(0, -1), { text: response, sendBy: 'Bot', loading: false }]);
             console.log('Chat History:', this.chatHistory());
             buttonEnviar.classList.remove('disabled');
+            this.hideLoadingIndicator();
             this.scrollToBottom();
           }, 500);
           
@@ -133,6 +150,7 @@ private fecharModalPaiComAnimacao(): void {
       this.scrollToBottom();
       console.error('Error:', error);
       buttonEnviar.classList.remove('disabled');
+      this.hideLoadingIndicator();
     }
     console.log('Iniciar');
     this.isInitialized.set(true);
