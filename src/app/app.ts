@@ -30,58 +30,43 @@ export class App {
 
   public showModal = false;
 
-  public modalErrorText = '';
-
-  public showModalError = false;
-
-  private modalTimer: any;
-
-  public isClosingModal = signal(false);
+  public showModalErrorPai = signal(false);
+  public isClosingModalPai = signal(false);
+  public modalErrorTextPai = '';
+  private modalTimerPai: any;
 
   
-
   constructor(private serviceAi: ServiceAi) {}
 
 
-
-  public mostrarModalErroAutomatico(texto: string): void {
-
-    console.log('Mostrando modal de erro automático:', texto);
-
-    if (this.modalTimer) {
-      clearTimeout(this.modalTimer);
-    }
-
-
-    this.isClosingModal.set(false);
-    this.modalErrorText = texto;
-    this.showModalError = true;
-
-
-    const tempoVisivel = 5000; // Tempo que o modal ficará visível
-
-    this.modalTimer = setTimeout(() => {
-      this.fecharModalCOmAnimacao();
-    }, tempoVisivel);
-
-    
+  public mostrarModalErroPai(texto: string): void {
+  if (this.modalTimerPai) {
+    clearTimeout(this.modalTimerPai);
   }
-  public triggerCloseModalError(modalElement: HTMLElement | null): void {
-    if (modalElement) {
-      clearTimeout(this.modalTimer);
-    }
-    this.fecharModalCOmAnimacao();
-  }
-  
- 
-  public fecharModalCOmAnimacao(): void {
-    this.isClosingModal.set(true);
 
-    setTimeout(() => {
-      this.showModalError = false;
-      this.isClosingModal.set(false);
-    }, 900); // Tempo para a animação de fechamento (ajuste conforme necessário)
+  this.isClosingModalPai.set(false);
+  this.modalErrorTextPai = texto;
+  this.showModalErrorPai.set(true);
+
+  this.modalTimerPai = setTimeout(() => {
+    this.fecharModalPaiComAnimacao();
+  }, 5000);
+}
+
+public triggerCloseModalPai(): void {
+  if (this.modalTimerPai) {
+    clearTimeout(this.modalTimerPai);
   }
+  this.fecharModalPaiComAnimacao();
+}
+
+private fecharModalPaiComAnimacao(): void {
+  this.isClosingModalPai.set(true);
+  setTimeout(() => {
+    this.showModalErrorPai.set(false);
+    this.isClosingModalPai.set(false);
+  }, 500); // Tempo sincronizado com o CSS
+}
   public scrollToBottom(): void {
     setTimeout(() => {
       const chatContainer = document.querySelector('.chat-container') as HTMLElement;
@@ -113,7 +98,7 @@ export class App {
     
 
     if (!this.isTypeSomething()){
-      this.mostrarModalErroAutomatico('Digite algo para iniciar a conversa');
+      this.mostrarModalErroPai('Digite algo para iniciar a conversa');
       buttonEnviar.classList.remove('disabled');
       return;
     }
@@ -124,7 +109,7 @@ export class App {
     try{
 
       if(this.textoValue().trim() === ''){
-        this.mostrarModalErroAutomatico('Digite algo para continuar a conversa');
+        this.mostrarModalErroPai('Digite algo para continuar a conversa');
         buttonEnviar.classList.remove('disabled');
         this.chatHistory.set(this.chatHistory().slice(0, -2));
         return;

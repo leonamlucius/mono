@@ -59,6 +59,7 @@
     border-radius: 0 25px 25px 0;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     animation: slideLeft 0.5s ease-in-out;
+    z-index: 1;
 }
 
 .logo-container img{
@@ -202,48 +203,40 @@
 }
 
 
-.modalError{
-    position: absolute;
-    top: 10px;
-    right: -10px;
-    background-color: #fcfcfc;
-    color: black;
-    width: 350px;
-    padding: 10px;
-    box-sizing: border-box;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    animation: slideTop 0.5s ease-in-out;
-}
-::ng-deep .modalError.exit,
-::ng-deep .exit {
-   animation: slideTop 0.9s ease-in-out reverse forwards !important;
-}
-.modalError .modalContent{
-    width: 100%;
-    min-width: 200px;
-    max-width: 350px;
-    height: 100%;
-    display: flex;
-    padding: 5px 10px;
-    box-sizing: border-box;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items:center;
+@keyframes slideTopIn {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
-
-.modalError .close{
-    position: absolute;
-    cursor: pointer;
-    right: 10px;
-    top: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+@keyframes slideTopOut {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-100%); opacity: 0; }
 }
 
-.modalError .close:hover{
-    transform: scale(1.1);
+.modalErrorPai {
+  position: fixed;
+  top: 20px;                  /* <-- Deixei em 90px (o do filho está em 20px) para não sobrepor se nascerem juntos */
+  right: 20px;
+  background-color: #fcfcfc !important; /* Cor diferente (azul do bot) para diferenciar do seu filho */
+  width: 350px;
+  padding: 15px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  animation: slideTopIn 0.5s ease-in-out forwards;
+}
+
+.modalErrorPai.exitPai {
+  animation: slideTopOut 0.5s ease-in-out forwards !important;
+}
+
+.modalErrorPai .close {
+  position: absolute;
+  cursor: pointer;
+  right: 15px;
+  top: 10px;
+  color: #fcfcfc;
 }
 
 @media screen and (max-width: 600px) {

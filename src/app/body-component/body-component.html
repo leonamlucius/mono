@@ -1,6 +1,4 @@
 
-
-
 <ng-container *ngIf="!isInitialized">
 
   <div class="logo-container">
@@ -11,5 +9,22 @@
 <div *ngIf="isInitialized" class="chat-container">
     <div *ngFor="let item of chatHistory" [class.bot]="item.sendBy === 'Bot'" [class.user]="item.sendBy === 'User'" [class.loading]="item.loading" class="message">
       <p >{{ item.text }}</p>
+
+      <div class="actions">
+        <button (click)="copyToClipboard(item.text)">
+          <span class="material-symbols-outlined">
+          content_copy
+          </span>
+        </button>
+
+      </div>
+    </div>
+</div>
+
+
+<div class="modalErrorBody" *ngIf="showModalError()" [ngClass]="{'exit': isClosingModal() }">
+    <span #modalError class="close" (click)="triggerCloseModalError()">&times;</span>
+    <div class="modalContent">
+        <p>{{ modalErrorText }}</p>
     </div>
 </div>

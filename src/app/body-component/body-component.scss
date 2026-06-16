@@ -48,11 +48,11 @@
     scale: 1.1;
 }
 .message{
-  min-width: 80px;
+  display: flex;
+  flex-direction: column;
   white-space: normal;
   width: fit-content;
-  word-break: break-all;
-
+  word-break:keep-all;
   height: auto;
   max-width: 50%;
   text-align: center;
@@ -62,20 +62,58 @@
   color: #fcfcfc;;
   font-size: 15px;
   font-weight: 500;
-  z-index: -10;
   background-image:url('/img/pngtree-vintage-crumpled-craft-package-wrapping-paper-texture-as-a-transparent-background-png-image_11989598.png');
   background-size: cover;      /* ou contain */
   background-position: center;
   background-repeat: no-repeat;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
+
+.actions{
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 10px;  
+  background: red;
+}
+
+.actions button{
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #fcfcfc;
+  font-size: 18px;
+  height: 30px;
+  width: 30px;
+  transition: all 0.3s ease;
+}
+.actions button:hover{
+  scale: 1.02;
+  
+}
+
+.actions button span{
+  font-size: 20px;
+}
 .bot {
   background-color: #071A45;
   align-self: flex-start;
+   min-width: 110px;
+}
+
+.bot .actions{
+  justify-content: flex-end; /* Alinha os botões à esquerda */
+  background: transparent;     /* Tire o 'red' de teste quando funcionar */
 }
 .user {
   background-color: #F95903;
-  align-self: flex-end;
+  align-self: flex-end !important;
+  min-width: 110px;
+}
+
+.user .actions{
+ justify-content: flex-start !important;   /* Alinha os botões à direita! */
+  background: transparent;
 }
 .loading {
   opacity: 0.8;
@@ -85,6 +123,10 @@
   min-height: 9%;
 
 }
+
+.loading .actions{
+  display: none;
+}
 .chat-container {
   display: flex;
   flex-direction: column;
@@ -92,7 +134,66 @@
   height: 100%;
   overflow-y: auto;
 }
+@keyframes slideTop {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
 
+
+@keyframes slideTopIn {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideTopOut {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-100%); opacity: 0; }
+}
+
+.modalErrorBody{
+  position: fixed;
+  top: 20px;                  /* <-- Deixei em 90px (o do filho está em 20px) para não sobrepor se nascerem juntos */
+  right: 20px;
+  background-color: #fcfcfc !important; /* Cor diferente (azul do bot) para diferenciar do seu filho */
+  width: 350px;
+  height: auto;
+  padding: 15px 8px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: slideTopIn 0.5s ease-in-out forwards;
+}
+::ng-deep .modalErrorBody.exit,
+::ng-deep .exit {
+   animation: slideTopOut 0.5s ease-in-out  forwards !important;
+}
+.modalErrorBody .modalContent{
+ width: 100%;
+}
+
+
+.modalErrorBody .close{
+    position: absolute;
+    cursor: pointer;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modalErrorBody .close:hover{
+    transform: scale(1.1);
+}
 @media (max-width: 600px) {
 
   :host {
@@ -121,6 +222,7 @@
   text-align: center;
   
 }
+
 
 
 }

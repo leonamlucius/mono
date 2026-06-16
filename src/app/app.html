@@ -40,10 +40,10 @@
     </div>
 </div>
 
-<div class="modalError" *ngIf="showModalError" [ngClass]="{'exit': isClosingModal() }">
-    <span #modalError class="close" (click)="triggerCloseModalError(modalError)">&times;</span>
+<div class="modalErrorPai" *ngIf="showModalErrorPai()" [ngClass]="{'exitPai': isClosingModalPai() }">
+    <span #modalErrorPai class="close" (click)="triggerCloseModalPai()">&times;</span>
     <div class="modalContent">
-        <p>{{ modalErrorText }}</p>
+        <p>{{ modalErrorTextPai }}</p>
     </div>
 </div>
 

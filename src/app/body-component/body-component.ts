@@ -1,5 +1,5 @@
 import { Component, Input, signal} from '@angular/core';
-import { NgFor, NgIf, AsyncPipe} from '@angular/common';
+import { NgFor, NgIf, AsyncPipe, NgClass} from '@angular/common';
 import { Observable } from 'rxjs';
 import { trigger, transition, style, animate } from '@angular/animations';
 
@@ -8,7 +8,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-body-component',
-  imports: [NgFor, NgIf, AsyncPipe],
+  imports: [NgFor, NgIf, AsyncPipe, NgClass],
   templateUrl: './body-component.html',
   styleUrls: ['./body-component.scss'],
    animations: [
@@ -26,65 +26,13 @@ export class BodyComponent {
 
   @Input() chatHistory: { text: string, sendBy: 'User' | 'Bot', loading: boolean }[] = [];
 
-  public mockUp = [
-    {
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.',
-      sendBy: "User",
-      loading: true
-    },
-     {
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.',
-      sendBy: "Bot",
-      loading: true
+  public showModalError = signal(false);
 
-    },
+  public isClosingModal = signal(false);
 
-    {
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.',
-      sendBy: "User",
-       loading: false
-    },
-     {
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.',
-      sendBy: "Bot",
-      loading: false
-    },
-    {
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.',
-      sendBy: "User",
-       loading: true
+  private modalTimer: any;
 
-    },
-     {
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.',
-      sendBy: "Bot",
-      loading: true
-    },
-
-    {
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.',
-      sendBy: "User",
-      loading: false
-    },
-     {
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.',
-      sendBy: "Bot",
-      loading: false
-    },
-
-    {
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.',
-      sendBy: "User",
-      loading: false
-    },
-     {
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.',
-      sendBy: "Bot",
-      loading: false
-    },
-    
-
-  ]
+  public modalErrorText = '';
 
 
  public textoAtual = signal('');
@@ -105,6 +53,49 @@ export class BodyComponent {
       text: 'O Mono é uma ferramenta útil para quem busca informações rápidas e confiáveis, seja para resolver dúvidas do dia a dia, obter insights sobre um assunto específico ou simplesmente ter uma conversa interessante. Experimente o Mono e descubra como ele pode facilitar sua vida com respostas inteligentes e eficientes!',
     }
   ]
+
+
+  public mostrarModalErroAutomatico(texto: string): void {
+
+    console.log('Mostrando modal de erro automático:', texto);
+
+    if (this.modalTimer) {
+      clearTimeout(this.modalTimer);
+    }
+
+
+    this.isClosingModal.set(false);
+    this.modalErrorText = texto;
+    this.showModalError.set(true);
+
+
+    this.modalTimer = setTimeout(() => {
+      this.fecharModalCOmAnimacao();
+    }, 5000);
+
+    
+  }
+  public triggerCloseModalError(): void {
+    if (this.modalTimer) {
+      clearTimeout(this.modalTimer);
+    }
+    this.fecharModalCOmAnimacao();
+  }
+  
+
+  public fecharModalCOmAnimacao(): void {
+    this.isClosingModal.set(true);
+
+    setTimeout(() => {
+      this.showModalError.set(false);
+      this.isClosingModal.set(false);
+    }, 500); // Tempo para a animação de fechamento (ajuste conforme necessário)
+  }
+  public copyToClipboard(text: string) {
+    navigator.clipboard.writeText(text).then(() => {
+      this.mostrarModalErroAutomatico('Texto copiado para a área de transferência!');
+    });
+  }
 
 
   ngOnInit() {
