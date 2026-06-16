@@ -34,6 +34,17 @@
         opacity: 1;
     }
 }
+
+@keyframes slideTop {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
 .logo-container{
     position: absolute;
     top: 10px;
@@ -190,6 +201,50 @@
   cursor: pointer;
 }
 
+
+.modalError{
+    position: absolute;
+    top: 10px;
+    right: -10px;
+    background-color: #fcfcfc;
+    color: black;
+    width: 350px;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    animation: slideTop 0.5s ease-in-out;
+}
+::ng-deep .modalError.exit,
+::ng-deep .exit {
+   animation: slideTop 0.9s ease-in-out reverse forwards !important;
+}
+.modalError .modalContent{
+    width: 100%;
+    min-width: 200px;
+    max-width: 350px;
+    height: 100%;
+    display: flex;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items:center;
+}
+
+
+.modalError .close{
+    position: absolute;
+    cursor: pointer;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modalError .close:hover{
+    transform: scale(1.1);
+}
 
 @media screen and (max-width: 600px) {
 .logo-container{

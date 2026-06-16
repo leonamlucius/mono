@@ -40,4 +40,11 @@
     </div>
 </div>
 
+<div class="modalError" *ngIf="showModalError" [ngClass]="{'exit': isClosingModal() }">
+    <span #modalError class="close" (click)="triggerCloseModalError(modalError)">&times;</span>
+    <div class="modalContent">
+        <p>{{ modalErrorText }}</p>
+    </div>
+</div>
+
 <router-outlet />

@@ -1,4 +1,4 @@
-import { Component, signal} from '@angular/core';
+import { Component, signal, Input} from '@angular/core';
 import { NgIf, NgClass } from '@angular/common';
 import { RouterOutlet, ɵEmptyOutletComponent } from '@angular/router';
 import {BodyComponent} from "./body-component/body-component";
@@ -30,10 +30,58 @@ export class App {
 
   public showModal = false;
 
+  public modalErrorText = '';
+
+  public showModalError = false;
+
+  private modalTimer: any;
+
+  public isClosingModal = signal(false);
+
+  
+
   constructor(private serviceAi: ServiceAi) {}
 
 
 
+  public mostrarModalErroAutomatico(texto: string): void {
+
+    console.log('Mostrando modal de erro automático:', texto);
+
+    if (this.modalTimer) {
+      clearTimeout(this.modalTimer);
+    }
+
+
+    this.isClosingModal.set(false);
+    this.modalErrorText = texto;
+    this.showModalError = true;
+
+
+    const tempoVisivel = 5000; // Tempo que o modal ficará visível
+
+    this.modalTimer = setTimeout(() => {
+      this.fecharModalCOmAnimacao();
+    }, tempoVisivel);
+
+    
+  }
+  public triggerCloseModalError(modalElement: HTMLElement | null): void {
+    if (modalElement) {
+      clearTimeout(this.modalTimer);
+    }
+    this.fecharModalCOmAnimacao();
+  }
+  
+ 
+  public fecharModalCOmAnimacao(): void {
+    this.isClosingModal.set(true);
+
+    setTimeout(() => {
+      this.showModalError = false;
+      this.isClosingModal.set(false);
+    }, 900); // Tempo para a animação de fechamento (ajuste conforme necessário)
+  }
   public scrollToBottom(): void {
     setTimeout(() => {
       const chatContainer = document.querySelector('.chat-container') as HTMLElement;
@@ -65,7 +113,8 @@ export class App {
     
 
     if (!this.isTypeSomething()){
-      alert('Digite algo para iniciar a conversa');
+      this.mostrarModalErroAutomatico('Digite algo para iniciar a conversa');
+      buttonEnviar.classList.remove('disabled');
       return;
     }
 
@@ -75,7 +124,7 @@ export class App {
     try{
 
       if(this.textoValue().trim() === ''){
-        alert('Digite algo para iniciar a conversa');
+        this.mostrarModalErroAutomatico('Digite algo para continuar a conversa');
         buttonEnviar.classList.remove('disabled');
         this.chatHistory.set(this.chatHistory().slice(0, -2));
         return;
@@ -83,15 +132,17 @@ export class App {
       
       this.serviceAi.sendMessage(this.textoValue())
         .then(response => {
-          console.log('Response:', response);
-          this.chatHistory.set([...this.chatHistory().slice(0, -1), { text: response, sendBy: 'Bot', loading: false }]);
 
-          console.log('Chat History:', this.chatHistory());
-
-          buttonEnviar.classList.remove('disabled');
           this.limparEResetar(textArea as HTMLTextAreaElement);
 
-          this.scrollToBottom();
+          setTimeout(() => {
+             console.log('Response:', response);
+            this.chatHistory.set([...this.chatHistory().slice(0, -1), { text: response, sendBy: 'Bot', loading: false }]);
+            console.log('Chat History:', this.chatHistory());
+            buttonEnviar.classList.remove('disabled');
+            this.scrollToBottom();
+          }, 500);
+          
         });
     }catch(error){
       this.scrollToBottom();
