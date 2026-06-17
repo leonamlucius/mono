@@ -8,7 +8,7 @@
 </ng-container>
 <div *ngIf="isInitialized" class="chat-container">
     <div *ngFor="let item of chatHistory" [class.bot]="item.sendBy === 'Bot'" [class.user]="item.sendBy === 'User'" [class.loading]="item.loading" class="message">
-      <p >{{ item.text }}</p>
+      <p [innerHTML]="item.sendBy === 'Bot' ? (item.text | markdown) : item.text" ></p>
 
       <div class="actions">
         <button (click)="copyToClipboard(item.text)">

@@ -2,13 +2,14 @@ import { Component, Input, signal} from '@angular/core';
 import { NgFor, NgIf, AsyncPipe, NgClass} from '@angular/common';
 import { Observable } from 'rxjs';
 import { trigger, transition, style, animate } from '@angular/animations';
+import {MarkdownPipe} from './markdown.pipe';
 
 
 
 
 @Component({
   selector: 'app-body-component',
-  imports: [NgFor, NgIf, AsyncPipe, NgClass],
+  imports: [NgFor, NgIf, AsyncPipe, NgClass, MarkdownPipe],
   templateUrl: './body-component.html',
   styleUrls: ['./body-component.scss'],
    animations: [
@@ -92,7 +93,7 @@ export class BodyComponent {
     }, 500); // Tempo para a animação de fechamento (ajuste conforme necessário)
   }
   public copyToClipboard(text: string) {
-    navigator.clipboard.writeText(text).then(() => {
+    navigator.clipboard.writeText(text.replace(/\*/g, '')).then(() => {
       this.mostrarModalErroAutomatico('Texto copiado para a área de transferência!');
     });
   }
@@ -100,7 +101,7 @@ export class BodyComponent {
 
   ngOnInit() {
   this.textoAtual.set(this.texts[0].text);
-  
+      
   setInterval(() => {
   this.textoAtual.set('');
   setTimeout(() => {

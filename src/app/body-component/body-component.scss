@@ -68,6 +68,13 @@
   background-repeat: no-repeat;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
+.message p{
+  padding: 0;
+  margin: 0;
+  word-break: break-word;
+  white-space: pre-wrap;
+  font-family: 'Arvo', serif;
+}
 
 .actions{
   display: flex;
@@ -98,7 +105,8 @@
 .bot {
   background-color: #071A45;
   align-self: flex-start;
-   min-width: 110px;
+  min-width: 140px;
+  text-align: left;
 }
 
 .bot .actions{
@@ -108,7 +116,12 @@
 .user {
   background-color: #F95903;
   align-self: flex-end !important;
-  min-width: 110px;
+  min-width: 170px;
+}
+
+.user p{
+  margin: 15px 0;
+
 }
 
 .user .actions{
@@ -158,9 +171,9 @@
 
 .modalErrorBody{
   position: fixed;
-  top: 20px;                  /* <-- Deixei em 90px (o do filho está em 20px) para não sobrepor se nascerem juntos */
+  top: 20px;                 
   right: 20px;
-  background-color: #fcfcfc !important; /* Cor diferente (azul do bot) para diferenciar do seu filho */
+  background-color: #fcfcfc !important;
   width: 350px;
   height: auto;
   padding: 15px 8px;

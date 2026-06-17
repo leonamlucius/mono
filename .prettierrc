@@ -1,11 +1,34 @@
 {
-  "printWidth": 100,
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "semi": true,
   "singleQuote": true,
+  "printWidth": 80,
+  "bracketSpacing": true,
+  "arrowParens": "always",
   "overrides": [
     {
       "files": "*.html",
       "options": {
+        "parser": "html"
+      }
+    },
+    {
+      "files": "*.component.html",
+      "options": {
         "parser": "angular"
+      }
+    },
+    {
+      "files": ["*.xml", "*.xhtml"],
+      "options": {
+        "xmlWhitespaceSensitivity": "ignore"
+      }
+    },
+    {
+      "files": "*.java",
+      "options": {
+        "tabWidth": 4
       }
     }
   ]

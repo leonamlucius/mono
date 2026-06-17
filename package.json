@@ -22,6 +22,7 @@
     "@ng-icons/core": "^33.2.3",
     "@ng-icons/feather-icons": "^33.2.3",
     "@ng-icons/heroicons": "^33.2.3",
+    "marked": "^18.0.5",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
@@ -32,6 +33,7 @@
     "@angular/compiler-cli": "^21.2.0",
     "@angular/platform-browser-dynamic": "^22.0.1",
     "@types/jest": "^30.0.0",
+    "@types/marked": "^5.0.2",
     "jest": "^30.4.2",
     "jest-environment-jsdom": "^30.4.1",
     "jsdom": "^28.0.0",
