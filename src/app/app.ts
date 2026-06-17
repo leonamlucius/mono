@@ -106,7 +106,12 @@ private fecharModalPaiComAnimacao(): void {
   public iniciar(buttonEnviar: HTMLButtonElement): void {
 
     buttonEnviar.classList.add('disabled');
+
+    if(this.showLoading()){
+      return;
+    }
     this.showLoadingIndicator();
+    
 
     const textArea = document.querySelector('textarea');
     
