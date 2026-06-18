@@ -105,6 +105,10 @@ private fecharModalPaiComAnimacao(): void {
   }
   public iniciar(buttonEnviar: HTMLButtonElement): void {
 
+
+    if(this.showModal){
+      this.closeModalInfo();
+    }
     buttonEnviar.classList.add('disabled');
 
     if(this.showLoading()){

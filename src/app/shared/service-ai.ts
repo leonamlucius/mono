@@ -9,7 +9,7 @@ export class ServiceAi {
 
     try{
 
-      const response = await fetch('http://localhost:8080/api/chat', {
+      const response = await fetch('http://137.131.246.242:8080/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'text/plain',
