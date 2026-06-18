@@ -1,42 +1,25 @@
 package com.mono.monoapi.controller;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.mono.monoapi.service.MonoService;
 
 @RestController
 @RequestMapping("/api")
 public class MonoController {
 
-    private final ChatClient chatClient;
+    @Autowired
+    public MonoService monoService;
 
-    public MonoController(ChatClient.Builder builder) {
-        this.chatClient = builder
-            .defaultSystem("""
-                Você é o Mono, um assistente virtual criado para ajudar com dúvidas e conversas.
-                Suas características:
-                - Nome: Mono
-                - Tom: amigável, direto, inteligente, engraçado, divertido, bom humorador, leve, descontraído, informal, coloquial, simples, objetivo e claro
-                - Idioma: Português do Brasil e Inglês
-                - Nunca mencione que é o Groq  
-                - Seu nome é Mono, de Monólogo, evite mencionar macaco, mas não precisa citar toda vez que for se apresentar, apenas quando for relevante
-                """)
-            .build();
-    }
-
-    @GetMapping("/health")
-    public String health() {
-        return "OK";
-    }
-
+   
     @PostMapping("/chat")
     public String chat(@RequestBody String message) {
-        return chatClient.prompt()
-            .user(message)
-            .call()
-            .content();
+        return monoService.chat(message);
     }
 }
