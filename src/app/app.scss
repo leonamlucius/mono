@@ -268,20 +268,18 @@
 .information{
     position: absolute;
     top: 10px;
-    right: 20px;
-    background-color: #fcfcfc;
+    right: 10px;
     width: 50px;
     height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    
+}
+
+.information span{
+    width: 25px;
+    height: 25px;
+   
 }
 .madeBy{
-    height: 6%;
+    left: 10px;;
     width: 110px;
     height: 50px;
 }
