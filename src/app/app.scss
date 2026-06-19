@@ -283,6 +283,7 @@
 .madeBy{
     height: 6%;
     width: 110px;
+    height: 50px;
 }
 
 .madeBy ng-icon{
@@ -300,5 +301,12 @@
 }
 
 }
+@media screen and (min-width: 1900px) {
+    :host .send-button{
+    bottom: -85px;
+}
 
+
+    
+}
 

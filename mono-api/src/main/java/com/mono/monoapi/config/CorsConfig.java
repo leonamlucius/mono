@@ -1,5 +1,6 @@
 package com.mono.monoapi.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -25,12 +26,16 @@ public class CorsConfig {
         return http.build();
     }
 
-    @Bean
+    @Value("${URLORIGIN}")
+    private String allowedOrigin;
+
+    
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         // Certifique-se de que System.getenv("URLORIGIN") não esteja retornando null no seu servidor
-        String origin = System.getenv("URLORIGIN");
-        configuration.setAllowedOrigins(Arrays.asList(origin != null ? origin : "https://mono-six-dusky.vercel.app/"));
+        System.out.println("DEBUG - O valor lido da ENV é: " + allowedOrigin);
+        String origin = allowedOrigin; // Lê a variável de ambiente
+        configuration.setAllowedOrigins(Arrays.asList(origin != null ? origin : "http://localhost:4200")); // Fallback para localhost se a variável de ambiente não estiver definida
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);

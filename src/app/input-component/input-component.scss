@@ -41,6 +41,16 @@ textarea:focus{
     }
     textarea{
         width: 80%;
+    }  
+}
+
+
+@media screen and (min-width: 1900px) {
+    :host{
+        bottom: -105px;
     }
+    
+
+
     
 }
