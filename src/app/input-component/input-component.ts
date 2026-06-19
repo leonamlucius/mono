@@ -9,20 +9,18 @@ import { FormsModule } from '@angular/forms';
 })
 export class InputComponent {
   @Output() textoChange = new EventEmitter<boolean>();
-  @Output() textoValueChange = new EventEmitter<string>();
+  @Output() textoValue = new EventEmitter<string>();
   @ViewChild('meuTextarea') meuTextarea!: ElementRef<HTMLTextAreaElement>;
 
   
 public onInput(textarea: HTMLTextAreaElement) {
   const valor = textarea.value;
 
-  this.textoValueChange.emit(valor);
+  this.textoValue.emit(valor);
   this.textoChange.emit(valor.trim().length > 0);
 
   textarea.style.height = 'auto';
   textarea.style.height = textarea.scrollHeight + 'px';
-
-  
 
 }
 
@@ -34,7 +32,7 @@ public limparEResetar() {
       textarea.style.height = 'auto'; // Reseta a altura para o min-height do CSS
       
       // Notifica o pai que o texto agora está vazio
-      this.textoValueChange.emit('');
+      this.textoValue.emit('');
       this.textoChange.emit(false);
     }
   }

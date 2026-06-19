@@ -21,12 +21,13 @@ export class App {
 
   public isInitialized = signal(false);
 
-
   public chatHistory = signal<{ text: string, sendBy: 'User' | 'Bot', loading: boolean }[]>([]);
 
   public isTypeSomething = signal(false);
 
   public textoValue = signal('');
+
+  public textValueSend = signal('');
 
   public showModal = false;
 
@@ -104,7 +105,7 @@ private fecharModalPaiComAnimacao(): void {
     
   }
   public iniciar(buttonEnviar: HTMLButtonElement): void {
-
+    this.scrollToBottom();
 
     if(this.showModal){
       this.closeModalInfo();
@@ -124,6 +125,7 @@ private fecharModalPaiComAnimacao(): void {
       this.mostrarModalErroPai('Digite algo para iniciar a conversa');
       buttonEnviar.classList.remove('disabled');
       this.hideLoadingIndicator();
+      this.scrollToBottom();
       return;
     }
 
@@ -137,14 +139,16 @@ private fecharModalPaiComAnimacao(): void {
         buttonEnviar.classList.remove('disabled');
         this.chatHistory.set(this.chatHistory().slice(0, -2));
         this.hideLoadingIndicator();
+        this.scrollToBottom();
         return;
       }
-      
-      this.serviceAi.sendMessage(this.textoValue())
+
+       this.textValueSend.set(this.textoValue());
+       this.limparEResetar(textArea as HTMLTextAreaElement);
+
+       
+      this.serviceAi.sendMessage(this.textValueSend())
         .then(response => {
-
-          this.limparEResetar(textArea as HTMLTextAreaElement);
-
           setTimeout(() => {
              console.log('Response:', response);
             this.chatHistory.set([...this.chatHistory().slice(0, -1), { text: response, sendBy: 'Bot', loading: false }]);
@@ -160,6 +164,7 @@ private fecharModalPaiComAnimacao(): void {
       console.error('Error:', error);
       buttonEnviar.classList.remove('disabled');
       this.hideLoadingIndicator();
+      this.scrollToBottom();
     }
     console.log('Iniciar');
     this.isInitialized.set(true);
