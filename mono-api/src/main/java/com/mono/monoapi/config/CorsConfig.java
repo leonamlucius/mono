@@ -30,7 +30,7 @@ public class CorsConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         // Certifique-se de que System.getenv("URLORIGIN") não esteja retornando null no seu servidor
         String origin = System.getenv("URLORIGIN");
-        configuration.setAllowedOrigins(Arrays.asList(origin != null ? origin : "http://localhost:4200"));
+        configuration.setAllowedOrigins(Arrays.asList(origin != null ? origin : "https://mono-six-dusky.vercel.app/"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
