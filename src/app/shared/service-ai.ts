@@ -5,13 +5,14 @@ import { Injectable } from '@angular/core';
 })
 export class ServiceAi {
 
-  public async sendMessage(message: string): Promise<string> {
+  public async sendMessage(message: string, provider: 'OLLAMA' | 'GROQ'): Promise<string> {
 
     try{
 
       const response = await fetch('https://unarmored-splashing-unturned.ngrok-free.dev/api/chat', {
         method: 'POST',
         headers: {
+          'X-AI-Provider': provider, // ou 'GROQ' dependendo do provedor que você deseja usar
           'Content-Type': 'text/plain',
         },
         body: message,

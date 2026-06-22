@@ -1,5 +1,10 @@
 <textarea #meuTextarea (input)="onInput(meuTextarea)" placeholder="Sobre o que é a sua dúvida?"  (keydown.enter)="$event.preventDefault(); sendText()"></textarea>
 
+<select #providerSelect  (change)="changeLlmType(providerSelect)">
+        <option value="GROQ">Groq</option>
+        <option value="OLLAMA">Ollama</option>
+        
+</select>
 <button #buttonEnviar class="send-button" [disabled]="showLoading()" (click)="sendText()"> 
     <span *ngIf="!showLoading()" class="material-symbols-outlined">
      chevron_right

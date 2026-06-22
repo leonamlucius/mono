@@ -12,6 +12,7 @@ import { App } from '../app';
 export class InputComponent {
   @Output() textoChange = new EventEmitter<boolean>();
   @Output() textoValue = new EventEmitter<string>();
+  @Output() llmType = new EventEmitter<'OLLAMA' | 'GROQ'>();
   @ViewChild('meuTextarea') meuTextarea!: ElementRef<HTMLTextAreaElement>;
   public showLoading = signal(false);
 
@@ -35,6 +36,12 @@ public onInput(textarea: HTMLTextAreaElement) {
   textarea.style.height = textarea.scrollHeight + 'px';
 
 }
+
+public changeLlmType(selectedType: HTMLSelectElement): void {
+  this.llmType.emit(selectedType.value as 'OLLAMA' | 'GROQ');
+
+  console.log('Tipo de LLM selecionado:', selectedType.value);
+} 
 
 
 public async sendText(): Promise<void> {

@@ -1,8 +1,9 @@
 :host{
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+    gap: 29px;
     background-color: #fcfcfc;
     min-height: 50px;
     padding: 20px;
@@ -15,6 +16,20 @@
     bottom: 0;
     left: 0;
     margin-bottom: 10px;
+   
+    
+}
+
+:host select{
+    width: 5em;
+    font-size: 16px;
+    border: none;
+    font-family: 'Arvo', serif;
+    cursor: pointer;
+}
+
+:host select:focus{
+    border: none; 
 }
 
 :host .send-button{
@@ -30,6 +45,7 @@
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
+    flex-shrink: 0;
 }
 :host .send-button:hover{
     border-radius: 50%;
@@ -51,7 +67,7 @@
 
 textarea{
     border-radius: 0px !important;
-    width: 96%;
+    width: 100%;
     border: none;
     resize: none;
     transition: all 0.3s ease;
@@ -61,6 +77,7 @@ textarea{
     height: auto;
     max-height: 90px;
     overflow-y: auto;
+    background-color: transparent;
 }
 
 textarea:focus{

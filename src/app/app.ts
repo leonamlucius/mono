@@ -39,6 +39,8 @@ export class App {
 
   private modalTimerPai: any;
 
+
+  public llmType = signal<'OLLAMA' | 'GROQ'>('GROQ');
  
 
   
@@ -132,7 +134,7 @@ private fecharModalPaiComAnimacao(): void {
        this.limparEResetar(textArea as HTMLTextAreaElement);
 
        
-       await this.serviceAi.sendMessage(this.textValueSend())
+       await this.serviceAi.sendMessage(this.textValueSend(), this.llmType())
         .then(response => {
           setTimeout(() => {
              console.log('Response:', response);
