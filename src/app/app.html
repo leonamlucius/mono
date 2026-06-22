@@ -1,3 +1,31 @@
+
+<ng-container *ngIf="!isInitialized()">
+    <div class="header">
+        
+
+    <div class="madeBy">
+        <button  (click)="goTolinkedin()" >
+            <ng-icon name="bootstrapLinkedin" title="LinkedIn"/>
+        </button>
+
+        <button (click)="goToGithub()">
+            <ng-icon name="bootstrapGithub" title="GitHub"/>
+        </button>
+    </div>
+
+
+    <div class="information">
+            <button (click)="createModalInfo()">
+                <span class="material-symbols-outlined" >
+                    info
+                </span>
+            </button>
+    </div>
+        
+    </div>
+</ng-container>
+
+
 <ng-container *ngIf="isInitialized()">
     <div class="logo-container">
         <img src="/img/mono.svg" title="MONO" alt="MONO">
@@ -5,36 +33,11 @@
 </ng-container>
 
 <app-body-component [isInitialized]="isInitialized()" [chatHistory]="chatHistory()"></app-body-component>
-<app-input-component (textoChange)="isTypeSomething.set($event)" (textoValue)="textoValue.set($event)" (keyup.enter)="iniciar(buttonEnviar)"> </app-input-component>
+<app-input-component (textoChange)="isTypeSomething.set($event)" (textoValue)="textoValue.set($event)"></app-input-component>
 
-<button #buttonEnviar class="send-button" (click)="iniciar(buttonEnviar)">
-    <span *ngIf="!showLoading()" class="material-symbols-outlined">
-     chevron_right
-    </span>
 
-    <span *ngIf="showLoading()" class="material-symbols-outlined" id="loadingIcon">
-        progress_activity
-    </span>
-</button>
 
-<div *ngIf="!isInitialized()" class="information">
-    <button (click)="createModalInfo()">
-        <span class="material-symbols-outlined" >
-            info
-        </span>
-    </button>
-</div>
 
-<div *ngIf="!isInitialized()" class="madeBy">
-    <button  (click)="goTolinkedin()" >
-    <ng-icon name="bootstrapLinkedin" title="LinkedIn"/>
-   </button>
-   
-   <button (click)="goToGithub()">
-   <ng-icon name="bootstrapGithub" title="GitHub"/>
-    </button>
-  
-</div>
 
 
 <div class="modalInfo" *ngIf="showModal">

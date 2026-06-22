@@ -39,19 +39,13 @@ export class App {
 
   private modalTimerPai: any;
 
-  public showLoading = signal(false);
+ 
 
   
   constructor(private serviceAi: ServiceAi) {}
 
 
-  showLoadingIndicator() {
-    this.showLoading.set(true);
-  }
-
-  hideLoadingIndicator() {
-    this.showLoading.set(false);
-  }
+  
 
   public mostrarModalErroPai(texto: string): void {
   if (this.modalTimerPai) {
@@ -104,27 +98,20 @@ private fecharModalPaiComAnimacao(): void {
       
     
   }
-  public iniciar(buttonEnviar: HTMLButtonElement): void {
+  public async iniciar(): Promise<void> {
     this.scrollToBottom();
 
     if(this.showModal){
       this.closeModalInfo();
     }
-    buttonEnviar.classList.add('disabled');
-
-    if(this.showLoading()){
-      return;
-    }
-    this.showLoadingIndicator();
-    
-
+   
     const textArea = document.querySelector('textarea');
     
 
     if (!this.isTypeSomething()){
       this.mostrarModalErroPai('Digite algo para iniciar a conversa');
-      buttonEnviar.classList.remove('disabled');
-      this.hideLoadingIndicator();
+     
+     
       this.scrollToBottom();
       return;
     }
@@ -136,9 +123,7 @@ private fecharModalPaiComAnimacao(): void {
 
       if(this.textoValue().trim() === ''){
         this.mostrarModalErroPai('Digite algo para continuar a conversa');
-        buttonEnviar.classList.remove('disabled');
         this.chatHistory.set(this.chatHistory().slice(0, -2));
-        this.hideLoadingIndicator();
         this.scrollToBottom();
         return;
       }
@@ -147,14 +132,13 @@ private fecharModalPaiComAnimacao(): void {
        this.limparEResetar(textArea as HTMLTextAreaElement);
 
        
-      this.serviceAi.sendMessage(this.textValueSend())
+       await this.serviceAi.sendMessage(this.textValueSend())
         .then(response => {
           setTimeout(() => {
              console.log('Response:', response);
             this.chatHistory.set([...this.chatHistory().slice(0, -1), { text: response, sendBy: 'Bot', loading: false }]);
             console.log('Chat History:', this.chatHistory());
-            buttonEnviar.classList.remove('disabled');
-            this.hideLoadingIndicator();
+            
             this.scrollToBottom();
           }, 500);
           
@@ -162,8 +146,6 @@ private fecharModalPaiComAnimacao(): void {
     }catch(error){
       this.scrollToBottom();
       console.error('Error:', error);
-      buttonEnviar.classList.remove('disabled');
-      this.hideLoadingIndicator();
       this.scrollToBottom();
     }
     console.log('Iniciar');

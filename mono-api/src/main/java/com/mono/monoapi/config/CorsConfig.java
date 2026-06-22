@@ -35,7 +35,7 @@ public class CorsConfig {
         // Certifique-se de que System.getenv("URLORIGIN") não esteja retornando null no seu servidor
         System.out.println("DEBUG - O valor lido da ENV é: " + allowedOrigin);
         String origin = allowedOrigin; // Lê a variável de ambiente
-        configuration.setAllowedOrigins(Arrays.asList(origin != null ? origin : "http://localhost:4200")); // Fallback para localhost se a variável de ambiente não estiver definida
+        configuration.setAllowedOrigins(Arrays.asList(origin != null ? origin : "")); // Fallback para localhost se a variável de ambiente não estiver definida
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);

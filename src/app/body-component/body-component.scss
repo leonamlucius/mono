@@ -1,6 +1,6 @@
 :host {
   width: 100%;
-  height: 88dvh;
+  height: 87dvh;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -211,6 +211,7 @@
 
   :host {
   gap: 5px;
+  height: 90dvh;
 }
   .message{
   max-width: 70%;

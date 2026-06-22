@@ -1,9 +1,8 @@
 :host{
     width: 100%;
     display: flex;
-    flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     background-color: #fcfcfc;
     min-height: 50px;
     padding: 20px;
@@ -11,10 +10,44 @@
     font-size: 16px;
     border-radius: 25px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: absolute;
-    bottom: -80px;
     transition: all 0.3s ease;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin-bottom: 10px;
 }
+
+:host .send-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    box-sizing: border-box;
+    background-color: #F95903;
+    color: #fcfcfc;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+:host .send-button:hover{
+    border-radius: 50%;
+}
+:host .send-button:hover span {
+    animation: slideIn 0.4s ease-in;
+    border-radius: 50%;
+}
+:host .send-button:disabled{
+    background-color: #ccc;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+:host .send-button #loadingIcon {
+    animation: rotate 1s linear infinite;
+}
+
 
 textarea{
     border-radius: 0px !important;
@@ -36,21 +69,38 @@ textarea:focus{
 }
 
 @media screen and (max-width: 600px) {
-    :host{
-        bottom: -90px;
-    }
     textarea{
         width: 80%;
     }  
+
+    :host .send-button{
+    bottom: -70px;
+}
+}
+@media screen and (min-width: 1900px) {
+    :host .send-button{
+    bottom: -85px;
 }
 
 
-@media screen and (min-width: 1900px) {
-    :host{
-        bottom: -105px;
+    
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(0);
+        opacity: 1;
     }
-    
-
-
-    
+    to {
+        transform: translateX(70%);
+        opacity: 1;
+    }
+}
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }

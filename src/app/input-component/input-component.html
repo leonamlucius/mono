@@ -1,3 +1,11 @@
-<textarea #meuTextarea (input)="onInput(meuTextarea)" placeholder="Sobre o que é a sua dúvida?"  (keydown.enter)="$event.preventDefault()"></textarea>
+<textarea #meuTextarea (input)="onInput(meuTextarea)" placeholder="Sobre o que é a sua dúvida?"  (keydown.enter)="$event.preventDefault(); sendText()"></textarea>
 
+<button #buttonEnviar class="send-button" [disabled]="showLoading()" (click)="sendText()"> 
+    <span *ngIf="!showLoading()" class="material-symbols-outlined">
+     chevron_right
+    </span>
 
+    <span *ngIf="showLoading()" class="material-symbols-outlined" id="loadingIcon">
+        progress_activity
+    </span>
+</button>
