@@ -80,9 +80,16 @@
   display: flex;
   width: 100%;
   align-items: center;
-  gap: 10px;  
-  background: red;
+  justify-content: space-between;
+  gap: 10px;
+  
 }
+.actions .llm-type{
+  width: 100%;
+  font-size: 14px;
+  font-style: italic;
+}
+
 
 .actions button{
   background: none;
@@ -109,10 +116,7 @@
   text-align: left;
 }
 
-.bot .actions{
-  justify-content: flex-end; /* Alinha os botões à esquerda */
-  background: transparent;     /* Tire o 'red' de teste quando funcionar */
-}
+
 .user {
   background-color: #F95903;
   align-self: flex-end !important;
@@ -124,10 +128,7 @@
 
 }
 
-.user .actions{
- justify-content: flex-start !important;   /* Alinha os botões à direita! */
-  background: transparent;
-}
+
 .loading {
   opacity: 0.8;
   color: transparent;

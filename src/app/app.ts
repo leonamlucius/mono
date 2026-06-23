@@ -21,7 +21,7 @@ export class App {
 
   public isInitialized = signal(false);
 
-  public chatHistory = signal<{ text: string, sendBy: 'User' | 'Bot', loading: boolean }[]>([]);
+  public chatHistory = signal<{ text: string, sendBy: 'User' | 'Bot', loading: boolean , llmType?: 'OLLAMA' | 'GROQ' }[]>([]);
 
   public isTypeSomething = signal(false);
 
@@ -119,7 +119,7 @@ private fecharModalPaiComAnimacao(): void {
     }
 
     this.chatHistory.set([...this.chatHistory(), { text: this.textoValue(), sendBy: 'User', loading: false }]);
-    this.chatHistory.set([...this.chatHistory(), { text: '', sendBy: 'Bot', loading: true }]);
+    this.chatHistory.set([...this.chatHistory(), { text: '', sendBy: 'Bot', loading: true , llmType: this.llmType()}]);
 
     try{
 
@@ -138,7 +138,7 @@ private fecharModalPaiComAnimacao(): void {
         .then(response => {
           setTimeout(() => {
              console.log('Response:', response);
-            this.chatHistory.set([...this.chatHistory().slice(0, -1), { text: response, sendBy: 'Bot', loading: false }]);
+            this.chatHistory.set([...this.chatHistory().slice(0, -1), { text: response.message, sendBy: 'Bot', loading: false , llmType: response.model}]);
             console.log('Chat History:', this.chatHistory());
             
             this.scrollToBottom();

@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class ServiceAi {
 
-  public async sendMessage(message: string, provider: 'OLLAMA' | 'GROQ'): Promise<string> {
+  public async sendMessage(message: string, provider: 'OLLAMA' | 'GROQ'): Promise<any> {
 
     try{
 
@@ -22,7 +22,7 @@ export class ServiceAi {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.text();
+      const data = await response.json();
       return data;
 
     }catch(error){

@@ -11,12 +11,18 @@
       <p [innerHTML]="item.sendBy === 'Bot' ? (item.text | markdown) : item.text" ></p>
 
       <div class="actions">
+          <span class="llm-type" *ngIf="item.llmType">
+            {{ item.llmType }}
+          </span>
+     
+
         <button (click)="copyToClipboard(item.text)">
           <span class="material-symbols-outlined">
           content_copy
           </span>
         </button>
 
+      
       </div>
     </div>
 </div>

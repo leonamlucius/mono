@@ -22,11 +22,6 @@ public class OllamaAiService {
 
     @Autowired
     public OllamaAiService(OllamaChatModel ollamaChatModel) {
-
-        
-
-
-
         this.chatClient = ChatClient.builder(ollamaChatModel)
             .defaultSystem("""
                 Você é o Mono, um assistente virtual criado para ajudar com dúvidas e conversas.

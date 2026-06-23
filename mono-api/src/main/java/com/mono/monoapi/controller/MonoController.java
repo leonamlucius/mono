@@ -1,6 +1,7 @@
 package com.mono.monoapi.controller;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import com.mono.monoapi.service.GroqAiService;
 import com.mono.monoapi.service.OllamaAiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.mono.monoapi.dto.ChatResponseDTO;
 
 @RestController
 @RequestMapping("/api")
@@ -29,23 +31,26 @@ public class MonoController {
 
    
     @PostMapping("/chat")
-    public String chat(@RequestBody String message, @RequestHeader(value = "X-AI-Provider", defaultValue = "GROQ") String provider) {
+    public ChatResponseDTO chat(@RequestBody String message, @RequestHeader(value = "X-AI-Provider", defaultValue = "GROQ") String provider) {
         if ("OLLAMA".equalsIgnoreCase(provider)) {
 
             try{
-                return ollamaAiService.chat(message);
+                String response = ollamaAiService.chat(message);
+                return new ChatResponseDTO(response, "OLLAMA-qwen2.5:0.5b", "SUCCESS");
             }catch (Exception e) {
                 logger.info("Erro ao processar a mensagem com Ollama, passando para Groq: '{}'. Detalhes do erro: {}", message, e.getMessage());
-                return groqAiService.chat(message);
+                String reponse = groqAiService.chat(message);
+                return new ChatResponseDTO(reponse, "GROQ-llama-3.1-8b-instant", "ERROR");
             }
 
         } else {
 
             try{
-                return groqAiService.chat(message);
+                String response = groqAiService.chat(message);
+                return new ChatResponseDTO(response, "GROQ-llama-3.1-8b-instant", "SUCCESS");
             }catch (Exception e) {
                 logger.info("Erro ao processar a mensagem com Groq: '{}'. Detalhes do erro: {}", message, e.getMessage());
-                return "Ocorreu um erro ao processar sua mensagem com Groq. Por favor, tente novamente." + e.getMessage();
+                return new ChatResponseDTO("Ocorreu um erro ao processar sua mensagem com Groq. Por favor, tente novamente." + e.getMessage(), "GROQ-llama-3.1-8b-instant", "ERROR");
             }
         }
     }

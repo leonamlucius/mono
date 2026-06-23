@@ -7,6 +7,7 @@ import {MarkdownPipe} from './markdown.pipe';
 
 
 
+
 @Component({
   selector: 'app-body-component',
   imports: [NgFor, NgIf, AsyncPipe, NgClass, MarkdownPipe],
@@ -25,7 +26,7 @@ export class BodyComponent {
 
   @Input() isInitialized = false;
 
-  @Input() chatHistory: { text: string, sendBy: 'User' | 'Bot', loading: boolean }[] = [];
+  @Input() chatHistory: { text: string, sendBy: 'User' | 'Bot', loading: boolean, llmType?: 'OLLAMA' | 'GROQ' }[] = [];
 
   public showModalError = signal(false);
 
