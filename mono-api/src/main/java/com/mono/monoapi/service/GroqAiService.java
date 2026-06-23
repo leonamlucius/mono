@@ -4,6 +4,9 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +15,8 @@ import groovy.transform.AutoExternalize;
 
 @Service
 public class GroqAiService {
+
+    private static final List<String> TERMOS_PROIBIDOS = List.of("hacker", "scrpit malicioso", "ataque cibernético", "phishing", "malware", "ransomware", "spyware", "adware", "keylogger", "rootkit", "botnet", "exploit", "vulnerabilidade", "zero-day", "DDoS", "SQL injection", "cross-site scripting", "XSS", "CSRF", "flooding", "spoofing", "sniffer", "backdoor", "trojan", "worm");
 
     private final ChatClient chatClient;
 
@@ -38,7 +43,15 @@ public class GroqAiService {
     }
 
     public String chat(String message) {
+       
         logger.info("Iniciando chamada Groq via ChatClient para a mensagem: {}", message);
+
+         for (String termo : TERMOS_PROIBIDOS) {
+            if (message.toLowerCase().contains(termo.toLowerCase())) {
+                logger.warn("Mensagem contém termo proibido: {}", termo);
+                return "Desculpe, sua mensagem contém conteúdo proibido.";
+            }
+        }
         return this.chatClient.prompt(message).call().content();
     }
 }

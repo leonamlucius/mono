@@ -1,5 +1,6 @@
 package com.mono.monoapi.service;
 
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 @Service
 public class OllamaAiService {
 
+    private static final List<String> TERMOS_PROIBIDOS = List.of("hacker", "scrpit malicioso", "ataque cibernético", "phishing", "malware", "ransomware", "spyware", "adware", "keylogger", "rootkit", "botnet", "exploit", "vulnerabilidade", "zero-day", "DDoS", "SQL injection", "cross-site scripting", "XSS", "CSRF", "flooding", "spoofing", "sniffer", "backdoor", "trojan", "worm");
+
     private static final Logger logger = LoggerFactory.getLogger(OllamaAiService.class);
     private final ChatClient chatClient;
 
@@ -19,6 +22,11 @@ public class OllamaAiService {
 
     @Autowired
     public OllamaAiService(OllamaChatModel ollamaChatModel) {
+
+        
+
+
+
         this.chatClient = ChatClient.builder(ollamaChatModel)
             .defaultSystem("""
                 Você é o Mono, um assistente virtual criado para ajudar com dúvidas e conversas.
@@ -38,6 +46,14 @@ public class OllamaAiService {
     public String chat(String message) {
         logger.info("MÁQUINA DETECTOR DE MENTIRAS -> A URL que o Spring está usando é: {}", ollamaUrl);
         logger.info("Iniciando chamada Ollama via ChatClient para a mensagem: {}", message);
+
+        for (String termo : TERMOS_PROIBIDOS) {
+            if (message.toLowerCase().contains(termo.toLowerCase())) {
+                logger.warn("Mensagem contém termo proibido: {}", termo);
+                return "Desculpe, sua mensagem contém conteúdo proibido.";
+            }
+        }
+
         return this.chatClient.prompt(message).call().content();
     }
 }
