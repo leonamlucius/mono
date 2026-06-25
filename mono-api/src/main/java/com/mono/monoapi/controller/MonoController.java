@@ -13,9 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.mono.monoapi.service.GroqAiService;
 import com.mono.monoapi.service.OllamaAiService;
+import com.mono.monoapi.service.LoginService;
+import jakarta.validation.Valid;
+
+import jakarta.validation.constraints.Positive;
+import org.springframework.http.ResponseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.mono.monoapi.dto.ChatResponseDTO;
+import com.mono.monoapi.dto.LoginResponse;
+import com.mono.monoapi.dto.LoginRequest;
+import com.mono.monoapi.dto.RegisterRequest;
 
 @RestController
 @RequestMapping("/api")
@@ -30,6 +38,8 @@ public class MonoController {
     @Autowired
     public OllamaAiService ollamaAiService;
 
+    @Autowired
+    public LoginService loginService;
    
     @PostMapping("/chat")
     public ChatResponseDTO chat(@RequestBody String message, @RequestHeader(value = "X-AI-Provider", defaultValue = "GROQ") String provider, @RequestParam(defaultValue = "usuario-atual") String chatId) {
@@ -55,5 +65,15 @@ public class MonoController {
                 return new ChatResponseDTO(response, "OLLAMA-qwen2.5:0.5b", "ERROR: Groq falhou, mas Ollama respondeu com sucesso.");
             }
         }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+        return ResponseEntity.ok(loginService.login(request));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<LoginResponse> register(@Valid @RequestBody RegisterRequest request) {
+        return ResponseEntity.ok(loginService.register(request));
     }
 }
