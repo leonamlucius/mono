@@ -42,10 +42,14 @@ testem.log
 /typings
 __screenshots__/
 
+
 # System files
 .DS_Store
 Thumbs.db
 
 
 mono-api/.mvn/wrapper/maven-wrapper.jar
-mono-api/.env    
+mono-api/.env  
+
+
+/pgdata
