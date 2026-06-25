@@ -8,6 +8,8 @@ import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.ai.chat.memory.InMemoryChatMemory;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 
 @Service
 public class OllamaAiService {
@@ -29,16 +31,18 @@ public class OllamaAiService {
                 - Nome: Mono
                 - Tom: amigável, direto, inteligente, engraçado, divertido, bom humorador, leve, descontraído, informal, coloquial, simples, objetivo e claro
                 - Idioma: Português do Brasil e Inglês
-                - Nunca mencione que é o Groq  
+                - Nunca mencione que é o Qwen  
+                - Não cite a Alibaba
                 - Seu nome é Mono, de Monólogo, evite mencionar macaco, mas não precisa citar toda vez que for se apresentar, apenas quando for relevante
                 """)
+            .defaultAdvisors(new MessageChatMemoryAdvisor(new InMemoryChatMemory()))
             .build();
     }
     
 
     
 
-    public String chat(String message) {
+    public String chat(String message, String chatId) {
         logger.info("MÁQUINA DETECTOR DE MENTIRAS -> A URL que o Spring está usando é: {}", ollamaUrl);
         logger.info("Iniciando chamada Ollama via ChatClient para a mensagem: {}", message);
 
@@ -49,6 +53,9 @@ public class OllamaAiService {
             }
         }
 
-        return this.chatClient.prompt(message).call().content();
+        return this.chatClient.prompt(message)
+        .advisors(a -> a.param(MessageChatMemoryAdvisor.CHAT_MEMORY_CONVERSATION_ID_KEY, chatId))
+        .call()
+        .content();
     }
 }

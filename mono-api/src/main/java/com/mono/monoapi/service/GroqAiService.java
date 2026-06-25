@@ -4,6 +4,10 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ai.chat.memory.InMemoryChatMemory;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+
+
 
 import java.util.List;
 
@@ -34,6 +38,7 @@ public class GroqAiService {
                 - Nunca mencione que é o Groq  
                 - Seu nome é Mono, de Monólogo, evite mencionar macaco, mas não precisa citar toda vez que for se apresentar, apenas quando for relevante
                 """)
+            .defaultAdvisors(new MessageChatMemoryAdvisor(new InMemoryChatMemory()))
             .build();
     }
 
@@ -42,7 +47,7 @@ public class GroqAiService {
         this.chatClient = ChatClient.builder(openAiChatModel).build();
     }
 
-    public String chat(String message) {
+    public String chat(String message, String chatId) {
        
         logger.info("Iniciando chamada Groq via ChatClient para a mensagem: {}", message);
 
@@ -52,6 +57,9 @@ public class GroqAiService {
                 return "Desculpe, sua mensagem contém conteúdo proibido.";
             }
         }
-        return this.chatClient.prompt(message).call().content();
+        return this.chatClient.prompt(message)
+        .advisors(a -> a.param(MessageChatMemoryAdvisor.CHAT_MEMORY_CONVERSATION_ID_KEY, chatId))
+        .call()
+        .content();
     }
 }
