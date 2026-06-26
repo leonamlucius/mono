@@ -9,7 +9,7 @@ export class ServiceAi {
 
     try{
 
-      const response = await fetch('https://unarmored-splashing-unturned.ngrok-free.dev/api/chat', {
+      const response = await fetch('http://localhost:8080/api/chat', {
         method: 'POST',
         headers: {
           'X-AI-Provider': provider, // ou 'GROQ' dependendo do provedor que você deseja usar

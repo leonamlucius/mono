@@ -2,6 +2,7 @@ import { Component, Output, EventEmitter, ViewChild , ElementRef, signal} from '
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common'
 import { App } from '../app';
+import {ChatComponent} from '../chat-component/chat-component';
 
 @Component({
   selector: 'app-input-component',
@@ -16,7 +17,7 @@ export class InputComponent {
   @ViewChild('meuTextarea') meuTextarea!: ElementRef<HTMLTextAreaElement>;
   public showLoading = signal(false);
 
-  constructor(private app: App) {}
+  constructor(private chatComponent: ChatComponent) {}
 
 showLoadingIndicator() {
     this.showLoading.set(true);
@@ -49,7 +50,7 @@ public async sendText(): Promise<void> {
   
   try {
     this.showLoadingIndicator();
-    await this.app.iniciar();
+    await this.chatComponent.iniciar();
     
   } catch (error) {
       console.error('Erro ao enviar o texto:', error)     

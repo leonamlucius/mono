@@ -1,0 +1,264 @@
+:host{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+.header{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    padding: 10px 15px;
+}
+
+.information{
+    background-color: #fcfcfc;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    animation: slideRight 0.5s ease-in-out;
+}
+
+.information button{
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.information span{
+    transition: all 0.3s ease;
+}
+
+.information span:hover{
+    transform: scale(1.1);
+}
+
+.madeBy{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: #fcfcfc;
+    height: 40px;
+    width: 90px;
+    border-radius: 25px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    animation: slideLeft 0.5s ease-in-out;
+}
+
+.madeBy button{
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.madeBy ng-icon{
+    width: 22px;
+    height: 22px;
+    color: #071A45;
+    transition: all 0.3s ease;
+}
+
+.madeBy ng-icon:hover{
+    transform: scale(1.1);
+}
+
+.logo-container img{
+  width: 150px;
+  background-color: #fcfcfc;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  animation: popUp 0.5s ease;
+}
+
+.login-container{
+    width: 33.33%;
+    background-color: #fcfcfc;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.login-container .welcome-message{
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.icon{
+    width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #F95903;
+}
+
+.icon span{
+    font-size: 30px;
+    
+}
+
+.login-container .login-instruction{
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+form{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+form .login-button{
+    background-color: #F95903;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-family: 'Arvo', serif;
+    transition: all 0.3s ease;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+
+form .login-button:hover{
+    transform: scale(1.07);
+    cursor: pointer;
+}
+
+   
+.form-group{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    padding: 10px 94px;
+    box-sizing: border-box;
+}
+
+.form-group input{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    border: 0.5px solid #a8a5a5;
+    background-color: transparent;
+    border-radius: 8px;
+    padding:7px 10px;
+}
+
+.form-group a{
+    text-decoration: none;
+    color: #F95903;
+    font-size: 14px;
+    margin-top: 18px;
+}
+
+.modalInfo{
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background-color: #fcfcfc;
+    color: black;
+    width: 200px;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.modalInfo span{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+
+}
+
+.modalInfo .close{
+  cursor: pointer;
+}
+.password-container{
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+
+.password-container button{
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #777575;
+    position: absolute;
+    right: -15px;
+    top: 50%;
+    transform: translateY(-40%);
+}
+
+@media screen and (max-width: 600px) {
+    .login-container{
+        width: 90%;
+        
+    }
+
+    .form-group{
+    width: 100%;
+    padding: 5px 26px;
+    }
+
+    .information{
+    width: 50px;
+    height: 50px;
+    }
+
+    .information button{
+        scale: 1.2;
+    }
+
+    .madeBy{
+        height: 50px;
+        width: 110px;
+    }
+
+    .madeBy ng-icon{
+        width: 25px;
+        height: 25px;
+    }
+
+    .modalInfo{
+        top: 70px;
+        right: 20px;  
+    }
+
+    .login-instruction{
+        font-size: 12px;
+        text-align: center;
+    }
+
+    form .login-button{
+        scale: 1.1;
+    }
+}

@@ -1,0 +1,50 @@
+<ng-container *ngIf="!isInitialized()">
+    <div class="header">
+        
+
+    <div class="madeBy">
+        <button  (click)="goTolinkedin()" >
+            <ng-icon name="bootstrapLinkedin" title="LinkedIn"/>
+        </button>
+
+        <button (click)="goToGithub()">
+            <ng-icon name="bootstrapGithub" title="GitHub"/>
+        </button>
+    </div>
+
+
+    <div class="information">
+            <button (click)="createModalInfo()">
+                <span class="material-symbols-outlined" >
+                    info
+                </span>
+            </button>
+    </div>
+        
+    </div>
+</ng-container>
+
+
+<ng-container *ngIf="isInitialized()">
+    <div class="logo-container">
+        <img src="/img/mono.svg" title="MONO" alt="MONO">
+    </div>
+</ng-container>
+
+<app-body-component [isInitialized]="isInitialized()" [chatHistory]="chatHistory()"></app-body-component>
+<app-input-component (textoChange)="isTypeSomething.set($event)" (textoValue)="textoValue.set($event)" (llmType)="llmType.set($event)"></app-input-component>
+
+
+<div class="modalInfo" *ngIf="showModal">
+    <div class="modalContent">
+        <span class="close" (click)="closeModalInfo()">&times;</span>
+        <p>Mono é um chatbot de inteligência artificial para ajudar no dia a dia, desenvolvido com uma interface moderna e reativa em Angular e um backend moderno em Spring Boot. Utilizando o Spring AI para orquestração de dados e a infraestrutura da Groq para inferência ultrarrápida, o projeto entrega respostas fluidas e com baixíssima latência, unindo o poder do ecossistema Java à agilidade dos modelos de linguagem de última geração.</p>
+    </div>
+</div>
+
+<div class="modalErrorPai" *ngIf="showModalErrorPai()" [ngClass]="{'exitPai': isClosingModalPai() }">
+    <span #modalErrorPai class="close" (click)="triggerCloseModalPai()">&times;</span>
+    <div class="modalContent">
+        <p>{{ modalErrorTextPai }}</p>
+    </div>
+</div> 

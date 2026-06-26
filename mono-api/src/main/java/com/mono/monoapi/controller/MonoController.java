@@ -76,4 +76,6 @@ public class MonoController {
     public ResponseEntity<LoginResponse> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.ok(loginService.register(request));
     }
+
+    
 }

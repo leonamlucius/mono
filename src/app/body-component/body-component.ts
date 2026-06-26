@@ -10,7 +10,7 @@ import {MarkdownPipe} from './markdown.pipe';
 
 @Component({
   selector: 'app-body-component',
-  imports: [NgFor, NgIf, AsyncPipe, NgClass, MarkdownPipe],
+  imports: [NgFor, NgIf, NgClass, MarkdownPipe],
   templateUrl: './body-component.html',
   styleUrls: ['./body-component.scss'],
    animations: [
