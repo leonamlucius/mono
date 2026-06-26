@@ -30,6 +30,31 @@ export class ServiceAi {
       return 'Desculpe, ocorreu um erro ao processar sua mensagem.';
     }
   }
+
+
+  public async getFacts(): Promise<any> {
+
+    try{
+
+      const response = await fetch('https://unarmored-splashing-unturned.ngrok-free.dev/api/chat', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'text/plain',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.text();
+      return data;
+
+    }catch(error){
+      console.error('Error fetching facts:', error);
+      return 'Desculpe, ocorreu um erro ao processar sua mensagem.';
+    }
+  }
 }
 
 

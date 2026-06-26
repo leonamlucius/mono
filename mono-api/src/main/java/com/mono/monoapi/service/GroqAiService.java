@@ -62,4 +62,13 @@ public class GroqAiService {
         .call()
         .content();
     }
+
+    public String getFacts() {
+        logger.info("Iniciando chamada Groq para obter fatos.");
+        String prompt = "Forneça um fato curioso, não forneça mais de um fato, não forneça explicações, apenas o fato em uma frase curta.";
+        return this.chatClient.prompt(prompt)
+                .call()
+                .content();
+    
+    }
 }

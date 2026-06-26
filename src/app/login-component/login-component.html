@@ -1,5 +1,5 @@
 
-<div class="header">
+<!-- <div class="header">
     <div class="madeBy">
         <button  (click)="goTolinkedin()" >
             <ng-icon name="bootstrapLinkedin" title="LinkedIn"/>
@@ -19,44 +19,55 @@
             </button>
     </div>
         
-</div>
+</div> -->
 
 
-<div class="logo-container">
-    <img src="/img/mono.svg" alt="Logo" class="logo">
-</div>
 
-<div class="login-container">
-    <div class="icon">
-        <span class="material-symbols-outlined">
-            login
-        </span>    
-    </div>
-    <p class="welcome-message">Bem-vindo!</p>
-    
-    <p class="login-instruction">Faça login para continuar e conversar com o mono!</p>
-    <form>
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="text" id="email" formControlName="email" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Senha</label>
-            <div class="password-container">
-                <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password" required>
-                <button type="button" (click)="togglePasswordVisibility()">
-                    <span class="material-symbols-outlined">
-                        {{ showPassword ? 'visibility_off' : 'visibility' }}
-                    </span>
-                </button>
+
+
+<div class="login-body">
+    <div class="logo-square-container">
+        <div class="logo-square">
+           <div class="logo-container">
+                <img src="/img/mono.svg" alt="Logo" class="logo">
+
+                <div class="facts-container" *ngIf="facts()" [ngClass]="{'balao-par': isEvenCall(), 'balao-impar': !isEvenCall()}">
+                    <p class="facts-text">{{ facts() }}</p>
+                </div>
             </div>
-
-            <a href="#" class="forgot-password">Esqueceu a senha?</a>
         </div>
-        <button type="submit" class="login-button">Login</button>
-    </form>
-</div>
+    </div>
+    <div class="login-container">
+        <div class="icon">
+            <span class="material-symbols-outlined">
+                login
+            </span>    
+        </div>
+        <p class="welcome-message">Bem-vindo!</p>
+        
+        <p class="login-instruction">Faça login para continuar e conversar com o mono!</p>
+        <form>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" id="email" formControlName="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <div class="password-container">
+                    <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password" required>
+                    <button type="button" (click)="togglePasswordVisibility()">
+                        <span class="material-symbols-outlined">
+                            {{ showPassword ? 'visibility_off' : 'visibility' }}
+                        </span>
+                    </button>
+                </div>
 
+                <a href="#" class="forgot-password">Esqueceu a senha?</a>
+            </div>
+            <button type="submit" class="login-button">Login</button>
+        </form>
+    </div>
+</div>
 
 <div class="modalInfo" *ngIf="showModal">
     <div class="modalContent">

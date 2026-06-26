@@ -42,27 +42,27 @@ public class MonoController {
     public LoginService loginService;
    
     @PostMapping("/chat")
-    public ChatResponseDTO chat(@RequestBody String message, @RequestHeader(value = "X-AI-Provider", defaultValue = "GROQ") String provider, @RequestParam(defaultValue = "usuario-atual") String chatId) {
+    public ResponseEntity<ChatResponseDTO> chat(@RequestBody String message, @RequestHeader(value = "X-AI-Provider", defaultValue = "GROQ") String provider, @RequestParam(defaultValue = "usuario-atual") String chatId) {
         if ("OLLAMA".equalsIgnoreCase(provider)) {
 
             try{
                 String response = ollamaAiService.chat(message, chatId);
-                return new ChatResponseDTO(response, "OLLAMA-qwen2.5:0.5b", "SUCCESS");
+                return ResponseEntity.ok(new ChatResponseDTO(response, "OLLAMA-qwen2.5:0.5b", "SUCCESS"));
             }catch (Exception e) {
                 logger.info("Erro ao processar a mensagem com Ollama, passando para Groq: '{}'. Detalhes do erro: {}", message, e.getMessage());
-                String reponse = groqAiService.chat(message, chatId);
-                return new ChatResponseDTO(reponse, "GROQ-llama-3.1-8b-instant", "ERROR: Ollama falhou, mas Groq respondeu com sucesso.");
+                String response = groqAiService.chat(message, chatId);
+                return ResponseEntity.ok(new ChatResponseDTO(response, "GROQ-llama-3.1-8b-instant", "ERROR: Ollama falhou, mas Groq respondeu com sucesso."));
             }
 
         } else {
 
             try{
                 String response = groqAiService.chat(message, chatId);
-                return new ChatResponseDTO(response, "GROQ-llama-3.1-8b-instant", "SUCCESS");
+                return ResponseEntity.ok(new ChatResponseDTO(response, "GROQ-llama-3.1-8b-instant", "SUCCESS"));
             }catch (Exception e) {
                 logger.info("Erro ao processar a mensagem com Groq: '{}'. Detalhes do erro: {}", message, e.getMessage());
                 String response = ollamaAiService.chat(message, chatId);
-                return new ChatResponseDTO(response, "OLLAMA-qwen2.5:0.5b", "ERROR: Groq falhou, mas Ollama respondeu com sucesso.");
+                return ResponseEntity.ok(new ChatResponseDTO(response, "OLLAMA-qwen2.5:0.5b", "ERROR: Groq falhou, mas Ollama respondeu com sucesso."));
             }
         }
     }
@@ -75,6 +75,12 @@ public class MonoController {
     @PostMapping("/register")
     public ResponseEntity<LoginResponse> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.ok(loginService.register(request));
+    }
+
+    @GetMapping("/facts")
+    public ResponseEntity<String> getFacts() {
+        String facts = groqAiService.getFacts();
+        return ResponseEntity.ok(facts);
     }
 
     
