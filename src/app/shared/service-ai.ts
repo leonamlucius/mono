@@ -40,6 +40,7 @@ export class ServiceAi {
         method: 'GET',
         headers: {
           'Content-Type': 'text/plain',
+          'ngrok-skip-browser-warning': 'true' // Isso é obrigatório para o ngrok funcionar no navegador
         },
       });
 
