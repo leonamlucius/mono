@@ -51,14 +51,14 @@ public class MonoController {
             }catch (Exception e) {
                 logger.info("Erro ao processar a mensagem com Ollama, passando para Groq: '{}'. Detalhes do erro: {}", message, e.getMessage());
                 String response = groqAiService.chat(message, chatId);
-                return ResponseEntity.ok(new ChatResponseDTO(response, "GROQ-llama-3.1-8b-instant", "ERROR: Ollama falhou, mas Groq respondeu com sucesso."));
+                return ResponseEntity.ok(new ChatResponseDTO(response, "GROQ-openai/gpt-oss-20b", "ERROR: Ollama falhou, mas Groq respondeu com sucesso."));
             }
 
         } else {
 
             try{
                 String response = groqAiService.chat(message, chatId);
-                return ResponseEntity.ok(new ChatResponseDTO(response, "GROQ-llama-3.1-8b-instant", "SUCCESS"));
+                return ResponseEntity.ok(new ChatResponseDTO(response, "GROQ-openai/gpt-oss-20b", "SUCCESS"));
             }catch (Exception e) {
                 logger.info("Erro ao processar a mensagem com Groq: '{}'. Detalhes do erro: {}", message, e.getMessage());
                 String response = ollamaAiService.chat(message, chatId);
