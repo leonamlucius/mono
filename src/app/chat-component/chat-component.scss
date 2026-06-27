@@ -179,11 +179,13 @@
     right: 20px;
     background-color: #fcfcfc;
     color: black;
-    width: 200px;
+    width: 25%;
     padding: 10px;
-    box-sizing: border-box;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    white-space: pre-wrap;
+    text-align: justify;
+    text-indent: 10px;
 }
 
 .modalInfo span{
@@ -266,8 +268,11 @@
 }
 
 .modalInfo{
+    width: 90%;
     top: 70px;
-    right: 20px;  
+    right: 50%;
+    transform: translateX(50%);
+    font-size: 16px;  
 }
 
 

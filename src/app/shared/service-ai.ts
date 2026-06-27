@@ -53,7 +53,7 @@ export class ServiceAi {
 
     }catch(error){
       console.error('Error fetching facts:', error);
-      return 'Desculpe, ocorreu um erro ao processar sua mensagem.';
+      return 'O mono conta fatos interessantes!';
     }
   }
 }

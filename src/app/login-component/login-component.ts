@@ -2,7 +2,7 @@ import { Component, signal } from '@angular/core';
 import { NgIcon, provideIcons,  } from '@ng-icons/core';
 import { NgIf, NgClass } from '@angular/common';
 import {ServiceAi} from '../shared/service-ai';
-import { interval, Subscription, startWith, switchMap, from, map } from 'rxjs';
+import { interval, Subscription, startWith, switchMap, from, map, scan } from 'rxjs';
 
 @Component({
   selector: 'app-login-component',
@@ -24,16 +24,16 @@ export class LoginComponent {
     this.pollingSubscription = interval(10000) //10 segundos
       .pipe(
         startWith(0),
-        switchMap((contador) => 
+        scan((acumulador) => acumulador + 1, -1),
+        switchMap((contadorVerdadeiro) => 
           from(this.serviceAi.getFacts()).pipe(
-            // O map aqui dentro "empacota" o número do contador junto com o texto que veio do backend
-            map((fatos) => ({ contador, fatos }))
+            map((fatos) => ({ contador: contadorVerdadeiro, fatos }))
           )
         )
       )
       .subscribe({
-        next: ({ contador, fatos }) => {
-          const ePar = contador % 2 === 0;
+        next: ({ contador , fatos }) => {
+          const ePar = contador % 2 == 0;
           
           this.isEvenCall.set(ePar); 
           this.facts.set(fatos);
