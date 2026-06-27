@@ -1,15 +1,22 @@
 import { Injectable } from '@angular/core';
 
+
 @Injectable({
   providedIn: 'root',
 })
+
+
 export class ServiceAi {
+
+  
 
   public async sendMessage(message: string, provider: 'OLLAMA' | 'GROQ'): Promise<any> {
 
     try{
 
-      const response = await fetch('https://unarmored-splashing-unturned.ngrok-free.dev/api/chat', {
+      const apiBase = import.meta.env['NG_APP_API_URL'];
+
+      const response = await fetch(`${apiBase}/api/chat`, {
         method: 'POST',
         headers: {
           'X-AI-Provider': provider, // ou 'GROQ' dependendo do provedor que você deseja usar
@@ -36,7 +43,9 @@ export class ServiceAi {
 
     try{
 
-      const response = await fetch('https://unarmored-splashing-unturned.ngrok-free.dev/api/facts', {
+      const apiBase = import.meta.env['NG_APP_API_URL'];
+
+      const response = await fetch(`${apiBase}/api/facts`, {
         method: 'GET',
         headers: {
           'Content-Type': 'text/plain',
