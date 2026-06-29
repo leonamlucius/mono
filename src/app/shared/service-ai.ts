@@ -24,11 +24,12 @@ export class ServiceAi {
 
       const apiBase = import.meta.env['NG_APP_API_URL'];
 
-      const response = await fetch(`${apiBase}/api/chat?chatId=${this.idUser()}`, {
+      const response = await fetch(`${apiBase}/api/chat`, {
         method: 'POST',
         headers: {
           'X-AI-Provider': provider, // ou 'GROQ' dependendo do provedor que você deseja usar
           'Content-Type': 'text/plain',
+          'Authorization': `Bearer ${localStorage.getItem('tokenUser')}`,
         },
         body: message,
       });
@@ -108,10 +109,9 @@ export class ServiceAi {
 
       if (response.ok) {
         const data = await response.json();
+        localStorage.setItem('tokenUser', data.token);
         this.router.navigate(['/mono']);
-        this.idUser.set(data.id);
-        this.tokenUser.set(data.token);
-        console.log("tokenUser: ", this.tokenUser());
+       
       }
      
       

@@ -20,6 +20,8 @@ import jakarta.validation.constraints.Positive;
 import org.springframework.http.ResponseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.mono.monoapi.config.JwtUtil;
 import com.mono.monoapi.dto.ChatResponseDTO;
 import com.mono.monoapi.dto.LoginResponse;
 import com.mono.monoapi.dto.LoginRequest;
@@ -40,28 +42,59 @@ public class MonoController {
 
     @Autowired
     public LoginService loginService;
+
+
+    @Autowired
+    private JwtUtil jwtUtil;
    
     @PostMapping("/chat")
-    public ResponseEntity<ChatResponseDTO> chat(@RequestBody String message, @RequestHeader(value = "X-AI-Provider", defaultValue = "GROQ") String provider, @RequestParam(defaultValue = "usuario-atual") String chatId) {
+    public ResponseEntity<ChatResponseDTO> chat(@RequestBody String message, @RequestHeader(value = "X-AI-Provider", defaultValue = "GROQ") String provider, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
+
+
+        logger.info("Recebida solicitação de chat com mensagem: '{}', provedor: '{}', token: '{}'", message, provider, bearerToken);
+
+        String ChatId = "usuario-anonimo"; 
+
+
+        if(bearerToken != null) {
+            String token = bearerToken.substring(7).trim();
+
+            token = token.replaceAll("[\\p{Cntrl}]", "");
+            try {
+                ChatId = jwtUtil.extractUserIdFromToken(token);
+
+                logger.info("ID do usuário extraído do token: '{}'", ChatId);
+            } catch (Exception e) {
+                logger.info("Erro ao extrair o ID do usuário do token: {}", e.getMessage());
+                return ResponseEntity.status(401).body(new ChatResponseDTO(null, null, "ERROR: Token inválido."));
+            }
+        } else {
+            logger.info("Nenhum token de autorização fornecido. Usando ID de chat padrão: '{}'", ChatId);
+        }
+
+       
+
+
+
         if ("OLLAMA".equalsIgnoreCase(provider)) {
 
             try{
-                String response = ollamaAiService.chat(message, chatId);
+                String response = ollamaAiService.chat(message, ChatId);
                 return ResponseEntity.ok(new ChatResponseDTO(response, "OLLAMA-qwen2.5:0.5b", "SUCCESS"));
             }catch (Exception e) {
                 logger.info("Erro ao processar a mensagem com Ollama, passando para Groq: '{}'. Detalhes do erro: {}", message, e.getMessage());
-                String response = groqAiService.chat(message, chatId);
+                String response = groqAiService.chat(message, ChatId);
                 return ResponseEntity.ok(new ChatResponseDTO(response, "GROQ-openai/gpt-oss-20b", "ERROR: Ollama falhou, mas Groq respondeu com sucesso."));
             }
 
         } else {
 
             try{
-                String response = groqAiService.chat(message, chatId);
+                String response = groqAiService.chat(message, ChatId);
                 return ResponseEntity.ok(new ChatResponseDTO(response, "GROQ-openai/gpt-oss-20b", "SUCCESS"));
             }catch (Exception e) {
                 logger.info("Erro ao processar a mensagem com Groq: '{}'. Detalhes do erro: {}", message, e.getMessage());
-                String response = ollamaAiService.chat(message, chatId);
+                String response = ollamaAiService.chat(message, ChatId);
                 return ResponseEntity.ok(new ChatResponseDTO(response, "OLLAMA-qwen2.5:0.5b", "ERROR: Groq falhou, mas Ollama respondeu com sucesso."));
             }
         }

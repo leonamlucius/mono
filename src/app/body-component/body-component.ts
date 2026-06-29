@@ -121,8 +121,7 @@ export class BodyComponent {
   }, 8000);
 
 
-    if (this.idUser==null || this.tokenUser == null) {
-      console.log(this.idUser, this.tokenUser);
+    if (localStorage.getItem('tokenUser') == null || localStorage.getItem('tokenUser') == undefined) {
       this.router.navigate(['/login']);
     }
 

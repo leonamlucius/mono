@@ -6,13 +6,20 @@ import com.mono.monoapi.dto.LoginResponse;
 import com.mono.monoapi.dto.RegisterRequest;
 import com.mono.monoapi.model.Login;
 import com.mono.monoapi.repository.LoginRepository;
+
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired; 
 import org.springframework.context.annotation.Lazy;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +34,15 @@ public class LoginService {
     private AuthenticationManager authenticationManager;
 
 
+    @Value("${jwt.secret}")
+    private String secretKey;
+
+    @Value("${jwt.expiration}")
+    private long jwtExpiration;
+
     public LoginResponse register(RegisterRequest request) {
+
+            
         // Check if the username already exists
         if (loginRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("Email já está em uso.");
@@ -42,7 +57,13 @@ public class LoginService {
 
         loginRepository.save(user);
 
-        String token = jwtUtil.generateToken(user.getEmail());
+        String token = Jwts.builder()
+            .setSubject(user.getEmail())
+            .claim("idUser", user.getId().toString()) // 🟢 O ID vai aqui dentro criptografado!
+            .setIssuedAt(new Date())
+            .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration)) // 1 dia
+            .signWith(SignatureAlgorithm.HS256, secretKey)
+            .compact();
 
         return new LoginResponse(user.getId(), token, user.getEmail());
     }
@@ -54,7 +75,7 @@ public class LoginService {
         Login user = loginRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
 
-        String token = jwtUtil.generateToken(user.getEmail());
+        String token = jwtUtil.generateToken(user.getEmail(), user.getId().toString());
         return new LoginResponse(user.getId(), token, user.getEmail());
     }
 

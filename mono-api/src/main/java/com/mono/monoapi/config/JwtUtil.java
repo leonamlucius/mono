@@ -4,37 +4,48 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Component
 public class JwtUtil {
-   @Value("${jwt.secret}")
+
+    private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
+
+    @Value("${jwt.secret}")
     private String secret;
 
     @Value("${jwt.expiration}")
     private long expiration;
 
-    // Ajustado para retornar SecretKey (exigência da nova versão)
+    // FORÇAR UTF_8 ao criar a chave. Isso evita corrupção de caracteres.
     private SecretKey getKey() {
-        return Keys.hmacShaKeyFor(secret.getBytes());
+        byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
+        logger.info("DEBUG: Secret Bytes Length: {}", keyBytes.length);
+        // Verifique se o tamanho é coerente. HS256 precisa de 32 bytes (256 bits).
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(String email) {
+    public String generateToken(String email, String idUser) {
         return Jwts.builder()
-                .subject(email)                                                
-                .issuedAt(new Date())                                           
-                .expiration(new Date(System.currentTimeMillis() + expiration))  
-                .signWith(getKey())                                             
+                .subject(email)
+                .claim("idUser", idUser) // Adicionando o ID no payload
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getKey())
                 .compact();
     }
 
+    // Corrigido: Agora usa .verifyWith() e .build() corretamente
     public String extractEmail(String token) {
-        return Jwts.parser()                                                   
+        return Jwts.parser()
+                .verifyWith(getKey()) // A chave é OBRIGATÓRIA para validar o header
                 .build()
-                .parseSignedClaims(token)                                     
-                .getPayload()                                                   
+                .parseSignedClaims(token)
+                .getPayload()
                 .getSubject();
     }
 
@@ -50,4 +61,14 @@ public class JwtUtil {
         }
     }
 
+    public String extractUserIdFromToken(String token) {
+        return Jwts.parser()
+            .verifyWith(getKey())
+            .build()
+            .parseSignedClaims(token)
+            .getPayload()
+            .get("idUser", String.class);
+    }
+
+   
 }
