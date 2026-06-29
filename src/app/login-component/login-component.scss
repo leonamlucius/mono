@@ -315,6 +315,49 @@ form .login-button:hover{
     transform: translateY(-40%);
 }
 
+
+.modalError{
+  position: fixed;
+  top: 20px;                 
+  right: 20px;
+  background-color: #fcfcfc !important;
+  width: 350px;
+  height: auto;
+  padding: 15px 8px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: slideTopIn 0.5s ease-in-out forwards;
+}
+::ng-deep .modalError.exit,
+::ng-deep .exit {
+   animation: slideTopOut 0.5s ease-in-out  forwards !important;
+}
+.modalError .modalContent{
+ width: 100%;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+}
+
+
+.modalError .close{
+    position: absolute;
+    cursor: pointer;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modalError .close:hover{
+    transform: scale(1.1);
+}
+
 @media screen and (max-width: 600px) {
     .login-container{
         width: 100%;
@@ -362,6 +405,12 @@ form .login-button:hover{
     form .login-button{
         scale: 1.1;
     }
+
+    .modalError{           
+        width: 90%;
+        right: 5%;
+        top: 10px;
+    }
 }
 
 @keyframes slideRight {
@@ -373,4 +422,14 @@ form .login-button:hover{
         transform: translateX(2%);
         opacity: 1;
     }
+}
+
+@keyframes slideTopIn {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideTopOut {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-100%); opacity: 0; }
 }

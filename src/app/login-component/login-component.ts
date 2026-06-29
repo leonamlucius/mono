@@ -18,6 +18,20 @@ export class LoginComponent {
 
   private pollingSubscription!: Subscription;
 
+  public modalErrorText = signal<string>('');
+
+  public showModalError = signal<boolean>(false);
+
+  public isClosingModal = signal<boolean>(false);
+
+  public showModal = false;
+
+  public showPassword = false;
+
+
+
+
+
   constructor(private serviceAi: ServiceAi) {}
 
   ngOnInit(): void {
@@ -51,11 +65,26 @@ export class LoginComponent {
       console.log('Timer dos fatos destruído com sucesso!');
     }
   }
+  
 
 
-  public showModal = false;
+  public showModalErrorFunction(text: string): void{
+    this.modalErrorText.set(text);
+    this.showModalError.set(true);
 
-  public showPassword = false;
+    setTimeout(() => {
+      this.triggerCloseModalError();
+    }, 3000);
+  }
+
+  public triggerCloseModalError(): void {
+    this.isClosingModal.set(true);
+    setTimeout(() => {
+      this.showModalError.set(false);
+      this.isClosingModal.set(false);
+    }, 300);
+  }
+  
 
   public togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
@@ -75,6 +104,20 @@ export class LoginComponent {
 
   public closeModalInfo(): void {
     this.showModal = false;
+  }
+
+
+  public login(email: string, password: string): void {
+
+    try{
+      this.serviceAi.login(email, password)
+        .then((response) => {
+          this.showModalErrorFunction(response);
+        })
+    }catch(error){
+      console.error('Error during login:', error);
+    }
+
   }
 
   

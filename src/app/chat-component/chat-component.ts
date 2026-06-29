@@ -62,22 +62,22 @@ export class ChatComponent {
   this.modalTimerPai = setTimeout(() => {
     this.fecharModalPaiComAnimacao();
   }, 5000);
-}
-
-public triggerCloseModalPai(): void {
-  if (this.modalTimerPai) {
-    clearTimeout(this.modalTimerPai);
   }
-  this.fecharModalPaiComAnimacao();
-}
 
-private fecharModalPaiComAnimacao(): void {
-  this.isClosingModalPai.set(true);
-  setTimeout(() => {
-    this.showModalErrorPai.set(false);
-    this.isClosingModalPai.set(false);
-  }, 500); // Tempo sincronizado com o CSS
-}
+  public triggerCloseModalPai(): void {
+    if (this.modalTimerPai) {
+      clearTimeout(this.modalTimerPai);
+    }
+    this.fecharModalPaiComAnimacao();
+  }
+
+  private fecharModalPaiComAnimacao(): void {
+    this.isClosingModalPai.set(true);
+    setTimeout(() => {
+      this.showModalErrorPai.set(false);
+      this.isClosingModalPai.set(false);
+    }, 500); // Tempo sincronizado com o CSS
+  }
   public scrollToBottom(): void {
     setTimeout(() => {
       const chatContainer = document.querySelector('.chat-container') as HTMLElement;
@@ -132,7 +132,8 @@ private fecharModalPaiComAnimacao(): void {
       }
 
        this.textValueSend.set(this.textoValue());
-       this.limparEResetar(textArea as HTMLTextAreaElement);
+       this.makeTextAreaDisabled(textArea as HTMLTextAreaElement);
+       
 
        
        await this.serviceAi.sendMessage(this.textValueSend(), this.llmType())
@@ -141,7 +142,8 @@ private fecharModalPaiComAnimacao(): void {
              console.log('Response:', response);
             this.chatHistory.set([...this.chatHistory().slice(0, -1), { text: response.message, sendBy: 'Bot', loading: false , llmType: response.model}]);
             console.log('Chat History:', this.chatHistory());
-            
+            this.limparEResetar(textArea as HTMLTextAreaElement);
+            this.makeTextAreaEnabled(textArea as HTMLTextAreaElement);
             this.scrollToBottom();
           }, 500);
           
@@ -169,5 +171,15 @@ private fecharModalPaiComAnimacao(): void {
 
   public closeModalInfo(): void {
     this.showModal = false;
+  }
+
+  public makeTextAreaDisabled(textarea: HTMLTextAreaElement): void {
+    textarea.disabled = true;
+    textarea.style.cursor = 'wait';
+  }
+
+  public makeTextAreaEnabled(textarea: HTMLTextAreaElement): void {
+    textarea.disabled = false;
+    textarea.style.cursor = 'text';
   }
 }

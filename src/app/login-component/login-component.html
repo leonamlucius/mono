@@ -23,12 +23,12 @@
         <form>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="text" id="email" formControlName="email" required>
+                <input type="text" id="email" formControlName="email" required #emailInput>
             </div>
             <div class="form-group">
                 <label for="password">Senha</label>
                 <div class="password-container">
-                    <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password" required>
+                    <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password" required #passwordInput>
                     <button type="button" (click)="togglePasswordVisibility()">
                         <span class="material-symbols-outlined">
                             {{ showPassword ? 'visibility_off' : 'visibility' }}
@@ -42,7 +42,7 @@
                 <a href="#">Registrar-se</a>
                 </div>
             </div>
-            <button type="submit" class="login-button">Login</button>
+            <button type="button" class="login-button" (click)="login(emailInput.value, passwordInput.value)">Login</button>
         </form>
 
         <hr class="divider">
@@ -77,6 +77,14 @@
     <div class="modalContent">
         <span class="close" (click)="closeModalInfo()">&times;</span>
         <p>Mono é um chatbot de inteligência artificial para ajudar no dia a dia, desenvolvido com uma interface moderna e reativa em Angular e um backend moderno em Spring Boot. Utilizando o Spring AI para orquestração de dados e a infraestrutura da Groq para inferência ultrarrápida, o projeto entrega respostas fluidas e com baixíssima latência, unindo o poder do ecossistema Java à agilidade dos modelos de linguagem de última geração.</p>
+    </div>
+</div>
+
+
+<div class="modalError" *ngIf="showModalError()" [ngClass]="{'exit': isClosingModal() }">
+    <span #modalError class="close" (click)="triggerCloseModalError()">&times;</span>
+    <div class="modalContent">
+        <p>{{ modalErrorText() }}</p>
     </div>
 </div>
 

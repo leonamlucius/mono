@@ -1,8 +1,10 @@
-import { Component, Input, signal} from '@angular/core';
+import { Component, Input, signal, inject} from '@angular/core';
 import { NgFor, NgIf, AsyncPipe, NgClass} from '@angular/common';
 import { Observable } from 'rxjs';
 import { trigger, transition, style, animate } from '@angular/animations';
+import {ServiceAi} from '../shared/service-ai';
 import {MarkdownPipe} from './markdown.pipe';
+import { Router } from '@angular/router';
 
 
 
@@ -24,6 +26,9 @@ import {MarkdownPipe} from './markdown.pipe';
 })
 export class BodyComponent {
 
+  private serviceAi = inject(ServiceAi);
+  private router = inject(Router);
+
   @Input() isInitialized = false;
 
   @Input() chatHistory: { text: string, sendBy: 'User' | 'Bot', loading: boolean, llmType?: 'OLLAMA' | 'GROQ' }[] = [];
@@ -36,9 +41,10 @@ export class BodyComponent {
 
   public modalErrorText = '';
 
+  public textoAtual = signal('');
 
- public textoAtual = signal('');
   private indice = 0;
+
   public texts = [
     {
       text: 'Faça sua pergunta, dúvidas, curiosidades e conversas com o Mono!',
@@ -55,6 +61,10 @@ export class BodyComponent {
       text: 'O Mono é uma ferramenta útil para quem busca informações rápidas e confiáveis, seja para resolver dúvidas do dia a dia, obter insights sobre um assunto específico ou simplesmente ter uma conversa interessante. Experimente o Mono e descubra como ele pode facilitar sua vida com respostas inteligentes e eficientes!',
     }
   ]
+
+  public idUser = this.serviceAi.idUser();
+
+  public tokenUser = this.serviceAi.tokenUser();
 
 
   public mostrarModalErroAutomatico(texto: string): void {
@@ -101,14 +111,22 @@ export class BodyComponent {
 
 
   ngOnInit() {
-  this.textoAtual.set(this.texts[0].text);
-      
-  setInterval(() => {
-  this.textoAtual.set('');
-  setTimeout(() => {
-    this.indice = (this.indice + 1) % this.texts.length;
-    this.textoAtual.set(this.texts[this.indice].text);
-  }, 50);
-}, 8000);
+    this.textoAtual.set(this.texts[0].text);
+    setInterval(() => {
+    this.textoAtual.set('');
+    setTimeout(() => {
+      this.indice = (this.indice + 1) % this.texts.length;
+      this.textoAtual.set(this.texts[this.indice].text);
+    }, 50);
+  }, 8000);
+
+
+    if (this.idUser==null || this.tokenUser == null) {
+      console.log(this.idUser, this.tokenUser);
+      this.router.navigate(['/login']);
+    }
+
+
+
 }
 }
