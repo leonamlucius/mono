@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import io.jsonwebtoken.io.Decoders;
 
 @Component
 public class JwtUtil {
@@ -21,14 +21,11 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private long expiration;
 
-    // FORÇAR UTF_8 ao criar a chave. Isso evita corrupção de caracteres.
     private SecretKey getKey() {
-        byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
-        logger.info("DEBUG: Secret Bytes Length: {}", keyBytes.length);
-        // Verifique se o tamanho é coerente. HS256 precisa de 32 bytes (256 bits).
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
-
+    // Decodifica a string Base64 de volta para os bytes originais
+    byte[] keyBytes = Decoders.BASE64.decode(secret);
+    return Keys.hmacShaKeyFor(keyBytes);
+}
     public String generateToken(String email, String idUser) {
         return Jwts.builder()
                 .subject(email)
