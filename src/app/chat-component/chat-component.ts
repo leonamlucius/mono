@@ -22,7 +22,7 @@ export class ChatComponent {
 
   public isInitialized = signal(false);
 
-  public chatHistory = signal<{ text: string, sendBy: 'User' | 'Bot', loading: boolean , llmType?: 'OLLAMA' | 'GROQ' }[]>([]);
+  public chatHistory = signal<{ text: string, sendBy: 'User' | 'Bot', loading: boolean , llmType?: 'OLLAMA' | 'GROQ' | 'ERROR'}[]>([]);
 
   public isTypeSomething = signal(false);
 
@@ -41,7 +41,7 @@ export class ChatComponent {
   private modalTimerPai: any;
 
 
-  public llmType = signal<'OLLAMA' | 'GROQ'>('GROQ');
+  public llmType = signal<'OLLAMA' | 'GROQ' | 'ERROR'>('GROQ');
  
 
   
@@ -139,17 +139,26 @@ export class ChatComponent {
        await this.serviceAi.sendMessage(this.textValueSend(), this.llmType())
         .then(response => {
           setTimeout(() => {
-             console.log('Response:', response);
+            console.log('Response:', response);
+
+            if (response === 'ERROR SENDING MESSAGE') {
+              this.mostrarModalErroPai('Desculpe, ocorreu um erro ao processar sua mensagem.');
+              this.chatHistory.set([...this.chatHistory().slice(0, -1), { text: "Erro ao enviar a mensagem.", sendBy: 'Bot', loading: false , llmType: "ERROR"}]);
+              this.limparEResetar(textArea as HTMLTextAreaElement);
+              this.makeTextAreaEnabled(textArea as HTMLTextAreaElement);
+              this.scrollToBottom();
+              return;
+            }
+
+
             this.chatHistory.set([...this.chatHistory().slice(0, -1), { text: response.message, sendBy: 'Bot', loading: false , llmType: response.model}]);
             console.log('Chat History:', this.chatHistory());
             this.limparEResetar(textArea as HTMLTextAreaElement);
             this.makeTextAreaEnabled(textArea as HTMLTextAreaElement);
             this.scrollToBottom();
           }, 500);
-          
-        });
+        })
     }catch(error){
-      this.scrollToBottom();
       console.error('Error:', error);
       this.scrollToBottom();
     }

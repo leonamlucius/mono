@@ -18,7 +18,7 @@ export class ServiceAi {
 
   
 
-  public async sendMessage(message: string, provider: 'OLLAMA' | 'GROQ'): Promise<any> {
+  public async sendMessage(message: string, provider: 'OLLAMA' | 'GROQ'| 'ERROR'): Promise<any> {
 
     try{
 
@@ -43,7 +43,7 @@ export class ServiceAi {
 
     }catch(error){
       console.error('Error sending message:', error);
-      return 'Desculpe, ocorreu um erro ao processar sua mensagem.';
+      return 'ERROR SENDING MESSAGE';
     }
   }
 
@@ -118,7 +118,7 @@ export class ServiceAi {
 
     }catch(error){
       console.error('Error during login:', error);
-      return 'Erro ao tentar fazer login.';
+      return 'Erro no login. Verifique suas credenciais e tente novamente.';
     }
   }
 }

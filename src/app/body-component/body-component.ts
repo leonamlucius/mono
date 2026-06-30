@@ -31,7 +31,7 @@ export class BodyComponent {
 
   @Input() isInitialized = false;
 
-  @Input() chatHistory: { text: string, sendBy: 'User' | 'Bot', loading: boolean, llmType?: 'OLLAMA' | 'GROQ' }[] = [];
+  @Input() chatHistory: { text: string, sendBy: 'User' | 'Bot', loading: boolean, llmType?: 'OLLAMA' | 'GROQ' | 'ERROR' }[] = [];
 
   public showModalError = signal(false);
 
