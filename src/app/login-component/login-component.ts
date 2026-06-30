@@ -28,6 +28,8 @@ export class LoginComponent {
 
   public showPassword = false;
 
+  public showLoading = signal<boolean>(false);
+
 
 
 
@@ -66,6 +68,13 @@ export class LoginComponent {
     }
   }
   
+  public showLoadingIndicator(): void {
+    this.showLoading.set(true);
+  }
+
+  public hideLoadingIndicator(): void {
+    this.showLoading.set(false);
+  }
 
 
   public showModalErrorFunction(text: string): void{
@@ -109,13 +118,19 @@ export class LoginComponent {
 
   public login(email: string, password: string): void {
 
+    this.showLoadingIndicator();
+
     try{
       this.serviceAi.login(email, password)
         .then((response) => {
           this.showModalErrorFunction(response);
         })
+        .finally(() => {
+          this.hideLoadingIndicator();
+        });
     }catch(error){
       console.error('Error during login:', error);
+      this.hideLoadingIndicator();
     }
 
   }

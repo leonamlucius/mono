@@ -1,26 +1,39 @@
 
+<div class="back-container">
+    <button class="back-button" (click)="goToLogin()">
+        <span class="material-symbols-outlined">
+            arrow_back
+        </span>
+    </button>
+</div>
 <div class="login-body">
     <div class="logo-square-container">
         <div class="logo-square">
            <div class="logo-container">
                 <img src="/img/mono.svg" alt="Logo" class="logo">
 
-                <div class="facts-container" *ngIf="facts()" [ngClass]="{'balao-par': isEvenCall(), 'balao-impar': !isEvenCall()}">
-                    <p class="facts-text">{{ facts() }}</p>
+                <div class="facts-container">
+                    <p class="facts-text">Registre-se para começar a usar o Mono!</p>
                 </div>
+               
             </div>
         </div>
     </div>
     <div class="login-container">
         <div class="icon">
             <span class="material-symbols-outlined">
-                login
-            </span>    
+                account_box
+            </span>   
         </div>
-        <p class="welcome-message">Bem-vindo!</p>
+        <p class="welcome-message">Cadastre-se</p>
         
-        <p class="login-instruction">Faça login para continuar e conversar com o mono!</p>
+        <p class="login-instruction">Crie sua conta para começar a usar o Mono!</p>
         <form>
+
+            <div class="form-group">
+                <label for="name">Nome</label>
+                <input type="text" id="name" formControlName="name" required #nameInput>
+            </div>
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="text" id="email" formControlName="email" required #emailInput>
@@ -28,22 +41,28 @@
             <div class="form-group">
                 <label for="password">Senha</label>
                 <div class="password-container">
-                    <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password" required #passwordInput>
+                    <input  [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password" required #passwordInput>
                     <button type="button" (click)="togglePasswordVisibility()">
                         <span class="material-symbols-outlined">
-                            {{ showPassword ? 'visibility_off' : 'visibility' }}
+                             {{ showPassword ? 'visibility_off' : 'visibility' }}
                         </span>
                     </button>
                 </div>
+            </div>
 
-                <div class="links">
-                <a href="#" >Esqueceu a senha?</a>
-
-                <a href="/register">Registrar-se</a>
+            <div class="form-group">
+                <label for="confirmPassword">Confirmar Senha</label>
+                <div class="password-container">
+                    <input  [type]="showConfirmPassword ? 'text' : 'password'" id="confirmPassword" formControlName="confirmPassword" required #confirmPasswordInput>
+                    <button type="button" (click)="togglePasswordConfirmVisibility()">
+                        <span class="material-symbols-outlined">
+                             {{ showConfirmPassword ? 'visibility_off' : 'visibility' }}
+                        </span>
+                    </button>
                 </div>
             </div>
-            <button type="button" class="login-button" (click)="login(emailInput.value, passwordInput.value)">
-                <span *ngIf="!showLoading()">Login</span>
+            <button type="button" class="register-button" (click)="registerUser(nameInput.value, emailInput.value, passwordInput.value, confirmPasswordInput.value)">
+                <span *ngIf="!showLoading()">Cadastrar</span>
                 <span *ngIf="showLoading()" class="material-symbols-outlined" id="loadingIcon">
                     progress_activity
                 </span>
