@@ -2,14 +2,23 @@
     <div class="header">
         
 
-    <div class="madeBy">
-        <button  (click)="goTolinkedin()" >
-            <ng-icon name="bootstrapLinkedin" title="LinkedIn"/>
-        </button>
+    <div class="left-container">
+        <div class="back-header">
+            <button (click)="goBack()">
+                <span class="material-symbols-outlined">
+                    arrow_back
+                </span>
+            </button>
+        </div>
+        <div class="madeBy">
+            <button  (click)="goTolinkedin()" >
+                <ng-icon name="bootstrapLinkedin" title="LinkedIn"/>
+            </button>
 
-        <button (click)="goToGithub()">
-            <ng-icon name="bootstrapGithub" title="GitHub"/>
-        </button>
+            <button (click)="goToGithub()">
+                <ng-icon name="bootstrapGithub" title="GitHub"/>
+            </button>
+        </div>
     </div>
 
 
@@ -27,8 +36,17 @@
 
 <ng-container *ngIf="isInitialized()">
     <div class="logo-container">
+
+        <div class="back-container">
+            <button (click)="goBack()">
+                <span class="material-symbols-outlined">
+                    arrow_back
+                </span>
+            </button>
+        </div>
         <img src="/img/mono.svg" title="MONO" alt="MONO">
     </div>
+
 </ng-container>
 
 <app-body-component [isInitialized]="isInitialized()" [chatHistory]="chatHistory()"></app-body-component>

@@ -50,6 +50,9 @@ export class ChatComponent {
 
   
 
+  public goBack(): void {
+     window.location.href = '/login';
+  }
   public mostrarModalErroPai(texto: string): void {
   if (this.modalTimerPai) {
     clearTimeout(this.modalTimerPai);

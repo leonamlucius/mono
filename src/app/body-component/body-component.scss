@@ -31,7 +31,9 @@
 
 .logo-container p{
   width: 40%;
-  height: 100px;
+  height: auto;
+  min-height: 100px;
+  max-height: 300px;
   padding: 15px 30px;
   display: flex;
   justify-content: center;
@@ -208,6 +210,46 @@
 .modalErrorBody .close:hover{
     transform: scale(1.1);
 }
+@media (max-width: 600px) {
+
+  :host {
+  gap: 5px;
+  height: 87dvh;
+}
+  .message{
+  max-width: 70%;
+  margin-top: 30px;
+  height: auto;
+  padding: 10px 15px;
+  font-weight: 300;
+  font-size: 15px;
+}
+
+.modalErrorBody{
+  width: 90%;
+  right: 5%;
+  top: 10px;
+}
+.logo-container p{
+  width: 80%;
+  height: auto;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fcfcfc;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: #071A45;
+  animation: fadeIn 1s ease;
+  text-align: center;
+  
+}
+
+
+
+}
+
 @media (max-width: 600px) {
 
   :host {

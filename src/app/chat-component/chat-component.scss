@@ -17,8 +17,41 @@
     position: absolute;
     top: 0;
 }
+.left-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+.left-container .back-header{
+    background-color: #fcfcfc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;  
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    
+}
 
 
+.left-container .back-header button{
+   background-color: transparent;
+   border: none;
+   cursor: pointer;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.left-container .back-header button span{
+   transition: all 0.3s ease;
+}
+
+.left-container .back-header button span:hover{
+   transform: scale(1.1);
+}
 @keyframes slideIn {
     from {
         transform: translateX(0);
@@ -65,41 +98,52 @@
 .logo-container{
     position: absolute;
     top: 10px;
-    left: -15px;
+    left: -50px;
     background-color: #fcfcfc;
-    width: 10%;
+    width: 15%;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
+    gap: 10px;
     padding: 5px 20px;
     box-sizing: border-box;
     border-radius: 0 25px 25px 0;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     animation: slideLeft 0.5s ease-in-out;
+    transition: all 0.3s ease;
     z-index: 1;
+}
+
+.logo-container:hover{
+    left: 0;
 }
 
 .logo-container img{
     width: 80px;
 }
 
-@keyframes tilt {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    50% {
-        transform: rotate(120deg);
-    }
-    100% {
-        transform: rotate(0deg);
-    }
+.back-container{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: #fcfcfc;
 }
 
-.logo-container img:hover{
-    animation: tilt 0.4s ease-in-out;
+
+.back-container button{
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+.back-container button span{
+   scale: 1.06;
+}
+    
 
 @keyframes rotate {
     from {
@@ -236,9 +280,20 @@
 
 @media screen and (max-width: 600px) {
 .logo-container{
-       width: 35%;
+       width: 50%;
 }
 
+.back-container button span{
+   scale: 1.2;
+}
+.left-container .back-header{
+   width: 50px;
+   height: 50px;
+}
+
+.left-container .back-header span{
+   scale: 1.2;
+}
 .modalErrorPai{
     width: 90%;
     left: 5%;
