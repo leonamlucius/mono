@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.mono.monoapi.service.GroqAiService;
 import com.mono.monoapi.service.OllamaAiService;
 import com.mono.monoapi.service.LoginService;
+import com.mono.monoapi.service.ResetPasswordService;
 import jakarta.validation.Valid;
 
 import jakarta.validation.constraints.Positive;
@@ -26,6 +27,8 @@ import com.mono.monoapi.dto.ChatResponseDTO;
 import com.mono.monoapi.dto.LoginResponse;
 import com.mono.monoapi.dto.LoginRequest;
 import com.mono.monoapi.dto.RegisterRequest;
+import com.mono.monoapi.dto.ResetPasswordRequest;
+import com.mono.monoapi.dto.ForgotPasswordRequest;
 
 @RestController
 @RequestMapping("/api")
@@ -40,8 +43,15 @@ public class MonoController {
     @Autowired
     public OllamaAiService ollamaAiService;
 
+
+    @Autowired
+    public ResetPasswordService resetPasswordService;
+
     @Autowired
     public LoginService loginService;
+
+
+    
 
 
     @Autowired
@@ -116,5 +126,15 @@ public class MonoController {
         return ResponseEntity.ok(facts);
     }
 
-    
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+        resetPasswordService.forgotPassword(request.email());
+        return ResponseEntity.ok("Password reset link sent to email: " + request.email());
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        String response = resetPasswordService.resetPassword(request.token(), request.newPassword());
+        return ResponseEntity.ok(response);
+    }
 }
