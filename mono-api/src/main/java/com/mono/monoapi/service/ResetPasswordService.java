@@ -59,7 +59,7 @@ public class ResetPasswordService {
         message.setText("Olá, " + user.getName() + "!\n\n" +
                 "Você solicitou a alteração de sua senha. Clique no link abaixo para cadastrar uma nova senha:\n" +
                 urlDoFront + "\n\n" +
-                "Este link é válido por 15 minutos.");
+                "Este link é válido 1 hora. Se você não solicitou a alteração de senha, por favor ignore este e-mail.\n\n");
 
         mailSender.send(message);
        
