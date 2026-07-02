@@ -99,7 +99,7 @@ export class LoginComponent {
     this.showPassword = !this.showPassword;
   }
 
-   public goTolinkedin(): void {
+   public goToLinkedin(): void {
     window.open('https://www.linkedin.com/in/leonamlucius/', '_blank');
   }
 

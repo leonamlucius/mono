@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { NgIcon, provideIcons,  } from '@ng-icons/core';
+import { NgIcon} from '@ng-icons/core';
 import { NgIf, NgClass } from '@angular/common';
 import {ServiceAi} from '../shared/service-ai';
 
@@ -81,7 +81,7 @@ export class RegisterComponent {
     }, 300);
   }
 
-  public goTolinkedin(): void {
+  public goToLinkedin(): void {
     window.open('https://www.linkedin.com/in/leonamlucius/', '_blank');
   }
 
