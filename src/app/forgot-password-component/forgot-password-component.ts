@@ -2,6 +2,7 @@ import { Component, signal} from '@angular/core';
 import { NgIf, NgClass } from '@angular/common';
 import { NgIcon} from '@ng-icons/core';
 import { ɵEmptyOutletComponent } from "@angular/router";
+import { ServiceAi } from '../shared/service-ai';1
 
 @Component({
   selector: 'app-forgot-password-component',
@@ -10,6 +11,8 @@ import { ɵEmptyOutletComponent } from "@angular/router";
   styleUrls: ['./forgot-password-component.scss'],
 })
 export class ForgotPasswordComponent {
+
+  constructor(private serviceAi: ServiceAi) {}
 
   public showLoading = signal<boolean>(false);
 
@@ -24,6 +27,31 @@ export class ForgotPasswordComponent {
 
   
 
+
+  public forgotPassword(email: string): void {
+    this.showLoading.set(true);
+
+
+    this.serviceAi.forgotPassword(email)
+      .then((response) => {
+        console.log('Forgot password response:', response);
+        this.showLoading.set(false);
+        this.modalErrorText.set(response);
+        this.showModalError.set(true);
+         setTimeout(() => {
+           this.triggerCloseModalError();
+        }, 3000);
+      })
+      .catch((error) => {
+        console.error('Error in forgot password:', error);
+        this.showLoading.set(false);
+        this.modalErrorText.set('Ocorreu um erro ao tentar redefinir a senha. Por favor, tente novamente.');
+        this.showModalError.set(true);
+           setTimeout(() => {
+           this.triggerCloseModalError();
+        }, 3000);
+      });
+  }
   public goToLogin(): void {
     window.location.href = '/login';
   }
@@ -52,10 +80,5 @@ export class ForgotPasswordComponent {
     }, 300);
   }
 
-  public sendEmail(): void {
-    this.showLoading.set(true);
-
-    window.open("/reset-password", "_blank");
-  
-  }
+ 
 }

@@ -7,10 +7,13 @@ import com.mono.monoapi.model.PasswordResetToken;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.UUID;
 import java.time.LocalDateTime;
@@ -21,26 +24,32 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class ResetPasswordService {
 
-    @Autowired
     private final LoginRepository loginRepository;
 
-    @Autowired
     private final TokenRepository tokenRepository;
 
-    @Autowired
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
+
+    private final PasswordEncoder passwordEncoder;
 
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    @Value("${URLORIGIN}") 
+    private String urlOrigin;
 
     public void forgotPassword(String email) {
 
         Login user = loginRepository.findByEmail(email)
-        .orElseThrow(() -> new IllegalArgumentException("Email não encontrado."));
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado com o email: " + email));
+
 
         String token = UUID.randomUUID().toString();
-        PasswordResetToken resetToken = new PasswordResetToken();
+        PasswordResetToken resetToken = tokenRepository.findByUser(user)
+                .orElse(new PasswordResetToken());
+
+        if(resetToken.getExpiryDate() != null && resetToken.getExpiryDate().isAfter(LocalDateTime.now())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Um token de redefinição de senha já foi enviado recentemente. Por favor, verifique seu e-mail.");
+        }
+
         resetToken.setToken(token);
         resetToken.setUser(user);
         resetToken.setExpiryDate(LocalDateTime.now().plusHours(1));
@@ -49,13 +58,13 @@ public class ResetPasswordService {
         tokenRepository.save(resetToken);
 
 
-        String urlDoFront = "http://localhost:4200/reset-password?token=" + token;
+        String urlDoFront = urlOrigin + "/reset-password?token=" + token;
 
 
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(user.getEmail());
-        message.setSubject("Recuperação de Senha - Mono API");
+        message.setSubject("Recuperação de Senha - Mono");
         message.setText("Olá, " + user.getName() + "!\n\n" +
                 "Você solicitou a alteração de sua senha. Clique no link abaixo para cadastrar uma nova senha:\n" +
                 urlDoFront + "\n\n" +
@@ -66,10 +75,10 @@ public class ResetPasswordService {
     }
 
     public String resetPassword(String token, String newPassword) {
-       PasswordResetToken resetToken = tokenRepository.findByToken(token)
-            .orElseThrow(() -> new IllegalArgumentException("Token inválido"));
+      PasswordResetToken resetToken = tokenRepository.findByToken(token)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token inválido"));
         if (resetToken.getExpiryDate().isBefore(LocalDateTime.now())) {
-            throw new IllegalArgumentException("Token expirado");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token expirado");
         }
         Login user = resetToken.getUser();
         user.setPassword(passwordEncoder.encode(newPassword));
