@@ -21,12 +21,62 @@ export class ResetPasswordComponent {
 
     public modalErrorText = signal<string>('');
 
+    public tokenExperied = signal<boolean>(false);
+
     public showPassword = false;
 
     public showConfirmPassword = false;
 
 
     constructor(private serviceAi: ServiceAi) {}
+
+
+    ngOnInit(): void {
+      const token = new URLSearchParams(window.location.search).get('token');
+
+      if (!token) {
+        this.modalErrorText.set("Token de redefinição de senha ausente. Redirecionando para a página de login...");
+        this.showModalError.set(true);
+
+        setTimeout(() => {
+            this.triggerCloseModalError();
+          }, 3000);
+
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 3000);
+      }
+
+
+      this.serviceAi.tokenIsExpired(token)
+        .then((response) => {
+          if (response === true) {
+            this.modalErrorText.set("Token de redefinição de senha inválido ou expirado. Redirecionando para a página de login...");
+            this.showModalError.set(true);
+
+            setTimeout(() => {
+            this.triggerCloseModalError();
+          }, 3000);
+
+          this.tokenExperied.set(response);
+
+          console.log('Token validation response:', response);
+
+          }else{
+            return;
+          }
+        }).catch((error) => {
+          console.error('Error validating token:', error);
+          this.modalErrorText.set("Ocorreu um erro ao validar o token. Redirecionando para a página de login...");
+          this.showModalError.set(true);
+
+          setTimeout(() => {
+            this.triggerCloseModalError();
+          }, 3000);
+        });
+
+    }
+
 
 
     public resetPassword( newPassword: string, confirmNewPassword: string): void {

@@ -137,4 +137,15 @@ public class MonoController {
         String response = resetPasswordService.resetPassword(request.token(), request.newPassword());
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/token-test")
+    public ResponseEntity<Boolean> tokenIsExpired(@RequestParam String token) {
+        boolean isExpired = resetPasswordService.tokenIsExpired(token);
+        return ResponseEntity.ok(isExpired);
+    }
+
+
+
+
+
 }

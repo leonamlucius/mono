@@ -87,4 +87,10 @@ public class ResetPasswordService {
         return "Password reset successful for token: " + token;
     }
 
+    public boolean tokenIsExpired(String token) {
+        PasswordResetToken resetToken = tokenRepository.findByToken(token)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token inválido"));
+        return resetToken.getExpiryDate().isBefore(LocalDateTime.now());
+    }
+
 }

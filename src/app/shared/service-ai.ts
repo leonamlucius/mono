@@ -269,6 +269,33 @@ export class ServiceAi {
       return 'Erro ao tentar redefinir a senha. Verifique suas informações e tente novamente.';
     }
   }
+
+
+  public async tokenIsExpired(token: any): Promise<any> {
+    try{
+      const apiBase = import.meta.env['NG_APP_API_URL'];
+
+      const response  = await fetch(`${apiBase}/api/token-test?token=${token}`, {
+        method: 'GET',
+        headers:
+        {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        console.error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      return result;
+
+    }catch(error){
+      console.error('Error during token test:', error);
+      return 'Erro ao tentar verificar o token. Verifique suas informações e tente novamente.';
+    }
+  }
 }
 
 
