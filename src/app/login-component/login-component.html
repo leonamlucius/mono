@@ -1,5 +1,5 @@
 
-<div class="login-body">
+<div class="login-body"  (keydown.enter)="$event.preventDefault(); login(emailInput.value, passwordInput.value)">
     <div class="logo-square-container">
         <div class="logo-square">
            <div class="logo-container">

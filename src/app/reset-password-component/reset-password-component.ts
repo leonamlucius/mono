@@ -90,19 +90,19 @@ export class ResetPasswordComponent {
       this.serviceAi.resetPassword(token, newPassword, confirmNewPassword)
         .then((response) => {
           this.showLoading.set(false);
-          this.modalWarningText.set("Senha redefinida com sucesso! Redirecionando para a página de login...");
+          this.modalWarningText.set(response);
           this.showModalWarning.set(true);
           
           // Aguarda 3 segundos para o usuário ler a mensagem
           setTimeout(() => {
-            this.triggerCloseModalWarning();
-            
-            // Redireciona após fechar o modal
-            setTimeout(() => {
-              window.location.href = '/login';
-            }, 300); // Tempo da animação de fechar
-            
+            this.triggerCloseModalWarning();  
           }, 3000);
+
+          
+
+
+  
+
         })
         .catch((error) => {
           console.error('Error resetting password:', error);

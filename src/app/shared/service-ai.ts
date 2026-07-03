@@ -228,6 +228,7 @@ export class ServiceAi {
 
   public async resetPassword(token: any, newPassword: string, confirmNewPassword: string): Promise<any> {
 
+
     if(!token || !newPassword || !confirmNewPassword){
       return 'Por favor, preencha todos os campos obrigatórios.';
     }
@@ -260,8 +261,12 @@ export class ServiceAi {
       }
 
       if (response.ok) {
-        return 'Senha redefinida com sucesso. Por favor, faça login com sua nova senha.';
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 3000);
+        return 'Senha redefinida com sucesso! Redirecionando para a página de login...';
       }
+        
 
     }catch(error){
       console.error('Error during password reset:', error);
