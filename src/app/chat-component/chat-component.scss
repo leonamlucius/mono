@@ -252,7 +252,7 @@
   to { transform: translateY(-100%); opacity: 0; }
 }
 
-.modalErrorPai {
+.modalWarningPai {
   position: fixed;
   top: 20px;                  /* <-- Deixei em 90px (o do filho está em 20px) para não sobrepor se nascerem juntos */
   right: 20px;
@@ -266,11 +266,11 @@
   animation: slideTopIn 0.5s ease-in-out forwards;
 }
 
-.modalErrorPai.exitPai {
+.modalWarningPai.exitPai {
   animation: slideTopOut 0.5s ease-in-out forwards !important;
 }
 
-.modalErrorPai .close {
+.modalWarningPai .close {
   position: absolute;
   cursor: pointer;
   right: 15px;

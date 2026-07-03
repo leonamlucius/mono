@@ -18,12 +18,12 @@ export class ForgotPasswordComponent {
 
   public showModal = false;
 
-  public showModalError = signal<boolean>(false);
+  public showModalWarning = signal<boolean>(false);
 
   public isClosingModal = signal<boolean>(false);
 
 
-  public modalErrorText = signal<string>('');
+  public modalWarningText = signal<string>('');
 
   
 
@@ -36,19 +36,19 @@ export class ForgotPasswordComponent {
       .then((response) => {
         console.log('Forgot password response:', response);
         this.showLoading.set(false);
-        this.modalErrorText.set(response);
-        this.showModalError.set(true);
+        this.modalWarningText.set(response);
+        this.showModalWarning.set(true);
          setTimeout(() => {
-           this.triggerCloseModalError();
+           this.triggerCloseModalWarning();
         }, 3000);
       })
       .catch((error) => {
         console.error('Error in forgot password:', error);
         this.showLoading.set(false);
-        this.modalErrorText.set('Ocorreu um erro ao tentar redefinir a senha. Por favor, tente novamente.');
-        this.showModalError.set(true);
+        this.modalWarningText.set('Ocorreu um erro ao tentar redefinir a senha. Por favor, tente novamente.');
+        this.showModalWarning.set(true);
            setTimeout(() => {
-           this.triggerCloseModalError();
+           this.triggerCloseModalWarning();
         }, 3000);
       });
   }
@@ -72,10 +72,10 @@ export class ForgotPasswordComponent {
     this.showModal = false;
   }
 
-  public triggerCloseModalError(): void {
+  public triggerCloseModalWarning(): void {
     this.isClosingModal.set(true);
     setTimeout(() => {
-      this.showModalError.set(false);
+      this.showModalWarning.set(false);
       this.isClosingModal.set(false);
     }, 300);
   }

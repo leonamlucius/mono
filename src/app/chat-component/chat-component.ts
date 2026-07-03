@@ -32,11 +32,11 @@ export class ChatComponent {
 
   public showModal = false;
 
-  public showModalErrorPai = signal(false);
+  public showModalWarningPai = signal(false);
 
   public isClosingModalPai = signal(false);
 
-  public modalErrorTextPai = '';
+  public modalWarningTextPai = '';
 
   private modalTimerPai: any;
 
@@ -74,8 +74,8 @@ export class ChatComponent {
   }
 
   this.isClosingModalPai.set(false);
-  this.modalErrorTextPai = texto;
-  this.showModalErrorPai.set(true);
+  this.modalWarningTextPai = texto;
+  this.showModalWarningPai.set(true);
 
   this.modalTimerPai = setTimeout(() => {
     this.fecharModalPaiComAnimacao();
@@ -92,7 +92,7 @@ export class ChatComponent {
   private fecharModalPaiComAnimacao(): void {
     this.isClosingModalPai.set(true);
     setTimeout(() => {
-      this.showModalErrorPai.set(false);
+      this.showModalWarningPai.set(false);
       this.isClosingModalPai.set(false);
     }, 500); // Tempo sincronizado com o CSS
   }

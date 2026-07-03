@@ -300,7 +300,7 @@ form .register-button:hover{
 }
 
 
-.modalError{
+.modalWarning{
   position: fixed;
   top: 20px;                 
   right: 20px;
@@ -317,11 +317,11 @@ form .register-button:hover{
   z-index: 9999;
   animation: slideTopIn 0.5s ease-in-out forwards;
 }
-::ng-deep .modalError.exit,
+::ng-deep .modalWarning.exit,
 ::ng-deep .exit {
    animation: slideTopOut 0.5s ease-in-out  forwards !important;
 }
-.modalError .modalContent{
+.modalWarning .modalContent{
  width: 100%;
  display: flex;
  justify-content: center;
@@ -330,7 +330,7 @@ form .register-button:hover{
 }
 
 
-.modalError .close{
+.modalWarning .close{
     position: absolute;
     cursor: pointer;
     right: 10px;
@@ -339,7 +339,7 @@ form .register-button:hover{
     transition: all 0.3s ease;
 }
 
-.modalError .close:hover{
+.modalWarning .close:hover{
     transform: scale(1.1);
 }
 

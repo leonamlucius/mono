@@ -15,11 +15,11 @@ export class RegisterComponent {
 
    public showLoading = signal<boolean>(false);
   
-   public showModalError = signal<boolean>(false);
+   public showModalWarning = signal<boolean>(false);
 
    public isClosingModal = signal<boolean>(false);
 
-   public modalErrorText = signal<string>('');
+   public modalWarningText = signal<string>('');
 
    public showPassword = false;
 
@@ -45,7 +45,7 @@ export class RegisterComponent {
    try{
     this.serviceAi.register(name, email, password, confirmPassword)
       .then((response) => {
-          this.showModalErrorFunction(response);
+          this.showModalWarningFunction(response);
         })
         .finally(() => {
           this.hideLoadingIndicator();
@@ -54,7 +54,7 @@ export class RegisterComponent {
    }catch(error){
     this.hideLoadingIndicator();
     console.error('Error registering user:', error);
-    this.showModalErrorFunction('Erro ao registrar usuário. Por favor, tente novamente.');
+    this.showModalWarningFunction('Erro ao registrar usuário. Por favor, tente novamente.');
    }
   }
     
@@ -64,19 +64,19 @@ export class RegisterComponent {
   public togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
   }
-  public showModalErrorFunction(text: string): void{
-    this.modalErrorText.set(text);
-    this.showModalError.set(true);
+  public showModalWarningFunction(text: string): void{
+    this.modalWarningText.set(text);
+    this.showModalWarning.set(true);
 
     setTimeout(() => {
-      this.triggerCloseModalError();
+      this.triggerCloseModalWarning();
     }, 3000);
   }
 
-  public triggerCloseModalError(): void {
+  public triggerCloseModalWarning(): void {
     this.isClosingModal.set(true);
     setTimeout(() => {
-      this.showModalError.set(false);
+      this.showModalWarning.set(false);
       this.isClosingModal.set(false);
     }, 300);
   }

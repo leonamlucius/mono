@@ -18,9 +18,9 @@ export class LoginComponent {
 
   private pollingSubscription!: Subscription;
 
-  public modalErrorText = signal<string>('');
+  public modalWarningText = signal<string>('');
 
-  public showModalError = signal<boolean>(false);
+  public showModalWarning = signal<boolean>(false);
 
   public isClosingModal = signal<boolean>(false);
 
@@ -77,19 +77,19 @@ export class LoginComponent {
   }
 
 
-  public showModalErrorFunction(text: string): void{
-    this.modalErrorText.set(text);
-    this.showModalError.set(true);
+  public showModalWarningFunction(text: string): void{
+    this.modalWarningText.set(text);
+    this.showModalWarning.set(true);
 
     setTimeout(() => {
-      this.triggerCloseModalError();
+      this.triggerCloseModalWarning();
     }, 3000);
   }
 
-  public triggerCloseModalError(): void {
+  public triggerCloseModalWarning(): void {
     this.isClosingModal.set(true);
     setTimeout(() => {
-      this.showModalError.set(false);
+      this.showModalWarning.set(false);
       this.isClosingModal.set(false);
     }, 300);
   }
@@ -123,7 +123,7 @@ export class LoginComponent {
     try{
       this.serviceAi.login(email, password)
         .then((response) => {
-          this.showModalErrorFunction(response);
+          this.showModalWarningFunction(response);
         })
         .finally(() => {
           this.hideLoadingIndicator();

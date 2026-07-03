@@ -33,13 +33,13 @@ export class BodyComponent {
 
   @Input() chatHistory: { text: string, sendBy: 'User' | 'Bot', loading: boolean, llmType?: 'OLLAMA' | 'GROQ' | 'ERROR' }[] = [];
 
-  public showModalError = signal(false);
+  public showModalWarning = signal(false);
 
   public isClosingModal = signal(false);
 
   private modalTimer: any;
 
-  public modalErrorText = '';
+  public modalWarningText = '';
 
   public textoAtual = signal('');
 
@@ -77,8 +77,8 @@ export class BodyComponent {
 
 
     this.isClosingModal.set(false);
-    this.modalErrorText = texto;
-    this.showModalError.set(true);
+    this.modalWarningText = texto;
+    this.showModalWarning.set(true);
 
 
     this.modalTimer = setTimeout(() => {
@@ -87,7 +87,7 @@ export class BodyComponent {
 
     
   }
-  public triggerCloseModalError(): void {
+  public triggerCloseModalWarning(): void {
     if (this.modalTimer) {
       clearTimeout(this.modalTimer);
     }
@@ -99,7 +99,7 @@ export class BodyComponent {
     this.isClosingModal.set(true);
 
     setTimeout(() => {
-      this.showModalError.set(false);
+      this.showModalWarning.set(false);
       this.isClosingModal.set(false);
     }, 500); // Tempo para a animação de fechamento (ajuste conforme necessário)
   }

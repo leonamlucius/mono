@@ -15,11 +15,11 @@ export class ResetPasswordComponent {
 
     public showModal = false;
 
-    public showModalError = signal<boolean>(false);
+    public showModalWarning = signal<boolean>(false);
 
     public isClosingModal = signal<boolean>(false);
 
-    public modalErrorText = signal<string>('');
+    public modalWarningText = signal<string>('');
 
     public tokenExperied = signal<boolean>(false);
 
@@ -35,11 +35,11 @@ export class ResetPasswordComponent {
       const token = new URLSearchParams(window.location.search).get('token');
 
       if (!token) {
-        this.modalErrorText.set("Token de redefinição de senha ausente. Redirecionando para a página de login...");
-        this.showModalError.set(true);
+        this.modalWarningText.set("Token de redefinição de senha ausente. Redirecionando para a página de login...");
+        this.showModalWarning.set(true);
 
         setTimeout(() => {
-            this.triggerCloseModalError();
+            this.triggerCloseModalWarning();
           }, 3000);
 
         setTimeout(() => {
@@ -51,11 +51,11 @@ export class ResetPasswordComponent {
       this.serviceAi.tokenIsExpired(token)
         .then((response) => {
           if (response === true) {
-            this.modalErrorText.set("Link de redefinição de senha inválido ou expirado. Redirecionando para a página de login...");
-            this.showModalError.set(true);
+            this.modalWarningText.set("Link de redefinição de senha inválido ou expirado. Redirecionando para a página de login...");
+            this.showModalWarning.set(true);
 
             setTimeout(() => {
-            this.triggerCloseModalError();
+            this.triggerCloseModalWarning();
           }, 3000);
 
           this.tokenExperied.set(response);
@@ -69,11 +69,11 @@ export class ResetPasswordComponent {
           }
         }).catch((error) => {
           console.error('Error validating token:', error);
-          this.modalErrorText.set("Ocorreu um erro ao validar o token. Redirecionando para a página de login...");
-          this.showModalError.set(true);
+          this.modalWarningText.set("Ocorreu um erro ao validar o token. Redirecionando para a página de login...");
+          this.showModalWarning.set(true);
 
           setTimeout(() => {
-            this.triggerCloseModalError();
+            this.triggerCloseModalWarning();
           }, 3000);
         });
 
@@ -90,12 +90,12 @@ export class ResetPasswordComponent {
       this.serviceAi.resetPassword(token, newPassword, confirmNewPassword)
         .then((response) => {
           this.showLoading.set(false);
-          this.modalErrorText.set("Senha redefinida com sucesso! Redirecionando para a página de login...");
-          this.showModalError.set(true);
+          this.modalWarningText.set("Senha redefinida com sucesso! Redirecionando para a página de login...");
+          this.showModalWarning.set(true);
           
           // Aguarda 3 segundos para o usuário ler a mensagem
           setTimeout(() => {
-            this.triggerCloseModalError();
+            this.triggerCloseModalWarning();
             
             // Redireciona após fechar o modal
             setTimeout(() => {
@@ -107,12 +107,12 @@ export class ResetPasswordComponent {
         .catch((error) => {
           console.error('Error resetting password:', error);
           this.showLoading.set(false);
-          this.modalErrorText.set(error);
-          this.showModalError.set(true);
+          this.modalWarningText.set(error);
+          this.showModalWarning.set(true);
           
           // Fecha o modal após 3 segundos (sem redirecionar)
           setTimeout(() => {
-            this.triggerCloseModalError();
+            this.triggerCloseModalWarning();
           }, 3000);
   });
 
@@ -140,10 +140,10 @@ export class ResetPasswordComponent {
     this.showModal = false;
     } 
 
-   public triggerCloseModalError(): void {
+   public triggerCloseModalWarning(): void {
     this.isClosingModal.set(true);
     setTimeout(() => {
-      this.showModalError.set(false);
+      this.showModalWarning.set(false);
       this.isClosingModal.set(false);
     }, 300);
     }

@@ -106,10 +106,10 @@
 </div>
 
 
-<div class="modalError" *ngIf="showModalError()" [ngClass]="{'exit': isClosingModal() }">
-    <span #modalError class="close" (click)="triggerCloseModalError()">&times;</span>
+<div class="modalWarning" *ngIf="showModalWarning()" [ngClass]="{'exit': isClosingModal() }">
+    <span #modalWarning class="close" (click)="triggerCloseModalWarning()">&times;</span>
     <div class="modalContent">
-        <p>{{ modalErrorText() }}</p>
+        <p>{{ modalWarningText() }}</p>
     </div>
 </div>
 
