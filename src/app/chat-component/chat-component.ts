@@ -56,7 +56,6 @@ export class ChatComponent {
     }
 
     this.serviceAi.jwtTest(token).then(isValid => {
-      console.log('Token is valid:', isValid);
       if (!isValid) {
         window.location.href = '/login';
       }

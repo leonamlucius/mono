@@ -80,6 +80,7 @@ public class MonoController {
             }
         } else {
             logger.info("Nenhum token de autorização fornecido. Usando ID de chat padrão: '{}'", ChatId);
+            return ResponseEntity.status(401).body(new ChatResponseDTO(null, null, "ERROR: Nenhum token de autorização fornecido."));
         }
 
        
@@ -145,7 +146,11 @@ public class MonoController {
     }
 
     @GetMapping("/jwt-test")
-    public ResponseEntity<Boolean> jwtTest(@RequestParam String token) {
+    public ResponseEntity<Boolean> jwtTest(@RequestHeader(value = "Authorization", required = false) String bearerToken) {
+        if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body(false);
+        }
+        String token = bearerToken.substring(7);
         boolean isValid = jwtUtil.isTokenValid(token);
         return ResponseEntity.ok(isValid);
     }

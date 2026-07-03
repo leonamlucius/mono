@@ -297,8 +297,12 @@ export class ServiceAi {
       try{
         const apiBase = import.meta.env['NG_APP_API_URL'];
 
-        const response  = await fetch(`${apiBase}/api/jwt-test?token=${token}`, {
-          method: 'GET'
+        const response  = await fetch(`${apiBase}/api/jwt-test`, {
+          method: 'GET',
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+            'Authorization': `Bearer ${token}`
+          }
         });
 
         if (!response.ok) {
