@@ -57,7 +57,6 @@ export class ServiceAi {
       const response = await fetch(`${apiBase}/api/facts`, {
         method: 'GET',
         headers: {
-          'Content-Type': 'text/plain',
           'ngrok-skip-browser-warning': 'true' // Isso é obrigatório para o ngrok funcionar no navegador
         },
       });
@@ -277,10 +276,6 @@ export class ServiceAi {
 
       const response  = await fetch(`${apiBase}/api/token-test?token=${token}`, {
         method: 'GET',
-        headers:
-        {
-          'Content-Type': 'application/json',
-        },
       });
 
       if (!response.ok) {
@@ -295,6 +290,29 @@ export class ServiceAi {
       console.error('Error during token test:', error);
       return 'Erro ao tentar verificar o token. Verifique suas informações e tente novamente.';
     }
+  }
+
+
+  public async jwtTest(token: any): Promise<any> {
+      try{
+        const apiBase = import.meta.env['NG_APP_API_URL'];
+
+        const response  = await fetch(`${apiBase}/api/jwt-test?token=${token}`, {
+          method: 'GET'
+        });
+
+        if (!response.ok) {
+          console.error(`HTTP error! status: ${response.status}`);
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        return result;
+
+      }catch(error){
+        console.error('Error during JWT test:', error);
+        return 'Erro ao tentar verificar o JWT. Verifique suas informações e tente novamente.';
+      }
   }
 }
 

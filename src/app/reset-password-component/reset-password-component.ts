@@ -51,7 +51,7 @@ export class ResetPasswordComponent {
       this.serviceAi.tokenIsExpired(token)
         .then((response) => {
           if (response === true) {
-            this.modalErrorText.set("Token de redefinição de senha inválido ou expirado. Redirecionando para a página de login...");
+            this.modalErrorText.set("Link de redefinição de senha inválido ou expirado. Redirecionando para a página de login...");
             this.showModalError.set(true);
 
             setTimeout(() => {
@@ -60,7 +60,9 @@ export class ResetPasswordComponent {
 
           this.tokenExperied.set(response);
 
-          console.log('Token validation response:', response);
+          setTimeout(() => {
+          window.location.href = '/login';
+          }, 18000);
 
           }else{
             return;

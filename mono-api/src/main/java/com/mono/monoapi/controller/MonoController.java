@@ -144,6 +144,12 @@ public class MonoController {
         return ResponseEntity.ok(isExpired);
     }
 
+    @GetMapping("/jwt-test")
+    public ResponseEntity<Boolean> jwtTest(@RequestParam String token) {
+        boolean isValid = jwtUtil.isTokenValid(token);
+        return ResponseEntity.ok(isValid);
+    }
+
 
 
 

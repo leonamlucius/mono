@@ -48,6 +48,21 @@ export class ChatComponent {
   constructor(private serviceAi: ServiceAi) {}
 
 
+  ngOnInit() {
+
+    const token = localStorage.getItem('tokenUser');
+    if (!token) {
+      this.goBack();
+    }
+
+    this.serviceAi.jwtTest(token).then(isValid => {
+      console.log('Token is valid:', isValid);
+      if (!isValid) {
+        window.location.href = '/login';
+      }
+    });
+
+  }
   
 
   public goBack(): void {
@@ -105,6 +120,15 @@ export class ChatComponent {
     
   }
   public async iniciar(): Promise<void> {
+
+    const token = localStorage.getItem('tokenUser');
+
+    this.serviceAi.jwtTest(token).then(isValid => {
+      console.log('Token is valid:', isValid);
+      if (!isValid) {
+        window.location.href = '/login';
+      }
+    });
     this.scrollToBottom();
 
     if(this.showModal){
