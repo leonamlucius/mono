@@ -283,6 +283,9 @@ export class ServiceAi {
 
       const response  = await fetch(`${apiBase}/api/token-test?token=${token}`, {
         method: 'GET',
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+          },
       });
 
 
