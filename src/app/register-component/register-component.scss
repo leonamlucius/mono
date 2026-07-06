@@ -198,14 +198,16 @@ form{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    padding: 10px 94px;
+    box-sizing: border-box;
+    gap: 15px;
 }
 
 form .register-button{
     background-color: #F95903;
     color: #fff;
     border: none;
-    width: 14%;
+    width: 10%;
     height: 40px;
     border-radius: 10px;
     font-family: 'Arvo', serif;
@@ -216,6 +218,7 @@ form .register-button{
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 15px 45px;
 }
 form .register-button #loadingIcon{
    animation: rotate 1s linear infinite;
@@ -232,7 +235,6 @@ form .register-button:hover{
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
-    padding: 10px 94px;
     box-sizing: border-box;
 }
 
@@ -245,6 +247,7 @@ form .register-button:hover{
     background-color: transparent;
     border-radius: 8px;
     padding:7px 10px;
+    box-sizing: border-box;
 }
 
 .form-group label::after{
@@ -294,7 +297,7 @@ form .register-button:hover{
     cursor: pointer;
     color: #777575;
     position: absolute;
-    right: -15px;
+    right: 0px;
     top: 50%;
     transform: translateY(-40%);
 }
@@ -367,6 +370,11 @@ form .register-button:hover{
 }
 
 @media screen and (max-width: 600px) {
+
+    form{
+        padding: 10px 40px;
+    }
+
     .register-container{
         width: 100%;
     
@@ -377,7 +385,7 @@ form .register-button:hover{
 
     .form-group{
     width: 100%;
-    padding: 5px 26px;
+    box-sizing: border-box;
     }
 
     .information{
