@@ -200,7 +200,7 @@ export class ServiceAi {
 
 
       if(response.status === 400){
-        console.error('Email not found:', email);
+        console.error('Already requested password reset:', email);
         return 'Aguarde uma hora antes de tentar novamente. Se o problema persistir, entre em contato com o suporte.';
     
       }
@@ -255,6 +255,8 @@ export class ServiceAi {
         body: JSON.stringify({ token, newPassword, confirmNewPassword }),
       });
 
+
+
       if (!response.ok) {
         console.error(`HTTP error! status: ${response.status}`);
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -282,6 +284,12 @@ export class ServiceAi {
       const response  = await fetch(`${apiBase}/api/token-test?token=${token}`, {
         method: 'GET',
       });
+
+
+      if (response.status === 400) {
+        console.error('Token is invalid or expired:', token);
+        return true;
+      }
 
       if (!response.ok) {
         console.error(`HTTP error! status: ${response.status}`);

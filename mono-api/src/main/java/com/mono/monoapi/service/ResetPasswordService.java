@@ -46,9 +46,6 @@ public class ResetPasswordService {
         PasswordResetToken resetToken = tokenRepository.findByUser(user)
                 .orElse(new PasswordResetToken());
 
-        if(resetToken.getExpiryDate() != null && resetToken.getExpiryDate().isAfter(LocalDateTime.now())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Um token de redefinição de senha já foi enviado recentemente. Por favor, verifique seu e-mail.");
-        }
 
         resetToken.setToken(token);
         resetToken.setUser(user);

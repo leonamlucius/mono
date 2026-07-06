@@ -25,11 +25,26 @@ export class ForgotPasswordComponent {
 
   public modalWarningText = signal<string>('');
 
+  public timeRemaining = signal<number>(0);
+
+  public isButtonDisabled = signal<boolean>(false);
+
+  public timerInterval: any;
+
   
 
 
   public forgotPassword(email: string): void {
+
+
+    if (this.isButtonDisabled()) {
+      return; 
+    }
+
+
     this.showLoading.set(true);
+
+
 
 
     this.serviceAi.forgotPassword(email)
@@ -38,6 +53,10 @@ export class ForgotPasswordComponent {
         this.showLoading.set(false);
         this.modalWarningText.set(response);
         this.showModalWarning.set(true);
+
+        this.startTimer(30);
+
+        
          setTimeout(() => {
            this.triggerCloseModalWarning();
         }, 3000);
@@ -51,6 +70,27 @@ export class ForgotPasswordComponent {
            this.triggerCloseModalWarning();
         }, 3000);
       });
+  }
+
+
+  private startTimer(seconds: number): void {
+    this.timeRemaining.set(seconds);
+    this.isButtonDisabled.set(true);
+
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+    }
+
+    this.timerInterval = setInterval(() => {
+      const current = this.timeRemaining();
+      if (current <= 1) {
+        this.timeRemaining.set(0);
+        this.isButtonDisabled.set(false);
+        clearInterval(this.timerInterval);
+      } else {
+        this.timeRemaining.set(current - 1);
+      }
+    }, 1000);
   }
   public goToLogin(): void {
     window.location.href = '/login';
