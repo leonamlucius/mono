@@ -194,7 +194,7 @@ export class ServiceAi {
 
       if(response.status === 404){
         console.error('Email not found:', email);
-        return 'Email não encontrado. Por favor, verifique o email e tente novamente.';
+        throw new Error('Email não encontrado. Por favor, verifique o email e tente novamente.');
     
       }
 
@@ -221,7 +221,7 @@ export class ServiceAi {
 
     }catch(error){
       console.error('Error during forgot password:', error);
-      return 'Erro ao tentar redefinir a senha. Verifique suas informações e tente novamente.';
+      throw new Error(error instanceof Error ? error.message : 'Erro desconhecido');
     }
 
   }

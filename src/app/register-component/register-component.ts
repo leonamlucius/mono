@@ -40,6 +40,14 @@ export class RegisterComponent {
   
 
   public registerUser(name: string, email: string, password: string, confirmPassword: string): void {
+
+
+    if(this.showLoading()) {
+      return; 
+    }
+
+
+
     this.showLoadingIndicator();
 
    try{

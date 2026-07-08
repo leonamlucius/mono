@@ -42,7 +42,7 @@
                 <a href="/register">Registrar-se</a>
                 </div>
             </div>
-            <button type="button" class="login-button" (click)="login(emailInput.value, passwordInput.value)">
+            <button type="button" class="login-button" [class.disabled]="showLoading()" (click)="login(emailInput.value, passwordInput.value)">
                 <span *ngIf="!showLoading()">Login</span>
                 <span *ngIf="showLoading()" class="material-symbols-outlined" id="loadingIcon">
                     progress_activity

@@ -83,6 +83,10 @@ export class ResetPasswordComponent {
 
     public resetPassword( newPassword: string, confirmNewPassword: string): void {
 
+      if(this.showLoading()) {
+        return; 
+      }
+
       this.showLoading.set(true);
 
       const token = new URLSearchParams(window.location.search).get('token');

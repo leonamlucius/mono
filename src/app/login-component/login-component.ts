@@ -118,6 +118,10 @@ export class LoginComponent {
 
   public login(email: string, password: string): void {
 
+    if(this.showLoading()) {
+      return; 
+    }
+
     this.showLoadingIndicator();
 
     try{

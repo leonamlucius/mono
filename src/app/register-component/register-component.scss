@@ -220,6 +220,13 @@ form .register-button{
     justify-content: center;
     padding: 15px 45px;
 }
+
+
+form .register-button.disabled{
+    background-color: #ccc;
+    cursor: not-allowed;
+    pointer-events: none;
+}
 form .register-button #loadingIcon{
    animation: rotate 1s linear infinite;
 }

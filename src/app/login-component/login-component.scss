@@ -235,6 +235,13 @@ form .login-button{
     justify-content: center;
     padding: 15px 35px;
 }
+
+form .login-button.disabled{
+    background-color: #ccc;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 form .login-button #loadingIcon{
    animation: rotate 1s linear infinite;
 }

@@ -61,7 +61,7 @@
                     </button>
                 </div>
             </div>
-            <button type="button" class="register-button" (click)="registerUser(nameInput.value, emailInput.value, passwordInput.value, confirmPasswordInput.value)">
+            <button type="button" class="register-button" [class.disabled]="showLoading()" (click)="registerUser(nameInput.value, emailInput.value, passwordInput.value, confirmPasswordInput.value)">
                 <span *ngIf="!showLoading()">Cadastrar</span>
                 <span *ngIf="showLoading()" class="material-symbols-outlined" id="loadingIcon">
                     progress_activity

@@ -159,6 +159,7 @@ export class ChatComponent {
 
        this.textValueSend.set(this.textoValue());
        this.makeTextAreaDisabled(textArea as HTMLTextAreaElement);
+       this.limparEResetar(textArea as HTMLTextAreaElement);
        
 
        
@@ -170,7 +171,6 @@ export class ChatComponent {
             if (response === 'ERROR SENDING MESSAGE') {
               this.mostrarModalErroPai('Desculpe, ocorreu um erro ao processar sua mensagem.');
               this.chatHistory.set([...this.chatHistory().slice(0, -1), { text: "Erro ao enviar a mensagem.", sendBy: 'Bot', loading: false , llmType: "ERROR"}]);
-              this.limparEResetar(textArea as HTMLTextAreaElement);
               this.makeTextAreaEnabled(textArea as HTMLTextAreaElement);
               this.scrollToBottom();
               return;
@@ -179,7 +179,6 @@ export class ChatComponent {
 
             this.chatHistory.set([...this.chatHistory().slice(0, -1), { text: response.message, sendBy: 'Bot', loading: false , llmType: response.model}]);
             console.log('Chat History:', this.chatHistory());
-            this.limparEResetar(textArea as HTMLTextAreaElement);
             this.makeTextAreaEnabled(textArea as HTMLTextAreaElement);
             this.scrollToBottom();
           }, 500);

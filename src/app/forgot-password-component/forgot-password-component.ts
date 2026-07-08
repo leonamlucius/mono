@@ -36,19 +36,15 @@ export class ForgotPasswordComponent {
 
   public forgotPassword(email: string): void {
 
-
-    if (this.isButtonDisabled()) {
+    if (this.isButtonDisabled() || this.showLoading()) {
       return; 
     }
 
-
     this.showLoading.set(true);
-
-
-
 
     this.serviceAi.forgotPassword(email)
       .then((response) => {
+
         console.log('Forgot password response:', response);
         this.showLoading.set(false);
         this.modalWarningText.set(response);
@@ -62,15 +58,17 @@ export class ForgotPasswordComponent {
         }, 3000);
       })
       .catch((error) => {
-        console.error('Error in forgot password:', error);
+        this.stopTimer();
         this.showLoading.set(false);
-        this.modalWarningText.set('Ocorreu um erro ao tentar redefinir a senha. Por favor, tente novamente.');
+        this.modalWarningText.set(error);
         this.showModalWarning.set(true);
            setTimeout(() => {
            this.triggerCloseModalWarning();
         }, 3000);
       });
   }
+
+
 
 
   private startTimer(seconds: number): void {
@@ -92,6 +90,18 @@ export class ForgotPasswordComponent {
       }
     }, 1000);
   }
+
+  private stopTimer(): void {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+
+    this.timeRemaining.set(0);
+    this.isButtonDisabled.set(false);
+
+  }
+
   public goToLogin(): void {
     window.location.href = '/login';
   }
