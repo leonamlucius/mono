@@ -3,10 +3,11 @@ import { NgIf, NgClass } from '@angular/common';
 import { NgIcon} from '@ng-icons/core';
 import { ɵEmptyOutletComponent } from "@angular/router";
 import { ServiceAi } from '../shared/service-ai';1
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-forgot-password-component',
-  imports: [NgIf, NgClass, NgIcon, ɵEmptyOutletComponent],
+  imports: [NgIf, NgClass, NgIcon, ɵEmptyOutletComponent, FormsModule],
   templateUrl: './forgot-password-component.html',
   styleUrls: ['./forgot-password-component.scss'],
 })

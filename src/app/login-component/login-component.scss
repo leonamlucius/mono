@@ -280,6 +280,11 @@ form .login-button:hover{
     font-size: 14px;
     margin-top: 18px;
 }
+
+.form-group label::after{
+    content: " *";
+    color: #F95903;
+}
 .footer{
     width: 100%;
     display: flex;

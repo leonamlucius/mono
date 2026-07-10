@@ -3,10 +3,11 @@ import { NgIcon, provideIcons,  } from '@ng-icons/core';
 import { NgIf, NgClass } from '@angular/common';
 import {ServiceAi} from '../shared/service-ai';
 import { interval, Subscription, startWith, switchMap, from, map, scan } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login-component',
-  imports: [NgIcon, NgIf, NgClass],
+  imports: [NgIcon, NgIf, NgClass, FormsModule],
   templateUrl: './login-component.html',
   styleUrls: ['./login-component.scss'],
 })

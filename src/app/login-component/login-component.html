@@ -20,15 +20,15 @@
         <p class="welcome-message">Bem-vindo!</p>
         
         <p class="login-instruction">Faça login para continuar e conversar com o mono!</p>
-        <form>
+        <form (ngSubmit)="login(emailInput.value, passwordInput.value)">
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="text" id="email" formControlName="email" required #emailInput>
+                <input type="text" id="email" required #emailInput>
             </div>
             <div class="form-group">
                 <label for="password">Senha</label>
                 <div class="password-container">
-                    <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password" required #passwordInput>
+                    <input [type]="showPassword ? 'text' : 'password'" id="password" required #passwordInput>
                     <button type="button" (click)="togglePasswordVisibility()">
                         <span class="material-symbols-outlined">
                             {{ showPassword ? 'visibility_off' : 'visibility' }}
@@ -42,7 +42,7 @@
                 <a href="/register">Registrar-se</a>
                 </div>
             </div>
-            <button type="button" class="login-button" [class.disabled]="showLoading()" (click)="login(emailInput.value, passwordInput.value)">
+            <button type="submit" class="login-button" [class.disabled]="showLoading()">
                 <span *ngIf="!showLoading()">Login</span>
                 <span *ngIf="showLoading()" class="material-symbols-outlined" id="loadingIcon">
                     progress_activity

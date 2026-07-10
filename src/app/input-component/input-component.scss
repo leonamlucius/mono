@@ -1,4 +1,4 @@
-:host{
+form{
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -20,7 +20,7 @@
     
 }
 
-:host select{
+form select{
     width: 5em;
     font-size: 16px;
     border: none;
@@ -29,11 +29,11 @@
     background-color: transparent;
 }
 
-:host select:focus{
+form select:focus{
     border: none; 
 }
 
-:host .send-button{
+form .send-button{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -48,20 +48,20 @@
     transition: all 0.3s ease-in-out;
     flex-shrink: 0;
 }
-:host .send-button:hover{
+form .send-button:hover{
     border-radius: 50%;
 }
-:host .send-button:hover span {
+form .send-button:hover span {
     animation: slideIn 0.4s ease-in;
     border-radius: 50%;
 }
-:host .send-button:disabled{
+form .send-button:disabled{
     background-color: #ccc;
     cursor: not-allowed;
     pointer-events: none;
 }
 
-:host .send-button #loadingIcon {
+form .send-button #loadingIcon {
     animation: rotate 1s linear infinite;
 }
 

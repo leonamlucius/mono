@@ -3,9 +3,10 @@ import { NgIf, NgClass } from '@angular/common';
 import { NgIcon} from '@ng-icons/core';
 import { ɵEmptyOutletComponent } from "@angular/router";
 import { ServiceAi } from '../shared/service-ai';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-reset-password-component',
-  imports: [NgIf, NgClass, NgIcon, ɵEmptyOutletComponent],
+  imports: [NgIf, NgClass, NgIcon, ɵEmptyOutletComponent, FormsModule],
   templateUrl: './reset-password-component.html',
   styleUrl: './reset-password-component.scss',
 })
