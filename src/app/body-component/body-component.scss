@@ -1,3 +1,11 @@
+
+$orange-primary: #f95903;
+$white-primary: #fcfcfc;
+$beige-primary: #E3DAC3;
+$disabled-color: #ccc;
+$blue-primary: #071A45;
+$grey-primary: #b8b7b7;
+
 :host {
   width: 100%;
   height: 87dvh;
@@ -6,7 +14,7 @@
   justify-content: flex-end;
   overflow:hidden;
   overflow-y: auto;
-  scrollbar-color: #b8b7b7 transparent;
+  scrollbar-color: $grey-primary transparent;
 }
 
 .logo-container{
@@ -21,7 +29,7 @@
 
 .logo-container img{
   width: 150px;
-  background-color: #fcfcfc;
+  background-color: $white-primary;
   border-radius: 50%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
@@ -38,10 +46,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #fcfcfc;
+  background-color: $white-primary;
   border-radius: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
- 
   animation: fadeIn 1s ease;
   text-align: center;
 }
@@ -61,7 +68,7 @@
   padding: 10px 15px;
   margin: 10px;
   border-radius: 25px;
-  color: #fcfcfc;;
+  color: $white-primary;
   font-size: 15px;
   font-weight: 500;
   background-image:url('/img/pngtree-vintage-crumpled-craft-package-wrapping-paper-texture-as-a-transparent-background-png-image_11989598.png');
@@ -97,7 +104,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: #fcfcfc;
+  color: $white-primary;
   font-size: 18px;
   height: 30px;
   width: 30px;
@@ -112,7 +119,7 @@
   font-size: 20px;
 }
 .bot {
-  background-color: #071A45;
+  background-color: $blue-primary;
   align-self: flex-start;
   min-width: 140px;
   text-align: left;
@@ -120,7 +127,7 @@
 
 
 .user {
-  background-color: #F95903;
+  background-color: $orange-primary;
   align-self: flex-end !important;
   min-width: 170px;
 }
@@ -176,7 +183,7 @@
   position: fixed;
   top: 20px;                 
   right: 20px;
-  background-color: #fcfcfc !important;
+  background-color: $white-primary !important;
   width: 350px;
   height: auto;
   padding: 15px 8px;
@@ -237,10 +244,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #fcfcfc;
+  background-color: $white-primary;
   border-radius: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  color: #071A45;
+  color: $blue-primary;
   animation: fadeIn 1s ease;
   text-align: center;
   
@@ -277,10 +284,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #fcfcfc;
+  background-color: $white-primary;
   border-radius: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  color: #071A45;
+  color: $blue-primary;
   animation: fadeIn 1s ease;
   text-align: center;
   

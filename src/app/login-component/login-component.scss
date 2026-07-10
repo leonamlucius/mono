@@ -1,3 +1,12 @@
+$orange-primary: #f95903;
+$white-primary: #fcfcfc;
+$beige-primary: #E3DAC3;
+$disabled-color: #ccc;
+$blue-primary: #071A45;
+$grey-primary: #a8a5a5;
+$grey-text: #777575;
+
+
 :host{
     display: flex;
     flex-direction: column;
@@ -17,7 +26,7 @@
 }
 
 .information{
-    background-color: #fcfcfc;
+    background-color: $white-primary;
     width: 40px;
     height: 40px;
     display: flex;
@@ -49,7 +58,7 @@
 
 
 .madeBy{
-    background-color: #fcfcfc;
+    background-color: $white-primary;
     width: 40px;
     height: 40px;
     display: flex;
@@ -92,7 +101,7 @@
 .logo-square-container{
     width: 50%;
     height: 100%;
-    background-color: #fcfcfc;
+    background-color: $white-primary;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -106,7 +115,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #E3DAC3;
+    background-color: $beige-primary;
     background-image: 
     linear-gradient(to right, rgba(0,0,0,0.2) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(0,0,0,0.2) 1px, transparent 1px);
@@ -135,7 +144,7 @@
     padding: 10px 15px;
     margin: 10px;
     border-radius: 25px;
-    color: #fcfcfc;
+    color: $white-primary;
     font-size: 15px;
     font-weight: 500;
     background-image: url(/img/pngtree-vintage-crumpled-craft-package-wrapping-paper-texture-as-a-transparent-background-png-image_11989598.png);
@@ -146,18 +155,18 @@
     transition: all 0.3s ease;
 }
 .balao-par{
-  background-color: #071A45;
+  background-color: $blue-primary;
 }
 
 
 .balao-impar {
-  background-color: #F95903;
+  background-color: $orange-primary;
 }
 
 
 .logo-container img{
   width: 150px;
-  background-color: #fcfcfc;
+  background-color: $white-primary;
   border-radius: 50%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
@@ -167,7 +176,7 @@
 .login-container{
     width: 50%;
     height: 100%;
-    background-color: #fcfcfc;
+    background-color: $white-primary;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -183,7 +192,7 @@
 
 .login-container .divider{
     width: 50%;
-    border: 0.5px solid #a8a5a5;
+    border: 0.5px solid $grey-primary;
     margin: 20px 0;
 }
 
@@ -192,7 +201,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #F95903;
+    color: $orange-primary;
     animation: slideRight 0.5s ease-in-out;
 }
 
@@ -219,8 +228,8 @@ form{
 }
 
 form .login-button{
-    background-color: #F95903;
-    color: #fff;
+    background-color: $orange-primary;
+    color: $white-primary;
     border: none;
     width: 10%;
     height: 40px;
@@ -237,7 +246,7 @@ form .login-button{
 }
 
 form .login-button.disabled{
-    background-color: #ccc;
+    background-color: $disabled-color;
     cursor: not-allowed;
     pointer-events: none;
 }
@@ -262,7 +271,7 @@ form .login-button:hover{
 
 .form-group input{
     width: 100%;
-    border: 0.5px solid #a8a5a5;
+    border: 0.5px solid $grey-primary;
     background-color: transparent;
     border-radius: 8px;
     padding:7px 10px;
@@ -276,14 +285,14 @@ form .login-button:hover{
 }
 .form-group a{
     text-decoration: none;
-    color: #071A45;
+    color: $blue-primary;
     font-size: 14px;
     margin-top: 18px;
 }
 
 .form-group label::after{
     content: " *";
-    color: #F95903;
+    color: $orange-primary;
 }
 .footer{
     width: 100%;
@@ -297,7 +306,7 @@ form .login-button:hover{
     position: absolute;
     top: 30px;
     left: 20px;
-    background-color: #fcfcfc;
+    background-color: $white-primary;
     color: black;
     width: 30%;
     padding: 10px;
@@ -326,7 +335,7 @@ form .login-button:hover{
     background: none;
     border: none;
     cursor: pointer;
-    color: #777575;
+    color: $grey-text;
     position: absolute;
     right: 0;
     top: 50%;
@@ -338,7 +347,7 @@ form .login-button:hover{
   position: fixed;
   top: 20px;                 
   right: 20px;
-  background-color: #fcfcfc !important;
+  background-color: $white-primary !important;
   width: 350px;
   height: auto;
   padding: 15px 8px;

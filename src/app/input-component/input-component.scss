@@ -1,10 +1,18 @@
+$orange-primary: #f95903;
+$white-primary: #fcfcfc;
+$beige-primary: #E3DAC3;
+$disabled-color: #ccc;
+$blue-primary: #071A45;
+$grey-primary: #a8a5a5;
+
+
 form{
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 29px;
-    background-color: #fcfcfc;
+    background-color: $white-primary;
     min-height: 50px;
     padding: 20px;
     box-sizing: border-box;
@@ -40,8 +48,8 @@ form .send-button{
     width: 40px;
     height: 40px;
     box-sizing: border-box;
-    background-color: #F95903;
-    color: #fcfcfc;
+    background-color: $orange-primary;
+    color: $white-primary;
     border: none;
     border-radius: 10px;
     cursor: pointer;
@@ -56,7 +64,7 @@ form .send-button:hover span {
     border-radius: 50%;
 }
 form .send-button:disabled{
-    background-color: #ccc;
+    background-color: $disabled-color;
     cursor: not-allowed;
     pointer-events: none;
 }

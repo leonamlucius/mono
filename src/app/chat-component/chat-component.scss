@@ -1,3 +1,10 @@
+$orange-primary: #f95903;
+$white-primary: #fcfcfc;
+$beige-primary: #E3DAC3;
+$disabled-color: #ccc;
+$blue-primary: #071A45;
+$grey-primary: #a8a5a5;
+
 :host{
     width: 100%;
     height: 100%;
@@ -24,7 +31,7 @@
     gap: 10px;
 }
 .left-container .back-header{
-    background-color: #fcfcfc;
+    background-color: $white-primary;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -99,7 +106,7 @@
     position: absolute;
     top: 10px;
     left: -50px;
-    background-color: #fcfcfc;
+    background-color: $white-primary;
     width: 15%;
     display: flex;
     align-items: center;
@@ -127,7 +134,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    background-color: #fcfcfc;
+    background-color: $white-primary;
 }
 
 
@@ -156,7 +163,7 @@
 
 
 .information{
-    background-color: #fcfcfc;
+    background-color: $white-primary;
     width: 40px;
     height: 40px;
     display: flex;
@@ -188,7 +195,7 @@
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    background-color: #fcfcfc;
+    background-color: $white-primary;
     height: 40px;
     width: 90px;
     border-radius: 25px;
@@ -220,7 +227,7 @@
     position: absolute;
     top: 60px;
     right: 20px;
-    background-color: #fcfcfc;
+    background-color: $white-primary;
     color: black;
     width: 25%;
     padding: 10px;
@@ -254,9 +261,9 @@
 
 .modalWarningPai {
   position: fixed;
-  top: 20px;                  /* <-- Deixei em 90px (o do filho está em 20px) para não sobrepor se nascerem juntos */
+  top: 20px;                  
   right: 20px;
-  background-color: #fcfcfc !important; /* Cor diferente (azul do bot) para diferenciar do seu filho */
+  background-color: $white-primary !important; 
   width: 350px;
   padding: 15px;
   box-sizing: border-box;
@@ -275,7 +282,7 @@
   cursor: pointer;
   right: 15px;
   top: 10px;
-  color: #fcfcfc;
+  color: $white-primary;
 }
 
 @media screen and (max-width: 600px) {
