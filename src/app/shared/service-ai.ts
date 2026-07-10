@@ -1,5 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
@@ -22,7 +23,7 @@ export class ServiceAi {
 
     try{
 
-      const apiBase = import.meta.env['NG_APP_API_URL'];
+      const apiBase = environment.apiUrl;
 
       const response = await fetch(`${apiBase}/api/chat`, {
         method: 'POST',
@@ -52,7 +53,7 @@ export class ServiceAi {
 
     try{
 
-      const apiBase = import.meta.env['NG_APP_API_URL'];
+      const apiBase = environment.apiUrl;
 
       const response = await fetch(`${apiBase}/api/facts`, {
         method: 'GET',
@@ -91,7 +92,7 @@ export class ServiceAi {
 
     try{
 
-      const apiBase = import.meta.env['NG_APP_API_URL'];
+      const apiBase = environment.apiUrl;
 
       const response  = await fetch(`${apiBase}/api/login`, {
         method: 'POST',
@@ -138,7 +139,7 @@ export class ServiceAi {
       
     try{
 
-      const apiBase = import.meta.env['NG_APP_API_URL'];
+      const apiBase = environment.apiUrl;
 
       const response  = await fetch(`${apiBase}/api/register`, {
         method: 'POST',
@@ -180,7 +181,7 @@ export class ServiceAi {
     }
 
     try{
-      const apiBase = import.meta.env['NG_APP_API_URL'];
+      const apiBase = environment.apiUrl;
 
       const response  = await fetch(`${apiBase}/api/forgot-password`, {
         method: 'POST',
@@ -244,7 +245,7 @@ export class ServiceAi {
 
     try{
 
-      const apiBase = import.meta.env['NG_APP_API_URL'];
+      const apiBase = environment.apiUrl;
 
       const response  = await fetch(`${apiBase}/api/reset-password`, {
         method: 'POST',
@@ -279,7 +280,7 @@ export class ServiceAi {
 
   public async tokenIsExpired(token: any): Promise<any> {
     try{
-      const apiBase = import.meta.env['NG_APP_API_URL'];
+      const apiBase = environment.apiUrl;
 
       const response  = await fetch(`${apiBase}/api/token-test?token=${token}`, {
         method: 'GET',
@@ -311,7 +312,7 @@ export class ServiceAi {
 
   public async jwtTest(token: any): Promise<any> {
       try{
-        const apiBase = import.meta.env['NG_APP_API_URL'];
+        const apiBase = environment.apiUrl;
 
         const response  = await fetch(`${apiBase}/api/jwt-test`, {
           method: 'GET',
