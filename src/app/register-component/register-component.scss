@@ -40,6 +40,7 @@ $grey-text: #777575;
     display: flex;
     justify-content: center;
     align-items: center;
+    user-select: none;
 }
 .information span{
     transition: all 0.3s ease;
@@ -72,12 +73,14 @@ $grey-text: #777575;
     display: flex;
     justify-content: center;
     align-items: center;
+    user-select: none;
 }
 
 .madeBy ng-icon{
     width: 22px;
     height: 22px;
     transition: all 0.3s ease;
+    user-select: none;
 }
 
 .register-body{
@@ -227,6 +230,7 @@ form .register-button{
     align-items: center;
     justify-content: center;
     padding: 15px 45px;
+    user-select: none;
 }
 
 
@@ -300,6 +304,7 @@ form .register-button:hover{
 
 .modalInfo .close{
   cursor: pointer;
+  user-select: none;
 }
 .password-container{
     width: 100%;
@@ -315,6 +320,7 @@ form .register-button:hover{
     right: 0px;
     top: 50%;
     transform: translateY(-40%);
+    user-select: none;
 }
 
 
@@ -355,6 +361,7 @@ form .register-button:hover{
     top: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
+    user-select: none;
 }
 
 .modalWarning .close:hover{
@@ -381,7 +388,8 @@ form .register-button:hover{
     border-radius: 50%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     animation: _ngcontent-ng-c1048178766_slideRight 0.5s ease-in-out;
-    transition: all 0.3s ease; 
+    transition: all 0.3s ease;
+    user-select: none;
 }
 
 @media screen and (max-width: 600px) {

@@ -109,6 +109,7 @@ $grey-primary: #b8b7b7;
   height: 30px;
   width: 30px;
   transition: all 0.3s ease;
+  user-select: none;
 }
 .actions button:hover{
   scale: 1.02;

@@ -55,6 +55,7 @@ form .send-button{
     cursor: pointer;
     transition: all 0.3s ease-in-out;
     flex-shrink: 0;
+    user-select: none;
 }
 form .send-button:hover{
     border-radius: 50%;

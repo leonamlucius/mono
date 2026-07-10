@@ -50,6 +50,7 @@ $grey-text: #777575;
     display: flex;
     justify-content: center;
     align-items: center;
+    user-select: none;
 }
 .information span{
     transition: all 0.3s ease;
@@ -82,12 +83,14 @@ $grey-text: #777575;
     display: flex;
     justify-content: center;
     align-items: center;
+    user-select: none;
 }
 
 .madeBy ng-icon{
     width: 22px;
     height: 22px;
     transition: all 0.3s ease;
+    user-select: none;
 }
 
 .login-body{
@@ -243,6 +246,7 @@ form .login-button{
     align-items: center;
     justify-content: center;
     padding: 15px 35px;
+    user-select: none;
 }
 
 form .login-button.disabled{
@@ -340,6 +344,7 @@ form .login-button:hover{
     right: 0;
     top: 50%;
     transform: translateY(-40%);
+    user-select: none;
 }
 
 
