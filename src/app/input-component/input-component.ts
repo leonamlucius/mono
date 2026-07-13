@@ -1,8 +1,20 @@
-import { Component, Output, EventEmitter, ViewChild , ElementRef, signal} from '@angular/core';
+import {
+  Component,
+  Output,
+  EventEmitter,
+  ViewChild,
+  ElementRef,
+  signal,
+  effect,
+  AfterViewInit,
+  OnDestroy,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common'
-import { App } from '../app';
-import {ChatComponent} from '../chat-component/chat-component';
+import { NgIf } from '@angular/common';
+import { ChatComponent } from '../chat-component/chat-component';
+import { SpeechService } from '../shared/speech.service';
+import WaveSurfer from 'wavesurfer.js';
+import RecordPlugin from 'wavesurfer.js/dist/plugins/record.js';
 
 @Component({
   selector: 'app-input-component',
@@ -10,61 +22,132 @@ import {ChatComponent} from '../chat-component/chat-component';
   templateUrl: './input-component.html',
   styleUrls: ['./input-component.scss'],
 })
-export class InputComponent {
+export class InputComponent implements OnDestroy {
   @Output() textoChange = new EventEmitter<boolean>();
   @Output() textoValue = new EventEmitter<string>();
   @Output() llmType = new EventEmitter<'OLLAMA' | 'GROQ'>();
   @ViewChild('meuTextarea') meuTextarea!: ElementRef<HTMLTextAreaElement>;
+  @ViewChild('waveformContainer')
+  waveformContainer!: ElementRef<HTMLDivElement>;
+  private waveSurfer: WaveSurfer | null = null;
+  private recordPlugin: RecordPlugin | null = null;
   public showLoading = signal(false);
+  public micIsON = signal(false);
+  public micValue = '';
 
-  constructor(private chatComponent: ChatComponent) {}
+  constructor(
+    private chatComponent: ChatComponent,
+    private speechService: SpeechService
+  ) {
+    effect(() => {
+      this.micValue = this.speechService.transcricao();
+      this.micValue = this.micValue.trim();
 
-showLoadingIndicator() {
+      if (this.micValue) {
+        this.micValue =
+          this.micValue.charAt(0).toUpperCase() + this.micValue.slice(1);
+        this.textoValue.emit(this.micValue);
+        this.textoChange.emit(true);
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.recordPlugin?.destroy();
+    this.waveSurfer?.destroy();
+    this.waveSurfer = null;
+    this.recordPlugin = null;
+  }
+  public initializeWaveform(): void {
+    if (!this.waveformContainer?.nativeElement) {
+      console.error('Waveform container não encontrado');
+      return;
+    }
+
+    if (this.waveSurfer) {
+      return; // Já foi inicializado
+    }
+    // 1. Inicializa o Wavesurfer básico apontando para a nossa div
+    this.waveSurfer = WaveSurfer.create({
+      container: this.waveformContainer.nativeElement,
+      waveColor: '#4a4a4a', // Cor da linha guia de fundo
+      progressColor: '#00ff80', // Verde Mono do progresso
+      height: 50,
+      barWidth: 3, // Efeito moderno de barrinhas separadas
+      barGap: 3, // Espaçamento entre as barrinhas
+      barRadius: 3,
+    });
+
+    // 2. Inicializa e conecta o Plugin de Gravação (Microfone)
+    this.recordPlugin = this.waveSurfer.registerPlugin(
+      RecordPlugin.create({
+        scrollingWaveform: true, // A onda vai correndo para o lado enquanto você fala
+        renderRecordedAudio: false, // Não precisa re-renderizar o áudio estático por cima ao parar
+      })
+    );
+  }
+
+  public recordingMic() {
+    if (this.speechService.estaOuvindo()) {
+      this.speechService.parar();
+      this.micIsON.set(false);
+      this.recordPlugin?.stopRecording();
+
+      if (this.micValue) {
+        this.sendText();
+      }
+    } else {
+      this.micIsON.set(true);
+
+      setTimeout(() => {
+        this.initializeWaveform();
+        this.recordPlugin?.startRecording();
+        this.speechService.iniciar();
+      }, 0);
+    }
+  }
+  showLoadingIndicator() {
     this.showLoading.set(true);
   }
 
-hideLoadingIndicator() {
+  hideLoadingIndicator() {
     this.showLoading.set(false);
   }
-public onInput(textarea: HTMLTextAreaElement) {
-  const valor = textarea.value;
 
-  this.textoValue.emit(valor);
-  this.textoChange.emit(valor.trim().length > 0);
+  public onInput(textarea: HTMLTextAreaElement) {
+    const valor = textarea.value;
 
-  textarea.style.height = 'auto';
-  textarea.style.position = 'relative';
-  textarea.style.height = textarea.scrollHeight + 'px';
+    this.textoValue.emit(valor);
+    this.textoChange.emit(valor.trim().length > 0);
 
-}
-
-public changeLlmType(selectedType: HTMLSelectElement): void {
-  this.llmType.emit(selectedType.value as 'OLLAMA' | 'GROQ');
-
-  console.log('Tipo de LLM selecionado:', selectedType.value);
-} 
-
-
-public async sendText(): Promise<void> {
-  
-  
-  try {
-    this.showLoadingIndicator();
-    await this.chatComponent.iniciar();
-    
-  } catch (error) {
-      console.error('Erro ao enviar o texto:', error)     
-  } finally {
-    this.hideLoadingIndicator();
+    textarea.style.height = 'auto';
+    textarea.style.position = 'relative';
+    textarea.style.height = textarea.scrollHeight + 'px';
   }
-}
 
-public limparEResetar() {
+  public changeLlmType(selectedType: HTMLSelectElement): void {
+    this.llmType.emit(selectedType.value as 'OLLAMA' | 'GROQ');
+
+    console.log('Tipo de LLM selecionado:', selectedType.value);
+  }
+
+  public async sendText(): Promise<void> {
+    try {
+      this.showLoadingIndicator();
+      await this.chatComponent.iniciar();
+    } catch (error) {
+      console.error('Erro ao enviar o texto:', error);
+    } finally {
+      this.hideLoadingIndicator();
+    }
+  }
+
+  public limparEResetar() {
     if (this.meuTextarea) {
       const textarea = this.meuTextarea.nativeElement;
       textarea.value = '';
       textarea.style.height = 'auto'; // Reseta a altura para o min-height do CSS
-      
+
       // Notifica o pai que o texto agora está vazio
       this.textoValue.emit('');
       this.textoChange.emit(false);

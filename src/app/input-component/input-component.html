@@ -1,20 +1,43 @@
-
-
 <form (ngSubmit)="sendText()">
-    <textarea #meuTextarea (input)="onInput(meuTextarea)" placeholder="Sobre o que é a sua dúvida?"  (keydown.enter)="$event.preventDefault(); sendText()"></textarea>
+  <div #waveformContainer class="waveform-visualizer" [class.invisible]="!micIsON()"></div>
+  <textarea
+    #meuTextarea
+    (input)="onInput(meuTextarea)"
+    placeholder="Sobre o que é a sua dúvida?"
+    (keydown.enter)="$event.preventDefault(); sendText()  
+    "
+    [class.invisible]="micIsON()"
+  
+  ></textarea>
 
-    <select #providerSelect  (change)="changeLlmType(providerSelect)">
-            <option value="GROQ">Groq</option>
-            <option value="OLLAMA">Ollama</option>
-            
-    </select>
-    <button type="submit" class="send-button" [disabled]="showLoading()"> 
-        <span *ngIf="!showLoading()" class="material-symbols-outlined">
-        chevron_right
-        </span>
+  <select #providerSelect (change)="changeLlmType(providerSelect)">
+    <option value="GROQ">Groq</option>
+    <option value="OLLAMA">Ollama</option>
+  </select>
 
-        <span *ngIf="showLoading()" class="material-symbols-outlined" id="loadingIcon">
-            progress_activity
-        </span>
-    </button>
+  <button type="button" class="microphone-button" (click)="recordingMic()">
+    <span class="material-symbols-outlined" *ngIf="!micIsON()"> mic </span>
+    <span
+      class="material-symbols-outlined"
+      id="listeningIcon"
+      *ngIf="micIsON()"
+      [class.pulse]="micIsON()"
+    >
+      stop_circle
+    </span>
+  </button>
+
+  <button type="submit" class="send-button" [disabled]="showLoading() || micIsON()">
+    <span *ngIf="!showLoading()" class="material-symbols-outlined">
+      chevron_right
+    </span>
+
+    <span
+      *ngIf="showLoading()"
+      class="material-symbols-outlined"
+      id="loadingIcon"
+    >
+      progress_activity
+    </span>
+  </button>
 </form>
