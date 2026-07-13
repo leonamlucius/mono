@@ -1,39 +1,38 @@
-<ng-container *ngIf="!isInitialized()">
-    <div class="header">
-        
-
+<ng-container>
+  <div class="header">
     <div class="left-container">
-        <div class="back-header">
-            <button (click)="goBack()">
-                <span class="material-symbols-outlined">
-                    arrow_back
-                </span>
-            </button>
-        </div>
-        <div class="madeBy">
-            <button  (click)="goTolinkedin()" >
-                <ng-icon name="bootstrapLinkedin" title="LinkedIn"/>
-            </button>
+      <div class="back-header">
+        <button (click)="goBack()">
+          <span class="material-symbols-outlined"> arrow_back </span>
+        </button>
+      </div>
+      <div class="madeBy">
+        <button (click)="goTolinkedin()">
+          <ng-icon name="bootstrapLinkedin" title="LinkedIn" />
+        </button>
 
-            <button (click)="goToGithub()">
-                <ng-icon name="bootstrapGithub" title="GitHub"/>
-            </button>
-        </div>
+        <button (click)="goToGithub()">
+          <ng-icon name="bootstrapGithub" title="GitHub" />
+        </button>
+      </div>
     </div>
 
+    <div class="right-container">
+      <div class="llm-select">
+        <select  (change)="onLlmTypeChange($event)">
+          <option value="GROQ">Groq</option>
+          <option value="OLLAMA">Ollama</option>
+        </select>
+      </div>
 
-    <div class="information">
-            <button (click)="createModalInfo()">
-                <span class="material-symbols-outlined" >
-                    info
-                </span>
-            </button>
+      <button (click)="createModalInfo()">
+        <span class="material-symbols-outlined"> info </span>
+      </button>
     </div>
-        
-    </div>
+  </div>
 </ng-container>
 
-
+<!-- 
 <ng-container *ngIf="isInitialized()">
     <div class="logo-container">
 
@@ -47,23 +46,47 @@
         <img src="/img/mono.svg" title="MONO" alt="MONO">
     </div>
 
-</ng-container>
+</ng-container> -->
 
-<app-body-component [isInitialized]="isInitialized()" [chatHistory]="chatHistory()"></app-body-component>
-<app-input-component (textoChange)="isTypeSomething.set($event)" (textoValue)="textoValue.set($event)" (llmType)="llmType.set($event)"></app-input-component>
-
+<app-body-component
+  [isInitialized]="isInitialized()"
+  [chatHistory]="chatHistory()"
+></app-body-component>
+<app-input-component
+  (textoChange)="isTypeSomething.set($event)"
+  (textoValue)="textoValue.set($event)"
+  (llmType)="llmType.set($event)"
+></app-input-component>
 
 <div class="modalInfo" *ngIf="showModal">
-    <div class="modalContent">
-        <span class="close" (click)="closeModalInfo()">&times;</span>
-        <p>Mono é um chatbot de inteligência artificial para ajudar no dia a dia, desenvolvido com uma interface moderna e reativa em Angular e um backend robusto em Spring Boot</p>
-        <p> Utilizando o Spring AI para orquestração de dados, o projeto adota uma arquitetura híbrida de modelos: consome a infraestrutura da Groq para inferência ultrarrápida em nuvem utilizando o <code>gpt-oss-20b</code>, e integra o <code>qwen2.5:0.5b</code> localmente através do Ollama. Essa combinação entrega respostas fluidas com baixíssima latência, unindo a robustez do ecossistema Java à agilidade dos modelos de linguagem de última geração.</p>
-    </div>
+  <div class="modalContent">
+    <span class="close" (click)="closeModalInfo()">&times;</span>
+    <p>
+      Mono é um chatbot de inteligência artificial para ajudar no dia a dia,
+      desenvolvido com uma interface moderna e reativa em Angular e um backend
+      robusto em Spring Boot
+    </p>
+    <p>
+      Utilizando o Spring AI para orquestração de dados, o projeto adota uma
+      arquitetura híbrida de modelos: consome a infraestrutura da Groq para
+      inferência ultrarrápida em nuvem utilizando o <code>gpt-oss-20b</code>, e
+      integra o <code>qwen2.5:0.5b</code> localmente através do Ollama. Essa
+      combinação entrega respostas fluidas com baixíssima latência, unindo a
+      robustez do ecossistema Java à agilidade dos modelos de linguagem de
+      última geração.
+    </p>
+  </div>
 </div>
 
-<div class="modalWarningPai" *ngIf="showModalWarningPai()" [ngClass]="{'exitPai': isClosingModalPai() }">
-    <span #modalWarningPai class="close" (click)="triggerCloseModalPai()">&times;</span>
-    <div class="modalContent">
-        <p>{{ modalWarningTextPai }}</p>
-    </div>
-</div> 
+<div
+  class="modalWarningPai"
+  *ngIf="showModalWarningPai()"
+  [ngClass]="{'exitPai': isClosingModalPai() }"
+>
+  <span #modalWarningPai class="close" (click)="triggerCloseModalPai()"
+    >&times;</span
+  >
+  <div class="modalContent">
+    <p>{{ modalWarningTextPai }}</p>
+  </div>
+</div>

@@ -1,8 +1,8 @@
-import { Component, signal, Input} from '@angular/core';
+import { Component, signal, Input } from '@angular/core';
 import { NgIf, NgClass } from '@angular/common';
 import { RouterOutlet, ɵEmptyOutletComponent } from '@angular/router';
-import {BodyComponent} from "../body-component/body-component";
-import {InputComponent} from "../input-component/input-component";
+import { BodyComponent } from '../body-component/body-component';
+import { InputComponent } from '../input-component/input-component';
 import { Subject } from 'rxjs';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { featherAirplay } from '@ng-icons/feather-icons';
@@ -15,14 +15,28 @@ import { ServiceAi } from '../shared/service-ai';
   imports: [RouterOutlet, BodyComponent, InputComponent, NgIf, NgClass, NgIcon],
   templateUrl: './chat-component.html',
   styleUrls: ['./chat-component.scss'],
-   providers: [provideIcons({ featherAirplay, heroUsers, bootstrapLinkedin, bootstrapGithub })]
+  providers: [
+    provideIcons({
+      featherAirplay,
+      heroUsers,
+      bootstrapLinkedin,
+      bootstrapGithub,
+    }),
+  ],
 })
 export class ChatComponent {
   protected readonly title = signal('mono');
 
   public isInitialized = signal(false);
 
-  public chatHistory = signal<{ text: string, sendBy: 'User' | 'Bot', loading: boolean , llmType?: 'OLLAMA' | 'GROQ' | 'ERROR'}[]>([]);
+  public chatHistory = signal<
+    {
+      text: string;
+      sendBy: 'User' | 'Bot';
+      loading: boolean;
+      llmType?: 'OLLAMA' | 'GROQ' | 'ERROR';
+    }[]
+  >([]);
 
   public isTypeSomething = signal(false);
 
@@ -40,45 +54,43 @@ export class ChatComponent {
 
   private modalTimerPai: any;
 
-
   public llmType = signal<'OLLAMA' | 'GROQ' | 'ERROR'>('GROQ');
- 
 
-  
   constructor(private serviceAi: ServiceAi) {}
 
-
   ngOnInit() {
-
     const token = localStorage.getItem('tokenUser');
     if (!token) {
       this.goBack();
     }
 
-    this.serviceAi.jwtTest(token).then(isValid => {
+    this.serviceAi.jwtTest(token).then((isValid) => {
       if (!isValid) {
         window.location.href = '/login';
       }
     });
-
   }
-  
+
+  public onLlmTypeChange(event: Event): void {
+    const select = event.target as HTMLSelectElement;
+    this.llmType.set(select.value as 'OLLAMA' | 'GROQ');
+  }
 
   public goBack(): void {
-     window.location.href = '/login';
+    window.location.href = '/login';
   }
   public mostrarModalErroPai(texto: string): void {
-  if (this.modalTimerPai) {
-    clearTimeout(this.modalTimerPai);
-  }
+    if (this.modalTimerPai) {
+      clearTimeout(this.modalTimerPai);
+    }
 
-  this.isClosingModalPai.set(false);
-  this.modalWarningTextPai = texto;
-  this.showModalWarningPai.set(true);
+    this.isClosingModalPai.set(false);
+    this.modalWarningTextPai = texto;
+    this.showModalWarningPai.set(true);
 
-  this.modalTimerPai = setTimeout(() => {
-    this.fecharModalPaiComAnimacao();
-  }, 5000);
+    this.modalTimerPai = setTimeout(() => {
+      this.fecharModalPaiComAnimacao();
+    }, 5000);
   }
 
   public triggerCloseModalPai(): void {
@@ -97,32 +109,28 @@ export class ChatComponent {
   }
   public scrollToBottom(): void {
     setTimeout(() => {
-      const chatContainer = document.querySelector('.chat-container') as HTMLElement;
+      const chatContainer = document.querySelector(
+        '.chat-container'
+      ) as HTMLElement;
       if (chatContainer) {
         chatContainer.scrollTo({
           top: chatContainer.scrollHeight,
-          behavior: 'smooth'
+          behavior: 'smooth',
         });
       }
-
     }, 100);
   }
 
   public limparEResetar(meuTextarea: HTMLTextAreaElement): void {
-   
-      const textarea = meuTextarea;
-      textarea.value = '';
-      textarea.style.height = 'auto'; // Reseta a altura para o min-height do CSS
-      this.textoValue.set('');
-      
-      
-    
+    const textarea = meuTextarea;
+    textarea.value = '';
+    textarea.style.height = 'auto'; // Reseta a altura para o min-height do CSS
+    this.textoValue.set('');
   }
   public async iniciar(): Promise<void> {
-
     const token = localStorage.getItem('tokenUser');
 
-    this.serviceAi.jwtTest(token).then(isValid => {
+    this.serviceAi.jwtTest(token).then((isValid) => {
       console.log('Token is valid:', isValid);
       if (!isValid) {
         window.location.href = '/login';
@@ -130,60 +138,79 @@ export class ChatComponent {
     });
     this.scrollToBottom();
 
-    if(this.showModal){
+    if (this.showModal) {
       this.closeModalInfo();
     }
-   
-    const textArea = document.querySelector('textarea');
-    
 
-    if (!this.isTypeSomething()){
+    const textArea = document.querySelector('textarea');
+
+    if (!this.isTypeSomething()) {
       this.mostrarModalErroPai('Digite algo para iniciar a conversa');
-     
-     
+
       this.scrollToBottom();
       return;
     }
 
-    this.chatHistory.set([...this.chatHistory(), { text: this.textoValue(), sendBy: 'User', loading: false }]);
-    this.chatHistory.set([...this.chatHistory(), { text: '', sendBy: 'Bot', loading: true , llmType: this.llmType()}]);
+    this.chatHistory.set([
+      ...this.chatHistory(),
+      { text: this.textoValue(), sendBy: 'User', loading: false },
+    ]);
+    this.chatHistory.set([
+      ...this.chatHistory(),
+      { text: '', sendBy: 'Bot', loading: true, llmType: this.llmType() },
+    ]);
 
-    try{
-
-      if(this.textoValue().trim() === ''){
+    try {
+      if (this.textoValue().trim() === '') {
         this.mostrarModalErroPai('Digite algo para continuar a conversa');
         this.chatHistory.set(this.chatHistory().slice(0, -2));
         this.scrollToBottom();
         return;
       }
 
-       this.textValueSend.set(this.textoValue());
-       this.makeTextAreaDisabled(textArea as HTMLTextAreaElement);
-       this.limparEResetar(textArea as HTMLTextAreaElement);
-       
+      this.textValueSend.set(this.textoValue());
+      this.makeTextAreaDisabled(textArea as HTMLTextAreaElement);
+      this.limparEResetar(textArea as HTMLTextAreaElement);
 
-       
-       await this.serviceAi.sendMessage(this.textValueSend(), this.llmType())
-        .then(response => {
+      await this.serviceAi
+        .sendMessage(this.textValueSend(), this.llmType())
+        .then((response) => {
           setTimeout(() => {
             console.log('Response:', response);
 
             if (response === 'ERROR SENDING MESSAGE') {
-              this.mostrarModalErroPai('Desculpe, ocorreu um erro ao processar sua mensagem.');
-              this.chatHistory.set([...this.chatHistory().slice(0, -1), { text: "Erro ao enviar a mensagem.", sendBy: 'Bot', loading: false , llmType: "ERROR"}]);
+              this.mostrarModalErroPai(
+                'Desculpe, ocorreu um erro ao processar sua mensagem.'
+              );
+              this.chatHistory.set([
+                ...this.chatHistory().slice(0, -1),
+                {
+                  text: 'Erro ao enviar a mensagem.',
+                  sendBy: 'Bot',
+                  loading: false,
+                  llmType: 'ERROR',
+                },
+              ]);
               this.makeTextAreaEnabled(textArea as HTMLTextAreaElement);
               this.scrollToBottom();
               return;
             }
 
-
-            this.chatHistory.set([...this.chatHistory().slice(0, -1), { text: response.message, sendBy: 'Bot', loading: false , llmType: response.model}]);
+            this.chatHistory.set([
+              ...this.chatHistory().slice(0, -1),
+              {
+                text: response.message,
+                sendBy: 'Bot',
+                loading: false,
+                llmType: response.model,
+              },
+            ]);
             console.log('Chat History:', this.chatHistory());
             this.makeTextAreaEnabled(textArea as HTMLTextAreaElement);
             this.scrollToBottom();
           }, 500);
-        })
-    }catch(error){
+        });
+    } catch (error) {
       console.error('Error:', error);
       this.scrollToBottom();
     }

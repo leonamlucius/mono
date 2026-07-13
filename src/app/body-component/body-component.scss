@@ -8,7 +8,7 @@ $grey-primary: #b8b7b7;
 
 :host {
   width: 100%;
-  height: 87dvh;
+  height: 80dvh;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -218,51 +218,13 @@ $grey-primary: #b8b7b7;
 .modalWarningBody .close:hover{
     transform: scale(1.1);
 }
-@media (max-width: 600px) {
 
-  :host {
-  gap: 5px;
-  height: 87dvh;
-}
-  .message{
-  max-width: 70%;
-  margin-top: 30px;
-  height: auto;
-  padding: 10px 15px;
-  font-weight: 300;
-  font-size: 15px;
-}
-
-.modalWarningBody{
-  width: 90%;
-  right: 5%;
-  top: 10px;
-}
-.logo-container p{
-  width: 80%;
-  height: auto;
-  padding: 15px 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: $white-primary;
-  border-radius: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  color: $blue-primary;
-  animation: fadeIn 1s ease;
-  text-align: center;
-  
-}
-
-
-
-}
 
 @media (max-width: 600px) {
 
   :host {
   gap: 5px;
-  height: 87dvh;
+  height: 82dvh;
 }
   .message{
   max-width: 70%;

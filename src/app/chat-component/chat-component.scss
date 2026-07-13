@@ -1,274 +1,310 @@
 $orange-primary: #f95903;
 $white-primary: #fcfcfc;
-$beige-primary: #E3DAC3;
+$beige-primary: #e3dac3;
 $disabled-color: #ccc;
-$blue-primary: #071A45;
+$blue-primary: #071a45;
 $grey-primary: #a8a5a5;
 
-:host{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    position: relative;
+:host {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
 }
 
-.header{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 15px;
-    box-sizing: border-box;
-    position: absolute;
-    top: 0;
+.header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
+  box-sizing: border-box;
 }
-.left-container{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
+.left-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  animation: slideLeft 0.5s ease-in-out;
+  gap: 10px;
 }
-.left-container .back-header{
-    background-color: $white-primary;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;  
-    border-radius: 50%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-    
+.left-container .back-header {
+  background-color: $white-primary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-
-.left-container .back-header button{
-   background-color: transparent;
-   border: none;
-   cursor: pointer;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   user-select: none;
+.left-container .back-header button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
 }
 
-.left-container .back-header button span{
-   transition: all 0.3s ease;
+.left-container .back-header button span {
+  transition: all 0.3s ease;
 }
 
-.left-container .back-header button span:hover{
-   transform: scale(1.1);
+.left-container .back-header button span:hover {
+  transform: scale(1.1);
 }
 @keyframes slideIn {
-    from {
-        transform: translateX(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(70%);
-        opacity: 1;
-    }
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(70%);
+    opacity: 1;
+  }
 }
 
 @keyframes slideLeft {
-    from {
-        transform: translateX(-100%);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(2%);
-        opacity: 1;
-    }
+  from {
+    transform: translateX(-100%);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(2%);
+    opacity: 1;
+  }
 }
 
 @keyframes slideRight {
-    from {
-        transform: translateX(40%);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(2%);
-        opacity: 1;
-    }
+  from {
+    transform: translateX(40%);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(2%);
+    opacity: 1;
+  }
 }
 
 @keyframes slideTop {
-      from {
-        transform: translateY(-100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
-.logo-container{
-    position: absolute;
-    top: 10px;
-    left: -50px;
-    background-color: $white-primary;
-    width: 15%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 5px 20px;
-    box-sizing: border-box;
-    border-radius: 0 25px 25px 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    animation: slideLeft 0.5s ease-in-out;
-    transition: all 0.3s ease;
-    z-index: 1;
-}
-
-.logo-container:hover{
-    left: 0;
+.logo-container {
+  position: absolute;
+  top: 10px;
+  left: -50px;
+  background-color: $white-primary;
+  width: 15%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 5px 20px;
+  box-sizing: border-box;
+  border-radius: 0 25px 25px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  animation: slideLeft 0.5s ease-in-out;
+  transition: all 0.3s ease;
+  z-index: 1;
 }
 
-.logo-container img{
-    width: 80px;
+.logo-container:hover {
+  left: 0;
 }
 
-.back-container{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    background-color: $white-primary;
+.logo-container img {
+  width: 80px;
 }
 
-
-.back-container button{
-    border: none;
-    background: none;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    user-select: none;
+.back-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: $white-primary;
 }
 
-.back-container button span{
-   scale: 1.06;
+.back-container button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
 }
-    
+
+.back-container button span {
+  scale: 1.06;
+}
 
 @keyframes rotate {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.right-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  animation: slideLeft 0.5s ease-in-out;
+  gap: 10px;
+}
+
+.right-container button {
+  background-color: $white-primary;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
+.right-container span {
+  transition: all 0.3s ease;
+}
+
+.right-container span:hover {
+  transform: scale(1.1);
 }
 
 
-.information{
-    background-color: $white-primary;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    animation: slideRight 0.5s ease-in-out;
+.right-container .llm-select {
+  background-color: $white-primary;
+  height: 40px;
+  width: 90px;
+  border-radius: 25px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  border: none;
+  padding: 10px;
+  box-sizing: border-box;
+  font-weight: 400;
+  font-family: 'Arvo', serif;
+  display: none;
 }
 
-.information button{
-    border: none;
-    background: none;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    user-select: none;
-}
-.information span{
-    transition: all 0.3s ease;
+.right-container select {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-weight: 400;
+  font-family: 'Arvo', serif;
 }
 
-.information span:hover{
-    transform: scale(1.1);
+.right-container select:focus {
+  outline: none;
 }
 
-.madeBy{
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    background-color: $white-primary;
-    height: 40px;
-    width: 90px;
-    border-radius: 25px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    animation: slideLeft 0.5s ease-in-out;
-}
-
-.madeBy button{
-    border: none;
-    background: none;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    user-select: none;
-}
-
-.madeBy ng-icon{
-    width: 22px;
-    height: 22px;
-    transition: all 0.3s ease;
-    user-select: none;
-}
-
-.madeBy ng-icon:hover{
-    transform: scale(1.1);
-}
-
-.modalInfo{
-    position: absolute;
-    top: 60px;
-    right: 20px;
-    background-color: $white-primary;
-    color: black;
-    width: 25%;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    white-space: pre-wrap;
-    text-align: justify;
-    text-indent: 10px;
-}
-
-.modalInfo span{
-    display: flex;
-    justify-content: flex-end;
-
-}
-
-.modalInfo .close{
+.madeBy {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: $white-primary;
+  height: 40px;
+  width: 90px;
+  border-radius: 25px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
 
+.madeBy button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
+
+.madeBy ng-icon {
+  width: 22px;
+  height: 22px;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.madeBy ng-icon:hover {
+  transform: scale(1.1);
+}
+
+.modalInfo {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  background-color: $white-primary;
+  color: black;
+  width: 25%;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  white-space: pre-wrap;
+  text-align: justify;
+  text-indent: 10px;
+}
+
+.modalInfo span {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modalInfo .close {
+  cursor: pointer;
+}
 
 @keyframes slideTopIn {
-  from { transform: translateY(-100%); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @keyframes slideTopOut {
-  from { transform: translateY(0); opacity: 1; }
-  to { transform: translateY(-100%); opacity: 0; }
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
 }
 
 .modalWarningPai {
   position: fixed;
-  top: 20px;                  
+  top: 20px;
   right: 20px;
-  background-color: $white-primary !important; 
+  background-color: $white-primary !important;
   width: 350px;
   padding: 15px;
   box-sizing: border-box;
@@ -291,59 +327,71 @@ $grey-primary: #a8a5a5;
 }
 
 @media screen and (max-width: 600px) {
-.logo-container{
-       width: 50%;
-}
+  .header {
+    gap: 15px;
+  }
+  .logo-container {
+    width: 50%;
+  }
 
-.back-container button span{
-   scale: 1.2;
-}
-.left-container .back-header{
-   width: 50px;
-   height: 50px;
-}
+  .back-container button span {
+    scale: 1.2;
+  }
+  .left-container .back-header {
+    width: 50px;
+    height: 50px;
+  }
 
-.left-container .back-header span{
-   scale: 1.2;
-}
-.modalErrorPai{
+  .left-container .back-header span {
+    scale: 1.2;
+  }
+  .modalErrorPai {
     width: 90%;
     left: 5%;
     right: 5%;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-.information{
+  }
+
+  .right-container button {
     width: 50px;
     height: 50px;
-}
-
-.information button{
-    scale: 1.2;
     user-select: none;
-}
+  }
 
-.madeBy{
+  .right-container button span {
+    scale: 1.2;
+  }
+
+  .right-container .llm-select {
+    display: flex;
     height: 50px;
     width: 110px;
-}
+  }
 
-.madeBy ng-icon{
+  .right-container select{
+    font-size: 15px;
+  }
+  .right-container select option{
+    font-size: 15px;
+  }
+
+  .madeBy {
+    height: 50px;
+    width: 110px;
+  }
+
+  .madeBy ng-icon {
     width: 25px;
     height: 25px;
-}
+  }
 
-.modalInfo{
+  .modalInfo {
     width: 90%;
     top: 70px;
     right: 50%;
     transform: translateX(50%);
-    font-size: 16px;  
+    font-size: 16px;
+  }
 }
-
-
-
-}
-
-
