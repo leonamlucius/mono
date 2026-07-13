@@ -15,7 +15,7 @@
     <option value="OLLAMA">Ollama</option>
   </select>
 
-  <button type="button" class="microphone-button" (click)="recordingMic()">
+  <button type="button" class="microphone-button" (click)="recordingMic()" (touchstart)="recordingMic()">
     <span class="material-symbols-outlined" *ngIf="!micIsON()"> mic </span>
     <span
       class="material-symbols-outlined"

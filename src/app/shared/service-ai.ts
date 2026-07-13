@@ -2,27 +2,21 @@ import { Injectable, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 
-
 @Injectable({
   providedIn: 'root',
 })
-
-
 export class ServiceAi {
-
   private router = inject(Router);
 
   public idUser = signal<any>(null);
 
   public tokenUser = signal<any>(null);
 
-
-  
-
-  public async sendMessage(message: string, provider: 'OLLAMA' | 'GROQ'| 'ERROR'): Promise<any> {
-
-    try{
-
+  public async sendMessage(
+    message: string,
+    provider: 'OLLAMA' | 'GROQ' | 'ERROR'
+  ): Promise<any> {
+    try {
       const apiBase = environment.apiUrl;
 
       const response = await fetch(`${apiBase}/api/chat`, {
@@ -30,7 +24,7 @@ export class ServiceAi {
         headers: {
           'X-AI-Provider': provider, // ou 'GROQ' dependendo do provedor que você deseja usar
           'Content-Type': 'text/plain',
-          'Authorization': `Bearer ${localStorage.getItem('tokenUser')}`,
+          Authorization: `Bearer ${localStorage.getItem('tokenUser')}`,
         },
         body: message,
       });
@@ -41,24 +35,20 @@ export class ServiceAi {
 
       const data = await response.json();
       return data;
-
-    }catch(error){
+    } catch (error) {
       console.error('Error sending message:', error);
       return 'ERROR SENDING MESSAGE';
     }
   }
 
-
   public async getFacts(): Promise<any> {
-
-    try{
-
+    try {
       const apiBase = environment.apiUrl;
 
       const response = await fetch(`${apiBase}/api/facts`, {
         method: 'GET',
         headers: {
-          'ngrok-skip-browser-warning': 'true' // Isso é obrigatório para o ngrok funcionar no navegador
+          'ngrok-skip-browser-warning': 'true', // Isso é obrigatório para o ngrok funcionar no navegador
         },
       });
 
@@ -68,36 +58,30 @@ export class ServiceAi {
 
       const data = await response.text();
       return data;
-
-    }catch(error){
+    } catch (error) {
       console.error('Error fetching facts:', error);
       return 'O mono conta fatos interessantes!';
     }
   }
 
   public async login(email: string, password: string): Promise<any> {
-
-    if(!email || !password){
-      
-      if(!email && password){
+    if (!email || !password) {
+      if (!email && password) {
         return 'Por favor, insira um email válido.';
       }
-      if(!password && email){
+      if (!password && email) {
         return 'Por favor, insira uma senha válida.';
       }
 
       return 'Por favor, insira um email e senha válidos.';
     }
 
-
-    try{
-
+    try {
       const apiBase = environment.apiUrl;
 
-      const response  = await fetch(`${apiBase}/api/login`, {
+      const response = await fetch(`${apiBase}/api/login`, {
         method: 'POST',
-        headers:
-        {
+        headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
@@ -111,46 +95,43 @@ export class ServiceAi {
         const data = await response.json();
         localStorage.setItem('tokenUser', data.token);
         this.router.navigate(['/mono']);
-       
       }
-     
-      
-
-    }catch(error){
+    } catch (error) {
       console.error('Error during login:', error);
       return 'Erro no login. Verifique suas credenciais e tente novamente.';
     }
   }
 
-  public async register(name: string, email: string, password: string, confirmPassword: string): Promise<any> {
-
-
-    if(!name || !email || !password || !confirmPassword){
+  public async register(
+    name: string,
+    email: string,
+    password: string,
+    confirmPassword: string
+  ): Promise<any> {
+    if (!name || !email || !password || !confirmPassword) {
       return 'Por favor, preencha todos os campos obrigatórios.';
     }
 
-    if(password.length < 8 || confirmPassword.length < 8){
+    if (password.length < 8 || confirmPassword.length < 8) {
       return 'A senha deve ter pelo menos 8 caracteres.';
     }
 
-    if(password !== confirmPassword){
+    if (password !== confirmPassword) {
       return 'As senhas não coincidem. Por favor, verifique e tente novamente.';
     }
-      
-    try{
 
+    try {
       const apiBase = environment.apiUrl;
 
-      const response  = await fetch(`${apiBase}/api/register`, {
+      const response = await fetch(`${apiBase}/api/register`, {
         method: 'POST',
-        headers:
-        {
+        headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ name, email, password, confirmPassword }),
       });
 
-      if(response.status === 500){
+      if (response.status === 500) {
         return 'Email já cadastrado. Por favor, tente outro email.';
       }
 
@@ -158,56 +139,44 @@ export class ServiceAi {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-
-
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('tokenUser', data.token);
         this.router.navigate(['/mono']);
       }
-
-    }catch(error){
+    } catch (error) {
       console.error('Error during registration:', error);
       return 'Erro no registro. Verifique suas informações e tente novamente.';
     }
-
   }
 
-
   public async forgotPassword(email: string): Promise<any> {
-
-    if(!email){
+    if (!email) {
       return 'Por favor, insira um email válido.';
     }
 
-    try{
+    try {
       const apiBase = environment.apiUrl;
 
-      const response  = await fetch(`${apiBase}/api/forgot-password`, {
+      const response = await fetch(`${apiBase}/api/forgot-password`, {
         method: 'POST',
-        headers:
-        {
+        headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email }),
       });
 
-
-      if(response.status === 404){
+      if (response.status === 404) {
         console.error('Email not found:', email);
-        throw new Error('Email não encontrado. Por favor, verifique o email e tente novamente.');
-    
+        throw new Error(
+          'Email não encontrado. Por favor, verifique o email e tente novamente.'
+        );
       }
 
-
-      if(response.status === 400){
+      if (response.status === 400) {
         console.error('Already requested password reset:', email);
         return 'Aguarde uma hora antes de tentar novamente. Se o problema persistir, entre em contato com o suporte.';
-    
       }
-
-
-      
 
       if (!response.ok) {
         console.error(`HTTP error! status: ${response.status}`);
@@ -217,46 +186,41 @@ export class ServiceAi {
       if (response.ok) {
         return 'Por favor, verifique sua caixa de email para redefinir sua senha.';
       }
-
-      
-
-    }catch(error){
+    } catch (error) {
       console.error('Error during forgot password:', error);
-      throw new Error(error instanceof Error ? error.message : 'Erro desconhecido');
+      throw new Error(
+        error instanceof Error ? error.message : 'Erro desconhecido'
+      );
     }
-
   }
 
-  public async resetPassword(token: any, newPassword: string, confirmNewPassword: string): Promise<any> {
-
-
-    if(!token || !newPassword || !confirmNewPassword){
+  public async resetPassword(
+    token: any,
+    newPassword: string,
+    confirmNewPassword: string
+  ): Promise<any> {
+    if (!token || !newPassword || !confirmNewPassword) {
       return 'Por favor, preencha todos os campos obrigatórios.';
     }
 
-    if(newPassword.length < 8 || confirmNewPassword.length < 8){
+    if (newPassword.length < 8 || confirmNewPassword.length < 8) {
       return 'A senha deve ter pelo menos 8 caracteres.';
     }
 
-    if(newPassword !== confirmNewPassword){
+    if (newPassword !== confirmNewPassword) {
       return 'As senhas não coincidem. Por favor, verifique e tente novamente.';
     }
 
-
-    try{
-
+    try {
       const apiBase = environment.apiUrl;
 
-      const response  = await fetch(`${apiBase}/api/reset-password`, {
+      const response = await fetch(`${apiBase}/api/reset-password`, {
         method: 'POST',
-        headers:
-        {
+        headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ token, newPassword, confirmNewPassword }),
       });
-
-
 
       if (!response.ok) {
         console.error(`HTTP error! status: ${response.status}`);
@@ -269,26 +233,22 @@ export class ServiceAi {
         }, 3000);
         return 'Senha redefinida com sucesso! Redirecionando para a página de login...';
       }
-        
-
-    }catch(error){
+    } catch (error) {
       console.error('Error during password reset:', error);
       return 'Erro ao tentar redefinir a senha. Verifique suas informações e tente novamente.';
     }
   }
 
-
   public async tokenIsExpired(token: any): Promise<any> {
-    try{
+    try {
       const apiBase = environment.apiUrl;
 
-      const response  = await fetch(`${apiBase}/api/token-test?token=${token}`, {
+      const response = await fetch(`${apiBase}/api/token-test?token=${token}`, {
         method: 'GET',
-          headers: {
-            "ngrok-skip-browser-warning": "true",
-          },
+        headers: {
+          'ngrok-skip-browser-warning': 'true',
+        },
       });
-
 
       if (response.status === 400) {
         console.error('Token is invalid or expired:', token);
@@ -302,40 +262,34 @@ export class ServiceAi {
 
       const result = await response.json();
       return result;
-
-    }catch(error){
+    } catch (error) {
       console.error('Error during token test:', error);
       return 'Erro ao tentar verificar o token. Verifique suas informações e tente novamente.';
     }
   }
 
-
   public async jwtTest(token: any): Promise<any> {
-      try{
-        const apiBase = environment.apiUrl;
+    try {
+      const apiBase = environment.apiUrl;
 
-        const response  = await fetch(`${apiBase}/api/jwt-test`, {
-          method: 'GET',
-          headers: {
-            "ngrok-skip-browser-warning": "true",
-            'Authorization': `Bearer ${token}`
-          }
-        });
+      const response = await fetch(`${apiBase}/api/jwt-test`, {
+        method: 'GET',
+        headers: {
+          'ngrok-skip-browser-warning': 'true',
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        if (!response.ok) {
-          console.error(`HTTP error! status: ${response.status}`);
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const result = await response.json();
-        return result;
-
-      }catch(error){
-        console.error('Error during JWT test:', error);
-        return 'Erro ao tentar verificar o JWT. Verifique suas informações e tente novamente.';
+      if (!response.ok) {
+        console.error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error('Error during JWT test:', error);
+      return 'Erro ao tentar verificar o JWT. Verifique suas informações e tente novamente.';
+    }
   }
 }
-
-
-

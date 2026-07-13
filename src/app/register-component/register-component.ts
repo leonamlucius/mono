@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
-import { NgIcon} from '@ng-icons/core';
+import { NgIcon } from '@ng-icons/core';
 import { NgIf, NgClass } from '@angular/common';
-import {ServiceAi} from '../shared/service-ai';
+import { ServiceAi } from '../shared/service-ai';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -11,25 +11,21 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./register-component.scss'],
 })
 export class RegisterComponent {
+  public showModal = false;
 
-   public showModal = false;
+  public showLoading = signal<boolean>(false);
 
-   public showLoading = signal<boolean>(false);
-  
-   public showModalWarning = signal<boolean>(false);
+  public showModalWarning = signal<boolean>(false);
 
-   public isClosingModal = signal<boolean>(false);
+  public isClosingModal = signal<boolean>(false);
 
-   public modalWarningText = signal<string>('');
+  public modalWarningText = signal<string>('');
 
-   public showPassword = false;
+  public showPassword = false;
 
-   public showConfirmPassword = false;
-    
+  public showConfirmPassword = false;
 
-
-   constructor(private serviceAi: ServiceAi) {}
-
+  constructor(private serviceAi: ServiceAi) {}
 
   public showLoadingIndicator(): void {
     this.showLoading.set(true);
@@ -38,42 +34,44 @@ export class RegisterComponent {
   public hideLoadingIndicator(): void {
     this.showLoading.set(false);
   }
-  
 
-  public registerUser(name: string, email: string, password: string, confirmPassword: string): void {
-
-
-    if(this.showLoading()) {
-      return; 
+  public registerUser(
+    name: string,
+    email: string,
+    password: string,
+    confirmPassword: string
+  ): void {
+    if (this.showLoading()) {
+      return;
     }
-
-
 
     this.showLoadingIndicator();
 
-   try{
-    this.serviceAi.register(name, email, password, confirmPassword)
-      .then((response) => {
+    try {
+      this.serviceAi
+        .register(name, email, password, confirmPassword)
+        .then((response) => {
           this.showModalWarningFunction(response);
         })
         .finally(() => {
           this.hideLoadingIndicator();
         });
-
-   }catch(error){
-    this.hideLoadingIndicator();
-    console.error('Error registering user:', error);
-    this.showModalWarningFunction('Erro ao registrar usuário. Por favor, tente novamente.');
-   }
+    } catch (error) {
+      this.hideLoadingIndicator();
+      console.error('Error registering user:', error);
+      this.showModalWarningFunction(
+        'Erro ao registrar usuário. Por favor, tente novamente.'
+      );
+    }
   }
-    
+
   public togglePasswordConfirmVisibility(): void {
     this.showConfirmPassword = !this.showConfirmPassword;
   }
   public togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
   }
-  public showModalWarningFunction(text: string): void{
+  public showModalWarningFunction(text: string): void {
     this.modalWarningText.set(text);
     this.showModalWarning.set(true);
 
@@ -101,7 +99,6 @@ export class RegisterComponent {
   public goToLogin(): void {
     window.location.href = '/login';
   }
-
 
   public createModalInfo(): void {
     this.showModal = true;
