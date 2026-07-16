@@ -191,7 +191,6 @@ $grey-primary: #a8a5a5;
   transform: scale(1.1);
 }
 
-
 .right-container .llm-select {
   background-color: $white-primary;
   height: 40px;
@@ -328,7 +327,8 @@ $grey-primary: #a8a5a5;
 
 @media screen and (max-width: 600px) {
   .header {
-    gap: 15px;
+    gap: 5px;
+    padding: 8px 15px;
   }
   .logo-container {
     width: 50%;
@@ -370,10 +370,10 @@ $grey-primary: #a8a5a5;
     width: 110px;
   }
 
-  .right-container select{
+  .right-container select {
     font-size: 15px;
   }
-  .right-container select option{
+  .right-container select option {
     font-size: 15px;
   }
 
