@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.mono.monoapi.service.GroqAiService;
 import com.mono.monoapi.service.OllamaAiService;
 import com.mono.monoapi.service.LoginService;
 import com.mono.monoapi.service.ResetPasswordService;
+import com.mono.monoapi.service.AssemblyAiService;
 import jakarta.validation.Valid;
 
 import jakarta.validation.constraints.Positive;
@@ -51,14 +53,15 @@ public class MonoController {
     public LoginService loginService;
 
 
-    
+    @Autowired
+    public AssemblyAiService assemblyAiService;
 
 
     @Autowired
     private JwtUtil jwtUtil;
    
     @PostMapping("/chat")
-    public ResponseEntity<ChatResponseDTO> chat(@RequestBody String message, @RequestHeader(value = "X-AI-Provider", defaultValue = "GROQ") String provider, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
+    public ResponseEntity<ChatResponseDTO> chat(@RequestBody String message, @RequestHeader(value = "X-AI-Provider", defaultValue = "GROQ") String provider, @RequestHeader(value = "Authorization", required = true) String bearerToken) {
 
 
         logger.info("Recebida solicitação de chat com mensagem: '{}', provedor: '{}', token: '{}'", message, provider, bearerToken);
@@ -146,13 +149,30 @@ public class MonoController {
     }
 
     @GetMapping("/jwt-test")
-    public ResponseEntity<Boolean> jwtTest(@RequestHeader(value = "Authorization", required = false) String bearerToken) {
+    public ResponseEntity<Boolean> jwtTest(@RequestHeader(value = "Authorization", required = true) String bearerToken) {
         if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
             return ResponseEntity.status(401).body(false);
         }
         String token = bearerToken.substring(7);
         boolean isValid = jwtUtil.isTokenValid(token);
         return ResponseEntity.ok(isValid);
+    }
+
+    @PostMapping("/transcribe")
+    public ResponseEntity<String> transcribe(@RequestParam("file") MultipartFile file, @RequestHeader(value = "Authorization", required = true) String bearerToken) throws Exception {
+
+
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("Arquivo de áudio não fornecido");
+        }
+
+        try {
+            String transcription = assemblyAiService.transcreverAudio(file.getBytes());
+            return ResponseEntity.ok(transcription);
+        } catch (Exception e) {
+            logger.error("Erro ao transcrever o áudio: {}", e.getMessage());
+            return ResponseEntity.status(500).body("Erro ao transcrever o áudio");
+        }
     }
 
 

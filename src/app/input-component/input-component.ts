@@ -12,9 +12,9 @@ import {
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { ChatComponent } from '../chat-component/chat-component';
-import { SpeechService } from '../shared/speech.service';
 import WaveSurfer from 'wavesurfer.js';
 import RecordPlugin from 'wavesurfer.js/dist/plugins/record.js';
+import { AudioRecordingService } from '../shared/audio-recording.service';
 
 @Component({
   selector: 'app-input-component',
@@ -34,20 +34,38 @@ export class InputComponent implements OnDestroy {
   public showLoading = signal(false);
   public micIsON = signal(false);
   public micValue = '';
+  private jaEnviou = false;
 
   constructor(
     private chatComponent: ChatComponent,
-    private speechService: SpeechService
+    private audioRecordingService: AudioRecordingService
   ) {
     effect(() => {
-      this.micValue = this.speechService.transcricao();
-      this.micValue = this.micValue.trim();
+      const transcricao = this.audioRecordingService.textTranscription();
 
-      if (this.micValue) {
-        this.micValue =
-          this.micValue.charAt(0).toUpperCase() + this.micValue.slice(1);
-        this.textoValue.emit(this.micValue);
-        this.textoChange.emit(true);
+      if (transcricao) {
+        this.micValue = transcricao.trim();
+
+        if (this.micValue.length > 0) {
+          this.micValue =
+            this.micValue.charAt(0).toUpperCase() + this.micValue.slice(1);
+
+          // Emite os eventos para notificar o componente pai
+          this.textoValue.emit(this.micValue);
+          this.textoChange.emit(true);
+
+          console.log('📝 Transcrição recebida:', this.micValue);
+
+          
+
+          if (!this.micIsON() &&  !this.jaEnviou) {
+            console.log('✅ Enviando automaticamente...');
+            this.jaEnviou = true;
+            setTimeout(() => {
+              this.sendText();
+            }, 100);
+          }
+        }
       }
     });
   }
@@ -88,21 +106,20 @@ export class InputComponent implements OnDestroy {
   }
 
   public recordingMic() {
-    if (this.speechService.estaOuvindo()) {
-      this.speechService.parar();
+    if (this.audioRecordingService.estaGravando()) {
+      this.audioRecordingService.pararGravacao();
       this.micIsON.set(false);
       this.recordPlugin?.stopRecording();
 
-      if (this.micValue) {
-        this.sendText();
-      }
+      this.showLoadingIndicator();
     } else {
       this.micIsON.set(true);
+      this.jaEnviou = false;
 
       setTimeout(() => {
         this.initializeWaveform();
         this.recordPlugin?.startRecording();
-        this.speechService.iniciar();
+        this.audioRecordingService.iniciarGravacao();
       }, 0);
     }
   }
@@ -132,14 +149,16 @@ export class InputComponent implements OnDestroy {
   }
 
   public async sendText(): Promise<void> {
-    try {
+    if (this.micValue.trim().length === 0) {
       this.showLoadingIndicator();
+    }
+    try {
       await this.chatComponent.iniciar();
     } catch (error) {
       console.error('Erro ao enviar o texto:', error);
-    } finally {
-      this.hideLoadingIndicator();
-    }
+    }finally {
+    this.hideLoadingIndicator();
+    } 
   }
 
   public limparEResetar() {
