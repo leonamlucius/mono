@@ -13,8 +13,10 @@ export class AudioRecordingService {
   public audioBlobResult = signal<Blob | null>(null);
 
   public textTranscription = signal<string | null>(null);
+  public audioCancelado = signal(false);
 
   public async iniciarGravacao(): Promise<void> {
+    this.audioCancelado.set(false);
     this.audioChunks = [];
     this.audioBlobResult.set(null);
 
@@ -42,9 +44,11 @@ export class AudioRecordingService {
 
       stream.getTracks().forEach((track) => track.stop());
 
-      this.enviarAudio().then((transcription) => {
-        this.textTranscription.set(transcription);
-      });
+      if (this.audioChunks.length > 0 && !this.audioCancelado()) {
+        this.enviarAudio().then((transcription) => {
+          this.textTranscription.set(transcription);
+        });
+      }
     };
 
     this.mediaRecorder.start();
@@ -56,12 +60,21 @@ export class AudioRecordingService {
     }
   }
 
+  public cancelarGravacao(): void {
+    if (this.mediaRecorder && this.estaGravando()) {
+      this.audioCancelado.set(true);
+      this.audioChunks = [];
+      this.pararGravacao();
+      this.audioBlobResult.set(null);
+      this.textTranscription.set('');
+    }
+  }
+
   public async enviarAudio(): Promise<string> {
     const apiBase = environment.apiUrl;
 
     const formData = new FormData();
     const audioBlob = this.audioBlobResult();
-
 
     if (audioBlob) {
       formData.append('file', audioBlob, 'audio.webm');

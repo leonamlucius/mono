@@ -56,9 +56,7 @@ export class InputComponent implements OnDestroy {
 
           console.log('📝 Transcrição recebida:', this.micValue);
 
-          
-
-          if (!this.micIsON() &&  !this.jaEnviou) {
+          if (!this.micIsON() && !this.jaEnviou) {
             console.log('✅ Enviando automaticamente...');
             this.jaEnviou = true;
             setTimeout(() => {
@@ -123,6 +121,15 @@ export class InputComponent implements OnDestroy {
       }, 0);
     }
   }
+
+  public cancelRecording() {
+    this.micIsON.set(false);
+
+    if (this.audioRecordingService.estaGravando()) {
+      this.audioRecordingService.cancelarGravacao();
+      this.recordPlugin?.stopRecording();
+    }
+  }
   showLoadingIndicator() {
     this.showLoading.set(true);
   }
@@ -156,9 +163,9 @@ export class InputComponent implements OnDestroy {
       await this.chatComponent.iniciar();
     } catch (error) {
       console.error('Erro ao enviar o texto:', error);
-    }finally {
-    this.hideLoadingIndicator();
-    } 
+    } finally {
+      this.hideLoadingIndicator();
+    }
   }
 
   public limparEResetar() {

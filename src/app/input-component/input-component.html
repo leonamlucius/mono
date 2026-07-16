@@ -16,15 +16,20 @@
   </select>
 
   <button type="button" class="microphone-button" (click)="recordingMic()">
-    <span class="material-symbols-outlined" *ngIf="!micIsON()"> mic </span>
+    <span class="material-symbols-outlined" *ngIf="!micIsON()" title="Gravar Áudio"> mic </span >
     <span
       class="material-symbols-outlined"
       id="listeningIcon"
       *ngIf="micIsON()"
       [class.pulse]="micIsON()"
+      title="Parar gravação de Áudio"
     >
       stop_circle
     </span>
+  </button>
+
+  <button type="button" class="cancel-button" *ngIf="micIsON()" (click)="cancelRecording()" title="Cancelar gravação">
+    <span class="material-symbols-outlined"> cancel </span>
   </button>
 
   <button type="submit" class="send-button" [disabled]="showLoading() || micIsON()">
