@@ -90,6 +90,7 @@ $grey-primary: #b8b7b7;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+
 }
 .actions .llm-type {
   width: 100%;
@@ -115,6 +116,23 @@ $grey-primary: #b8b7b7;
 .actions button span {
   font-size: 20px;
 }
+
+.actions .actions-buttons{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+
+.bot .actions .actions-buttons{
+  justify-content: flex-end;
+}
+
+.user .actions .actions-buttons{
+  justify-content: flex-start;
+}
+
 .bot {
   background-color: $blue-primary;
   align-self: flex-start;

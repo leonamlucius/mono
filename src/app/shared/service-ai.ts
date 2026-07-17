@@ -8,8 +8,6 @@ import { environment } from '../../environments/environment';
 export class ServiceAi {
   private router = inject(Router);
 
-  public idUser = signal<any>(null);
-
   public tokenUser = signal<any>(null);
 
   public async sendMessage(

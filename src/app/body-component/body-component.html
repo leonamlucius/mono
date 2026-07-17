@@ -1,36 +1,46 @@
-
 <ng-container *ngIf="!isInitialized">
-
   <div class="logo-container">
-    <img src="/img/mono.svg" alt="Logo" class="logo">
-     <p  @fadeText>{{ textoAtual() }}</p>
+    <img src="/img/mono.svg" alt="Logo" class="logo" />
+    <p @fadeText>{{ textoAtual() }}</p>
   </div>
 </ng-container>
 <div *ngIf="isInitialized" class="chat-container">
-    <div *ngFor="let item of chatHistory" [class.bot]="item.sendBy === 'Bot'" [class.user]="item.sendBy === 'User'" [class.loading]="item.loading" class="message">
-      <p [innerHTML]="item.sendBy === 'Bot' ? (item.text | markdown) : item.text" ></p>
+  <div
+    *ngFor="let item of chatHistory"
+    [class.bot]="item.sendBy === 'Bot'"
+    [class.user]="item.sendBy === 'User'"
+    [class.loading]="item.loading"
+    class="message"
+  >
+    <p
+      [innerHTML]="item.sendBy === 'Bot' ? (item.text | markdown) : item.text"
+    ></p>
 
-      <div class="actions">
-          <span class="llm-type" *ngIf="item.llmType">
-            {{ item.llmType }}
-          </span>
-     
+    <div class="actions">
+      <span class="llm-type" *ngIf="item.llmType"> {{ item.llmType }} </span>
 
+      <div class="actions-buttons">
         <button (click)="copyToClipboard(item.text)">
-          <span class="material-symbols-outlined">
-          content_copy
-          </span>
+          <span class="material-symbols-outlined"> content_copy </span>
         </button>
 
-      
+        <button type="button" (click)="speechText(item.text)">
+          <span class="material-symbols-outlined"> volume_up </span>
+        </button>
       </div>
     </div>
+  </div>
 </div>
 
-
-<div class="modalWarningBody" *ngIf="showModalWarning()" [ngClass]="{'exit': isClosingModal() }">
-    <span #modalWarning class="close" (click)="triggerCloseModalWarning()">&times;</span>
-    <div class="modalContent">
-        <p>{{ modalWarningText }}</p>
-    </div>
+<div
+  class="modalWarningBody"
+  *ngIf="showModalWarning()"
+  [ngClass]="{'exit': isClosingModal() }"
+>
+  <span #modalWarning class="close" (click)="triggerCloseModalWarning()"
+    >&times;</span
+  >
+  <div class="modalContent">
+    <p>{{ modalWarningText }}</p>
+  </div>
 </div>
