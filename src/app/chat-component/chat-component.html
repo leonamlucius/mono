@@ -19,34 +19,18 @@
 
     <div class="right-container">
       <div class="llm-select">
-        <select  (change)="onLlmTypeChange($event)">
+        <select (change)="onLlmTypeChange($event)">
           <option value="GROQ">Groq</option>
           <option value="OLLAMA">Ollama</option>
         </select>
       </div>
 
-      <button (click)="createModalInfo()">
-        <span class="material-symbols-outlined"> info </span>
+      <button (click)="toggleSidebar()">
+        <span class="material-symbols-outlined"> menu </span>
       </button>
     </div>
   </div>
 </ng-container>
-
-<!-- 
-<ng-container *ngIf="isInitialized()">
-    <div class="logo-container">
-
-        <div class="back-container">
-            <button (click)="goBack()">
-                <span class="material-symbols-outlined">
-                    arrow_back
-                </span>
-            </button>
-        </div>
-        <img src="/img/mono.svg" title="MONO" alt="MONO">
-    </div>
-
-</ng-container> -->
 
 <app-body-component
   [isInitialized]="isInitialized()"
@@ -57,25 +41,44 @@
   (textoValue)="textoValue.set($event)"
   (llmType)="llmType.set($event)"
 ></app-input-component>
+<div class="side-bar-overlay" *ngIf="showSidebar()">
 
-<div class="modalInfo" *ngIf="showModal">
-  <div class="modalContent">
-    <span class="close" (click)="closeModalInfo()">&times;</span>
-    <p>
-      Mono é um chatbot de inteligência artificial para ajudar no dia a dia,
-      desenvolvido com uma interface moderna e reativa em Angular e um backend
-      robusto em Spring Boot
-    </p>
-    <p>
-      Utilizando o Spring AI para orquestração de dados, o projeto adota uma
-      arquitetura híbrida de modelos: consome a infraestrutura da Groq para
-      inferência ultrarrápida em nuvem utilizando o <code>gpt-oss-20b</code>, e
-      integra o <code>qwen2.5:0.5b</code> localmente através do Ollama. Essa
-      combinação entrega respostas fluidas com baixíssima latência, unindo a
-      robustez do ecossistema Java à agilidade dos modelos de linguagem de
-      última geração.
-    </p>
+
+  <div class="modalInfo" *ngIf="showModal">
+    <div class="modalContent">
+      <span class="close" (click)="closeModalInfo()">&times;</span>
+      <p>
+        Mono é um chatbot de inteligência artificial para ajudar no dia a dia,
+        desenvolvido com uma interface moderna e reativa em Angular e um backend
+        robusto em Spring Boot
+      </p>
+      <p>
+        Utilizando o Spring AI para orquestração de dados, o projeto adota uma
+        arquitetura híbrida de modelos: consome a infraestrutura da Groq para
+        inferência ultrarrápida em nuvem utilizando o <code>gpt-oss-20b</code>,
+        e integra o <code>qwen2.5:0.5b</code> localmente através do Ollama. Essa
+        combinação entrega respostas fluidas com baixíssima latência, unindo a
+        robustez do ecossistema Java à agilidade dos modelos de linguagem de
+        última geração.
+      </p>
+    </div>
   </div>
+  <div class="sidebar" [ngClass]="{'show': showSidebar() }">
+    <span class="close">
+      <button type="button" (click)="toggleSidebar()">
+        <span class="material-symbols-outlined"> arrow_back_ios_new </span>
+      </button>
+    </span>
+
+    <span class="module">
+      <span class="material-symbols-outlined" (click)="createModalInfo()">
+        info
+      </span>
+      Info
+    </span>
+  </div>
+
+  
 </div>
 
 <div

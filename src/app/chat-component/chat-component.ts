@@ -56,6 +56,8 @@ export class ChatComponent {
 
   public llmType = signal<'OLLAMA' | 'GROQ' | 'ERROR'>('GROQ');
 
+  public showSidebar = signal(false);
+
   constructor(private serviceAi: ServiceAi) {}
 
   ngOnInit() {
@@ -69,6 +71,10 @@ export class ChatComponent {
         window.location.href = '/login';
       }
     });
+  }
+
+  public toggleSidebar(): void {
+    this.showSidebar.set(!this.showSidebar());
   }
 
   public onLlmTypeChange(event: Event): void {

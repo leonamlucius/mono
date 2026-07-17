@@ -253,15 +253,75 @@ $grey-primary: #a8a5a5;
   transform: scale(1.1);
 }
 
+.side-bar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 999;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+  box-sizing: border-box;
+}
+
+.sidebar {
+  width: 0px;
+  height: 0px;
+  background-color: $white-primary;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  border-radius: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+}
+.sidebar.show {
+  width: 250px;
+  height: 100%;
+  animation: slideRight 0.5s ease-in-out;
+}
+
+.sidebar .close button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  transition: all 0.3s ease;
+}
+.sidebar .close button:hover {
+  scale: 1.1;
+}
+
+.sidebar .module {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-start;
+  padding: 15px 10px;
+  box-sizing: border-box;
+  border-bottom: 1px solid $grey-primary;
+}
 .modalInfo {
-  position: absolute;
-  top: 60px;
-  right: 20px;
   background-color: $white-primary;
   color: black;
-  width: 25%;
+  width: 100%;
+  height: 100%;
   padding: 10px;
-  border-radius: 10px;
+  box-sizing: border-box;
+  border-radius: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   white-space: pre-wrap;
   text-align: justify;
@@ -387,11 +447,18 @@ $grey-primary: #a8a5a5;
     height: 25px;
   }
 
+  .sidebar.show {
+    width: 100%;
+  }
+
   .modalInfo {
-    width: 90%;
-    top: 70px;
-    right: 50%;
-    transform: translateX(50%);
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    position: fixed;
+    right: 0;
+    left: 0;
+    z-index: 9999;
     font-size: 16px;
   }
 }

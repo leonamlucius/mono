@@ -14,6 +14,7 @@ $grey-primary: #b8b7b7;
   justify-content: flex-end;
   overflow:hidden;
   overflow-y: auto;
+  transition: all 0.3s ease;
   scrollbar-color: $grey-primary transparent;
 }
 
