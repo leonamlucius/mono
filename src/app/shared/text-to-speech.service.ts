@@ -4,22 +4,44 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class TextToSpeechService {
-  public isSpeechEnabled: boolean = false;
+  public isSpeechEnabled: boolean = true;
 
-  toggleSpeech(): void {
-    this.isSpeechEnabled = !this.isSpeechEnabled;
+  public speechEnabled(): void {
+    this.isSpeechEnabled = true;
   }
 
-  speak(text: string): void {
-    if (this.isSpeechEnabled && 'speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(text);
+  public speechDisabled(): void {
+    this.isSpeechEnabled = false;
+  }
 
-      utterance.lang = 'pt-BR';
-      utterance.rate = 1.8;
-      utterance.pitch = 1;
-      utterance.volume = 1;
-      window.speechSynthesis.speak(utterance);
-      this.toggleSpeech();
-    }
+  speak(text: string): Promise<void> {
+    return new Promise((resolve) => {
+      if (this.isSpeechEnabled && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+
+        this.speechDisabled();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+
+        utterance.lang = 'pt-BR';
+        utterance.rate = 1.3;
+        utterance.pitch = 1;
+        utterance.volume = 1;
+
+        utterance.onend = () => {
+          this.speechEnabled();
+          resolve();
+        };
+
+        utterance.onerror = () => {
+          this.speechEnabled();
+          resolve();
+        };
+
+        window.speechSynthesis.speak(utterance);
+      } else {
+        resolve();
+      }
+    });
   }
 }

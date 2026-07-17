@@ -43,6 +43,14 @@ export class InputComponent implements OnDestroy {
     effect(() => {
       const transcricao = this.audioRecordingService.textTranscription();
 
+
+      if (transcricao === "ERRO: Transcrição vazia recebida do servidor.") {
+        console.error('Transcrição vazia recebida do servidor.');
+        this.hideLoadingIndicator();
+        this.micValue = '';
+        return;
+      }
+
       if (transcricao) {
         this.micValue = transcricao.trim();
 
@@ -53,8 +61,6 @@ export class InputComponent implements OnDestroy {
           // Emite os eventos para notificar o componente pai
           this.textoValue.emit(this.micValue);
           this.textoChange.emit(true);
-
-          console.log('📝 Transcrição recebida:', this.micValue);
 
           if (!this.micIsON() && !this.jaEnviou) {
             console.log('✅ Enviando automaticamente...');
@@ -128,6 +134,7 @@ export class InputComponent implements OnDestroy {
     if (this.audioRecordingService.estaGravando()) {
       this.audioRecordingService.cancelarGravacao();
       this.recordPlugin?.stopRecording();
+      this.hideLoadingIndicator();
     }
   }
   showLoadingIndicator() {

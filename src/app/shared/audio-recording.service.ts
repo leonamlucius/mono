@@ -46,6 +46,12 @@ export class AudioRecordingService {
 
       if (this.audioChunks.length > 0 && !this.audioCancelado()) {
         this.enviarAudio().then((transcription) => {
+
+          if (transcription.trim() === '') {
+            console.error('Transcrição vazia recebida do servidor.');
+            this.textTranscription.set('ERRO: Transcrição vazia recebida do servidor.');
+            return;
+          }
           this.textTranscription.set(transcription);
         });
       }
@@ -97,6 +103,10 @@ export class AudioRecordingService {
       if (response.ok) {
         const transcription = await response.text();
         console.log('Transcrição recebida do servidor:', transcription);
+
+        if (transcription.trim() === '') {
+          throw new Error('Transcrição vazia recebida do servidor.');
+        }
         return transcription;
       }
     } catch (error) {

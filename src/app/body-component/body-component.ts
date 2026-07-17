@@ -69,8 +69,12 @@ export class BodyComponent {
   public tokenUser = this.serviceAi.tokenUser();
 
   public speechText(text: any): void {
+
+    console.log("Is speech enabled:", this.textToSpeechService.isSpeechEnabled);
     if (!this.textToSpeechService.isSpeechEnabled) {
-      this.textToSpeechService.toggleSpeech();
+      return;
+    }
+    if (this.textToSpeechService.isSpeechEnabled) {
       this.textToSpeechService.speak(removeMarkdown(text));
     }
   }
