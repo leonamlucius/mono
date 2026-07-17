@@ -290,6 +290,10 @@ $grey-primary: #a8a5a5;
   animation: slideRight 0.5s ease-in-out;
 }
 
+.sidebar.closing {
+  animation: slideRightOut 0.5s ease-in-out;
+}
+
 .sidebar .close button {
   background-color: transparent;
   border: none;
@@ -312,7 +316,13 @@ $grey-primary: #a8a5a5;
   justify-content: flex-start;
   padding: 15px 10px;
   box-sizing: border-box;
+  cursor: pointer;
   border-bottom: 1px solid $grey-primary;
+}
+
+.sidebar .module:hover {
+  transform: scale(1.1);
+  transition: all 0.3s ease;
 }
 .modalInfo {
   background-color: $white-primary;
@@ -355,6 +365,17 @@ $grey-primary: #a8a5a5;
   }
   to {
     transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slideRightOut {
+  from {
+    transform: translateX(2%);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
     opacity: 0;
   }
 }

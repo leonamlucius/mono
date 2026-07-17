@@ -58,6 +58,8 @@ export class ChatComponent {
 
   public showSidebar = signal(false);
 
+  public sideBarExit = signal(false);
+
   constructor(private serviceAi: ServiceAi) {}
 
   ngOnInit() {
@@ -73,8 +75,17 @@ export class ChatComponent {
     });
   }
 
-  public toggleSidebar(): void {
-    this.showSidebar.set(!this.showSidebar());
+  public openSidebar(): void {
+    this.showSidebar.set(true);
+    this.sideBarExit.set(false);
+  }
+
+  public closeSidebar(): void {
+    this.sideBarExit.set(true);
+
+    setTimeout(() => {
+      this.showSidebar.set(false);
+    }, 400);
   }
 
   public onLlmTypeChange(event: Event): void {
