@@ -1,14 +1,14 @@
 import { Component, signal, Input } from '@angular/core';
 import { NgIf, NgClass } from '@angular/common';
 import { RouterOutlet, ɵEmptyOutletComponent } from '@angular/router';
-import { BodyComponent } from '../body-component/body-component';
-import { InputComponent } from '../input-component/input-component';
+import { BodyComponent } from '../../core/body-component/body-component';
+import { InputComponent } from '../../core/input-component/input-component';
 import { Subject } from 'rxjs';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { featherAirplay } from '@ng-icons/feather-icons';
 import { heroUsers } from '@ng-icons/heroicons/outline';
 import { bootstrapLinkedin, bootstrapGithub } from '@ng-icons/bootstrap-icons';
-import { ServiceAi } from '../shared/service-ai';
+import { ServiceAi } from '../../shared/service-ai';
 
 @Component({
   selector: 'app-chat-component',

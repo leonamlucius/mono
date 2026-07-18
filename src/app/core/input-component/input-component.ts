@@ -14,7 +14,7 @@ import { NgIf } from '@angular/common';
 import { ChatComponent } from '../chat-component/chat-component';
 import WaveSurfer from 'wavesurfer.js';
 import RecordPlugin from 'wavesurfer.js/dist/plugins/record.js';
-import { AudioRecordingService } from '../shared/audio-recording.service';
+import { AudioRecordingService } from '../../shared/audio-recording.service';
 
 @Component({
   selector: 'app-input-component',
@@ -43,8 +43,7 @@ export class InputComponent implements OnDestroy {
     effect(() => {
       const transcricao = this.audioRecordingService.textTranscription();
 
-
-      if (transcricao === "ERRO: Transcrição vazia recebida do servidor.") {
+      if (transcricao === 'ERRO: Transcrição vazia recebida do servidor.') {
         console.error('Transcrição vazia recebida do servidor.');
         this.hideLoadingIndicator();
         this.micValue = '';

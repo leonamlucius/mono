@@ -1,8 +1,6 @@
 import { Component, signal, Input} from '@angular/core';
 import { NgIf, NgClass } from '@angular/common';
 import { RouterOutlet, ɵEmptyOutletComponent } from '@angular/router';
-import {BodyComponent} from "./body-component/body-component";
-import {InputComponent} from "./input-component/input-component";
 import { Subject } from 'rxjs';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { featherAirplay } from '@ng-icons/feather-icons';

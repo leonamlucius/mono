@@ -2,7 +2,7 @@ import { Component, signal} from '@angular/core';
 import { NgIf, NgClass } from '@angular/common';
 import { NgIcon} from '@ng-icons/core';
 import { ɵEmptyOutletComponent } from "@angular/router";
-import { ServiceAi } from '../shared/service-ai';1
+import { ServiceAi } from '../../shared/service-ai';
 import { FormsModule } from '@angular/forms';
 
 @Component({

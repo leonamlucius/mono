@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { NgIf, NgClass } from '@angular/common';
-import { ServiceAi } from '../shared/service-ai';
+import { ServiceAi } from '../../shared/service-ai';
 import { FormsModule } from '@angular/forms';
 
 @Component({
