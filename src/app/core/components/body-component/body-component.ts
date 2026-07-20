@@ -1,6 +1,5 @@
 import { Component, Input, signal, inject } from '@angular/core';
-import { NgFor, NgIf, AsyncPipe, NgClass } from '@angular/common';
-import { Observable } from 'rxjs';
+import { NgFor, NgIf, NgClass } from '@angular/common';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { TextToSpeechService } from '../../services/text-to-speech.service';
 import { MarkdownPipe } from './markdown.pipe';
@@ -25,7 +24,7 @@ import removeMarkdown from 'remove-markdown';
   ],
 })
 export class BodyComponent {
-  private textToSpeechService = inject(TextToSpeechService);
+  public textToSpeechService = inject(TextToSpeechService);
   private router = inject(Router);
 
   @Input() isInitialized = false;
@@ -40,6 +39,10 @@ export class BodyComponent {
   public showModalWarning = signal(false);
 
   public isClosingModal = signal(false);
+
+  public activeSpeechIndex = signal<number | null>(null);
+
+  public isSpeechPaused = signal(false);
 
   private modalTimer: any;
 
@@ -64,15 +67,26 @@ export class BodyComponent {
     },
   ];
 
-
-  public speechText(text: any): void {
-    console.log('Is speech enabled:', this.textToSpeechService.isSpeechEnabled);
-    if (!this.textToSpeechService.isSpeechEnabled) {
+  public async speechText(text: any, index: number): Promise<void> {
+    if (!this.textToSpeechService.isSpeechEnabled()) {
       return;
     }
-    if (this.textToSpeechService.isSpeechEnabled) {
-      this.textToSpeechService.speak(removeMarkdown(text));
+
+    this.activeSpeechIndex.set(index);
+    this.isSpeechPaused.set(false);
+
+    await this.textToSpeechService.speak(removeMarkdown(text));
+
+    if (this.activeSpeechIndex() === index) {
+      this.activeSpeechIndex.set(null);
+      this.isSpeechPaused.set(false);
     }
+  }
+
+  public toggleSpeech(): void {
+    console.log('Stopping speech...');
+    this.textToSpeechService.pauseSpeak();
+    this.isSpeechPaused.set(!this.isSpeechPaused());
   }
 
   public mostrarModalErroAutomatico(texto: string): void {

@@ -1,22 +1,22 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TextToSpeechService {
-  public isSpeechEnabled: boolean = true;
+  public isSpeechEnabled = signal(true);
 
   public speechEnabled(): void {
-    this.isSpeechEnabled = true;
+    this.isSpeechEnabled.set(true);
   }
 
   public speechDisabled(): void {
-    this.isSpeechEnabled = false;
+    this.isSpeechEnabled.set(false);
   }
 
-  speak(text: string): Promise<void> {
+  public speak(text: string): Promise<void> {
     return new Promise((resolve) => {
-      if (this.isSpeechEnabled && 'speechSynthesis' in window) {
+      if (this.isSpeechEnabled() && 'speechSynthesis' in window) {
         window.speechSynthesis.cancel();
 
         this.speechDisabled();
@@ -33,7 +33,7 @@ export class TextToSpeechService {
           resolve();
         };
 
-        utterance.onerror = () => {
+        utterance.onerror = (error) => {
           this.speechEnabled();
           resolve();
         };
@@ -43,5 +43,15 @@ export class TextToSpeechService {
         resolve();
       }
     });
+  }
+
+  public pauseSpeak(): void {
+    if ('speechSynthesis' in window) {
+      if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+        window.speechSynthesis.pause();
+      } else if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+      }
+    }
   }
 }
