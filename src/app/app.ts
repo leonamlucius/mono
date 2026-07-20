@@ -6,7 +6,6 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { featherAirplay } from '@ng-icons/feather-icons';
 import { heroUsers } from '@ng-icons/heroicons/outline';
 import { bootstrapLinkedin, bootstrapGithub } from '@ng-icons/bootstrap-icons';
-import { ServiceAi } from './shared/service-ai';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],

@@ -1,18 +1,17 @@
 import { Component, signal, Input } from '@angular/core';
 import { NgIf, NgClass } from '@angular/common';
-import { RouterOutlet, ɵEmptyOutletComponent } from '@angular/router';
-import { BodyComponent } from '../../core/body-component/body-component';
-import { InputComponent } from '../../core/input-component/input-component';
+import { BodyComponent } from '../../../core/components/body-component/body-component';
+import { InputComponent } from '../../../core/components/input-component/input-component';
 import { Subject } from 'rxjs';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { featherAirplay } from '@ng-icons/feather-icons';
 import { heroUsers } from '@ng-icons/heroicons/outline';
 import { bootstrapLinkedin, bootstrapGithub } from '@ng-icons/bootstrap-icons';
-import { ServiceAi } from '../../shared/service-ai';
+import {ChatService} from '../../services/chat-service';
 
 @Component({
   selector: 'app-chat-component',
-  imports: [RouterOutlet, BodyComponent, InputComponent, NgIf, NgClass, NgIcon],
+  imports: [BodyComponent, InputComponent, NgIf, NgClass, NgIcon],
   templateUrl: './chat-component.html',
   styleUrls: ['./chat-component.scss'],
   providers: [
@@ -60,7 +59,7 @@ export class ChatComponent {
 
   public sideBarExit = signal(false);
 
-  constructor(private serviceAi: ServiceAi) {}
+  constructor(private chatService: ChatService) {}
 
   ngOnInit() {
     const token = localStorage.getItem('tokenUser');
@@ -68,7 +67,7 @@ export class ChatComponent {
       this.goBack();
     }
 
-    this.serviceAi.jwtTest(token).then((isValid) => {
+    this.chatService.jwtTest(token).then((isValid) => {
       if (!isValid) {
         window.location.href = '/login';
       }
@@ -147,7 +146,7 @@ export class ChatComponent {
   public async iniciar(): Promise<void> {
     const token = localStorage.getItem('tokenUser');
 
-    this.serviceAi.jwtTest(token).then((isValid) => {
+    this.chatService.jwtTest(token).then((isValid) => {
       console.log('Token is valid:', isValid);
       if (!isValid) {
         window.location.href = '/login';
@@ -189,7 +188,7 @@ export class ChatComponent {
       this.makeTextAreaDisabled(textArea as HTMLTextAreaElement);
       this.limparEResetar(textArea as HTMLTextAreaElement);
 
-      await this.serviceAi
+      await this.chatService
         .sendMessage(this.textValueSend(), this.llmType())
         .then((response) => {
           setTimeout(() => {

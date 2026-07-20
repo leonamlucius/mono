@@ -1,8 +1,16 @@
 import { Component, signal } from '@angular/core';
-import { NgIcon, provideIcons,  } from '@ng-icons/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgIf, NgClass } from '@angular/common';
-import {ServiceAi} from '../../shared/service-ai';
-import { interval, Subscription, startWith, switchMap, from, map, scan } from 'rxjs';
+import { LoginService } from '../../services/login-service';
+import {
+  interval,
+  Subscription,
+  startWith,
+  switchMap,
+  from,
+  map,
+  scan,
+} from 'rxjs';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -12,7 +20,6 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./login-component.scss'],
 })
 export class LoginComponent {
-
   public facts = signal<any>(null);
 
   public isEvenCall = signal<boolean>(true);
@@ -31,36 +38,34 @@ export class LoginComponent {
 
   public showLoading = signal<boolean>(false);
 
-
-
-
-
-  constructor(private serviceAi: ServiceAi) {}
+  constructor(private loginService: LoginService) {}
 
   ngOnInit(): void {
     this.pollingSubscription = interval(10000) //10 segundos
       .pipe(
         startWith(0),
         scan((acumulador) => acumulador + 1, -1),
-        switchMap((contadorVerdadeiro) => 
-          from(this.serviceAi.getFacts()).pipe(
+        switchMap((contadorVerdadeiro) =>
+          from(this.loginService.getFacts()).pipe(
             map((fatos) => ({ contador: contadorVerdadeiro, fatos }))
           )
         )
       )
       .subscribe({
-        next: ({ contador , fatos }) => {
+        next: ({ contador, fatos }) => {
           const ePar = contador % 2 == 0;
-          
-          this.isEvenCall.set(ePar); 
+
+          this.isEvenCall.set(ePar);
           this.facts.set(fatos);
-          
-          console.log(`Sincronizado! Chamada ${ePar ? 'Par' : 'Ímpar'} recebeu:`, fatos);
+
+          console.log(
+            `Sincronizado! Chamada ${ePar ? 'Par' : 'Ímpar'} recebeu:`,
+            fatos
+          );
         },
-        error: (err) => console.error(err)
+        error: (err) => console.error(err),
       });
   }
-
 
   ngOnDestroy(): void {
     if (this.pollingSubscription) {
@@ -68,7 +73,7 @@ export class LoginComponent {
       console.log('Timer dos fatos destruído com sucesso!');
     }
   }
-  
+
   public showLoadingIndicator(): void {
     this.showLoading.set(true);
   }
@@ -77,8 +82,7 @@ export class LoginComponent {
     this.showLoading.set(false);
   }
 
-
-  public showModalWarningFunction(text: string): void{
+  public showModalWarningFunction(text: string): void {
     this.modalWarningText.set(text);
     this.showModalWarning.set(true);
 
@@ -94,13 +98,12 @@ export class LoginComponent {
       this.isClosingModal.set(false);
     }, 300);
   }
-  
 
   public togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
   }
 
-   public goToLinkedin(): void {
+  public goToLinkedin(): void {
     window.open('https://www.linkedin.com/in/leonamlucius/', '_blank');
   }
 
@@ -116,29 +119,25 @@ export class LoginComponent {
     this.showModal = false;
   }
 
-
   public login(email: string, password: string): void {
-
-    if(this.showLoading()) {
-      return; 
+    if (this.showLoading()) {
+      return;
     }
 
     this.showLoadingIndicator();
 
-    try{
-      this.serviceAi.login(email, password)
+    try {
+      this.loginService
+        .login(email, password)
         .then((response) => {
           this.showModalWarningFunction(response);
         })
         .finally(() => {
           this.hideLoadingIndicator();
         });
-    }catch(error){
+    } catch (error) {
       console.error('Error during login:', error);
       this.hideLoadingIndicator();
     }
-
   }
-
-  
 }

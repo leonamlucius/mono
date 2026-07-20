@@ -1,19 +1,17 @@
-import { Component, signal} from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { NgIf, NgClass } from '@angular/common';
-import { NgIcon} from '@ng-icons/core';
-import { ɵEmptyOutletComponent } from "@angular/router";
-import { ServiceAi } from '../../shared/service-ai';
+import { NgIcon } from '@ng-icons/core';
+import { ForgotPasswordService } from '../../services/forgot-password-service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-forgot-password-component',
-  imports: [NgIf, NgClass, NgIcon, ɵEmptyOutletComponent, FormsModule],
+  imports: [NgIf, NgClass, NgIcon, FormsModule],
   templateUrl: './forgot-password-component.html',
   styleUrls: ['./forgot-password-component.scss'],
 })
 export class ForgotPasswordComponent {
-
-  constructor(private serviceAi: ServiceAi) {}
+  constructor(private forgotPasswordService: ForgotPasswordService) {}
 
   public showLoading = signal<boolean>(false);
 
@@ -23,7 +21,6 @@ export class ForgotPasswordComponent {
 
   public isClosingModal = signal<boolean>(false);
 
-
   public modalWarningText = signal<string>('');
 
   public timeRemaining = signal<number>(0);
@@ -32,20 +29,16 @@ export class ForgotPasswordComponent {
 
   public timerInterval: any;
 
-  
-
-
   public forgotPassword(email: string): void {
-
     if (this.isButtonDisabled() || this.showLoading()) {
-      return; 
+      return;
     }
 
     this.showLoading.set(true);
 
-    this.serviceAi.forgotPassword(email)
+    this.forgotPasswordService
+      .forgotPassword(email)
       .then((response) => {
-
         console.log('Forgot password response:', response);
         this.showLoading.set(false);
         this.modalWarningText.set(response);
@@ -53,9 +46,8 @@ export class ForgotPasswordComponent {
 
         this.startTimer(30);
 
-        
-         setTimeout(() => {
-           this.triggerCloseModalWarning();
+        setTimeout(() => {
+          this.triggerCloseModalWarning();
         }, 3000);
       })
       .catch((error) => {
@@ -63,14 +55,11 @@ export class ForgotPasswordComponent {
         this.showLoading.set(false);
         this.modalWarningText.set(error);
         this.showModalWarning.set(true);
-           setTimeout(() => {
-           this.triggerCloseModalWarning();
+        setTimeout(() => {
+          this.triggerCloseModalWarning();
         }, 3000);
       });
   }
-
-
-
 
   private startTimer(seconds: number): void {
     this.timeRemaining.set(seconds);
@@ -100,7 +89,6 @@ export class ForgotPasswordComponent {
 
     this.timeRemaining.set(0);
     this.isButtonDisabled.set(false);
-
   }
 
   public goToLogin(): void {
@@ -130,6 +118,4 @@ export class ForgotPasswordComponent {
       this.isClosingModal.set(false);
     }, 300);
   }
-
- 
 }

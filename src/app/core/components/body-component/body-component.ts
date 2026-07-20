@@ -2,8 +2,7 @@ import { Component, Input, signal, inject } from '@angular/core';
 import { NgFor, NgIf, AsyncPipe, NgClass } from '@angular/common';
 import { Observable } from 'rxjs';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { ServiceAi } from '../../shared/service-ai';
-import { TextToSpeechService } from '../../shared/text-to-speech.service';
+import { TextToSpeechService } from '../../services/text-to-speech.service';
 import { MarkdownPipe } from './markdown.pipe';
 import { Router } from '@angular/router';
 import removeMarkdown from 'remove-markdown';
@@ -26,7 +25,6 @@ import removeMarkdown from 'remove-markdown';
   ],
 })
 export class BodyComponent {
-  private serviceAi = inject(ServiceAi);
   private textToSpeechService = inject(TextToSpeechService);
   private router = inject(Router);
 
@@ -66,11 +64,9 @@ export class BodyComponent {
     },
   ];
 
-  public tokenUser = this.serviceAi.tokenUser();
 
   public speechText(text: any): void {
-
-    console.log("Is speech enabled:", this.textToSpeechService.isSpeechEnabled);
+    console.log('Is speech enabled:', this.textToSpeechService.isSpeechEnabled);
     if (!this.textToSpeechService.isSpeechEnabled) {
       return;
     }

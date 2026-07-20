@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from '../app/features/login-component/login-component';
-import { ChatComponent } from '../app/core/chat-component/chat-component';
-import { RegisterComponent } from '../app/features/register-component/register-component';
-import { ForgotPasswordComponent } from '../app/features/forgot-password-component/forgot-password-component';
-import { ResetPasswordComponent } from '../app/features/reset-password-component/reset-password-component';
+import { LoginComponent } from '../app/features/components/login-component/login-component';
+import { ChatComponent } from '../app/core/components/chat-component/chat-component';
+import { RegisterComponent } from '../app/features/components/register-component/register-component';
+import { ForgotPasswordComponent } from '../app/features/components/forgot-password-component/forgot-password-component';
+import { ResetPasswordComponent } from '../app/features/components/reset-password-component/reset-password-component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },

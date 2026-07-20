@@ -11,10 +11,10 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
-import { ChatComponent } from '../chat-component/chat-component';
+import { ChatComponent } from '../../components/chat-component/chat-component';
 import WaveSurfer from 'wavesurfer.js';
 import RecordPlugin from 'wavesurfer.js/dist/plugins/record.js';
-import { AudioRecordingService } from '../../shared/audio-recording.service';
+import { AudioRecordingService } from '../../services/audio-recording.service';
 
 @Component({
   selector: 'app-input-component',

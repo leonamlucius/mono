@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { NgIf, NgClass } from '@angular/common';
-import { ServiceAi } from '../../shared/service-ai';
+import { RegisterService } from '../../services/register-service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -25,7 +25,7 @@ export class RegisterComponent {
 
   public showConfirmPassword = false;
 
-  constructor(private serviceAi: ServiceAi) {}
+  constructor(private registerService: RegisterService) {}
 
   public showLoadingIndicator(): void {
     this.showLoading.set(true);
@@ -48,7 +48,7 @@ export class RegisterComponent {
     this.showLoadingIndicator();
 
     try {
-      this.serviceAi
+      this.registerService
         .register(name, email, password, confirmPassword)
         .then((response) => {
           this.showModalWarningFunction(response);

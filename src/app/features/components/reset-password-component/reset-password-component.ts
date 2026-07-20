@@ -1,12 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { NgIf, NgClass } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';
-import { ɵEmptyOutletComponent } from '@angular/router';
-import { ServiceAi } from '../../shared/service-ai';
+import {ResetPasswordService} from '../../services/reset-password-service';
 import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-reset-password-component',
-  imports: [NgIf, NgClass, NgIcon, ɵEmptyOutletComponent, FormsModule],
+  imports: [NgIf, NgClass, NgIcon, FormsModule],
   templateUrl: './reset-password-component.html',
   styleUrl: './reset-password-component.scss',
 })
@@ -27,7 +26,7 @@ export class ResetPasswordComponent {
 
   public showConfirmPassword = false;
 
-  constructor(private serviceAi: ServiceAi) {}
+  constructor(private resetPasswordService: ResetPasswordService) {}
 
   ngOnInit(): void {
     const token = new URLSearchParams(window.location.search).get('token');
@@ -47,7 +46,7 @@ export class ResetPasswordComponent {
       }, 3000);
     }
 
-    this.serviceAi
+    this.resetPasswordService
       .tokenIsExpired(token)
       .then((response) => {
         if (response === true) {
@@ -91,7 +90,7 @@ export class ResetPasswordComponent {
 
     const token = new URLSearchParams(window.location.search).get('token');
 
-    this.serviceAi
+    this.resetPasswordService
       .resetPassword(token, newPassword, confirmNewPassword)
       .then((response) => {
         this.showLoading.set(false);
