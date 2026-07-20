@@ -1,16 +1,18 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ViewChild } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { NgIf, NgClass } from '@angular/common';
 import { RegisterService } from '../../services/register-service';
 import { FormsModule } from '@angular/forms';
+import { Warning } from '../../../shared/components/warning/warning';
 
 @Component({
   selector: 'app-register-component',
-  imports: [NgIcon, NgIf, NgClass, FormsModule],
+  imports: [NgIcon, NgIf, NgClass, FormsModule, Warning],
   templateUrl: './register-component.html',
   styleUrls: ['./register-component.scss'],
 })
 export class RegisterComponent {
+  @ViewChild(Warning) warning!: Warning;
   public showModal = false;
 
   public showLoading = signal<boolean>(false);
@@ -51,7 +53,7 @@ export class RegisterComponent {
       this.registerService
         .register(name, email, password, confirmPassword)
         .then((response) => {
-          this.showModalWarningFunction(response);
+          this.warning.openModal(response);
         })
         .finally(() => {
           this.hideLoadingIndicator();
@@ -59,7 +61,7 @@ export class RegisterComponent {
     } catch (error) {
       this.hideLoadingIndicator();
       console.error('Error registering user:', error);
-      this.showModalWarningFunction(
+      this.warning.openModal(
         'Erro ao registrar usuário. Por favor, tente novamente.'
       );
     }
@@ -70,22 +72,6 @@ export class RegisterComponent {
   }
   public togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
-  }
-  public showModalWarningFunction(text: string): void {
-    this.modalWarningText.set(text);
-    this.showModalWarning.set(true);
-
-    setTimeout(() => {
-      this.triggerCloseModalWarning();
-    }, 3000);
-  }
-
-  public triggerCloseModalWarning(): void {
-    this.isClosingModal.set(true);
-    setTimeout(() => {
-      this.showModalWarning.set(false);
-      this.isClosingModal.set(false);
-    }, 300);
   }
 
   public goToLinkedin(): void {

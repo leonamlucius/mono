@@ -1,27 +1,25 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ViewChild } from '@angular/core';
 import { NgIf, NgClass } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';
 import { ForgotPasswordService } from '../../services/forgot-password-service';
 import { FormsModule } from '@angular/forms';
+import { Warning } from '../../../shared/components/warning/warning';
 
 @Component({
   selector: 'app-forgot-password-component',
-  imports: [NgIf, NgClass, NgIcon, FormsModule],
+  imports: [NgIf, NgClass, NgIcon, FormsModule, Warning],
   templateUrl: './forgot-password-component.html',
   styleUrls: ['./forgot-password-component.scss'],
 })
 export class ForgotPasswordComponent {
+  @ViewChild(Warning) warning!: Warning;
   constructor(private forgotPasswordService: ForgotPasswordService) {}
 
   public showLoading = signal<boolean>(false);
 
   public showModal = false;
 
-  public showModalWarning = signal<boolean>(false);
-
   public isClosingModal = signal<boolean>(false);
-
-  public modalWarningText = signal<string>('');
 
   public timeRemaining = signal<number>(0);
 
@@ -30,6 +28,10 @@ export class ForgotPasswordComponent {
   public timerInterval: any;
 
   public forgotPassword(email: string): void {
+    if (!email) {
+      this.warning.openModal('Por favor, insira um endereço de e-mail válido.');
+      return;
+    }
     if (this.isButtonDisabled() || this.showLoading()) {
       return;
     }
@@ -41,23 +43,13 @@ export class ForgotPasswordComponent {
       .then((response) => {
         console.log('Forgot password response:', response);
         this.showLoading.set(false);
-        this.modalWarningText.set(response);
-        this.showModalWarning.set(true);
-
+        this.warning.openModal(response);
         this.startTimer(30);
-
-        setTimeout(() => {
-          this.triggerCloseModalWarning();
-        }, 3000);
       })
       .catch((error) => {
         this.stopTimer();
         this.showLoading.set(false);
-        this.modalWarningText.set(error);
-        this.showModalWarning.set(true);
-        setTimeout(() => {
-          this.triggerCloseModalWarning();
-        }, 3000);
+        this.warning.openModal(error);
       });
   }
 
@@ -109,13 +101,5 @@ export class ForgotPasswordComponent {
 
   public closeModalInfo(): void {
     this.showModal = false;
-  }
-
-  public triggerCloseModalWarning(): void {
-    this.isClosingModal.set(true);
-    setTimeout(() => {
-      this.showModalWarning.set(false);
-      this.isClosingModal.set(false);
-    }, 300);
   }
 }

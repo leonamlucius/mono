@@ -1,25 +1,21 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ViewChild} from '@angular/core';
 import { NgIf, NgClass } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';
 import {ResetPasswordService} from '../../services/reset-password-service';
 import { FormsModule } from '@angular/forms';
+import { Warning } from '../../../shared/components/warning/warning';
 @Component({
   selector: 'app-reset-password-component',
-  imports: [NgIf, NgClass, NgIcon, FormsModule],
+  imports: [NgIf, NgClass, NgIcon, FormsModule, Warning],
   templateUrl: './reset-password-component.html',
-  styleUrl: './reset-password-component.scss',
+  styleUrls: ['./reset-password-component.scss'],
 })
 export class ResetPasswordComponent {
+  @ViewChild(Warning) warning!: Warning;
   public showLoading = signal<boolean>(false);
 
   public showModal = false;
-
-  public showModalWarning = signal<boolean>(false);
-
-  public isClosingModal = signal<boolean>(false);
-
-  public modalWarningText = signal<string>('');
-
+  
   public tokenExperied = signal<boolean>(false);
 
   public showPassword = false;
@@ -32,14 +28,9 @@ export class ResetPasswordComponent {
     const token = new URLSearchParams(window.location.search).get('token');
 
     if (!token) {
-      this.modalWarningText.set(
+      this.warning.openModal(
         'Token de redefinição de senha ausente. Redirecionando para a página de login...'
       );
-      this.showModalWarning.set(true);
-
-      setTimeout(() => {
-        this.triggerCloseModalWarning();
-      }, 3000);
 
       setTimeout(() => {
         window.location.href = '/login';
@@ -50,14 +41,9 @@ export class ResetPasswordComponent {
       .tokenIsExpired(token)
       .then((response) => {
         if (response === true) {
-          this.modalWarningText.set(
+          this.warning.openModal(
             'Link de redefinição de senha inválido ou expirado. Redirecionando para a página de login...'
           );
-          this.showModalWarning.set(true);
-
-          setTimeout(() => {
-            this.triggerCloseModalWarning();
-          }, 3000);
 
           this.tokenExperied.set(response);
 
@@ -70,14 +56,9 @@ export class ResetPasswordComponent {
       })
       .catch((error) => {
         console.error('Error validating token:', error);
-        this.modalWarningText.set(
+        this.warning.openModal(
           'Ocorreu um erro ao validar o token. Redirecionando para a página de login...'
         );
-        this.showModalWarning.set(true);
-
-        setTimeout(() => {
-          this.triggerCloseModalWarning();
-        }, 3000);
       });
   }
 
@@ -94,24 +75,15 @@ export class ResetPasswordComponent {
       .resetPassword(token, newPassword, confirmNewPassword)
       .then((response) => {
         this.showLoading.set(false);
-        this.modalWarningText.set(response);
-        this.showModalWarning.set(true);
+        this.warning.openModal(response);
 
-        // Aguarda 3 segundos para o usuário ler a mensagem
-        setTimeout(() => {
-          this.triggerCloseModalWarning();
-        }, 3000);
+       
       })
       .catch((error) => {
         console.error('Error resetting password:', error);
         this.showLoading.set(false);
-        this.modalWarningText.set(error);
-        this.showModalWarning.set(true);
+        this.warning.openModal(error);
 
-        // Fecha o modal após 3 segundos (sem redirecionar)
-        setTimeout(() => {
-          this.triggerCloseModalWarning();
-        }, 3000);
       });
   }
   public togglePasswordConfirmVisibility(): void {
@@ -137,11 +109,5 @@ export class ResetPasswordComponent {
     this.showModal = false;
   }
 
-  public triggerCloseModalWarning(): void {
-    this.isClosingModal.set(true);
-    setTimeout(() => {
-      this.showModalWarning.set(false);
-      this.isClosingModal.set(false);
-    }, 300);
-  }
+  
 }

@@ -216,6 +216,7 @@ $grey-primary: #b8b7b7;
   justify-content: center;
   align-items: center;
   z-index: 9999;
+  text-align: center;
   animation: slideTopIn 0.5s ease-in-out forwards;
 }
 ::ng-deep .modalWarningBody.exit,

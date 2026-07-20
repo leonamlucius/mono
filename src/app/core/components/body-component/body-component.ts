@@ -1,14 +1,15 @@
-import { Component, Input, signal, inject } from '@angular/core';
+import { Component, Input, signal, inject, ViewChild } from '@angular/core';
 import { NgFor, NgIf, NgClass } from '@angular/common';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { TextToSpeechService } from '../../services/text-to-speech.service';
 import { MarkdownPipe } from './markdown.pipe';
 import { Router } from '@angular/router';
+import { Warning } from '../../../shared/components/warning/warning';
 import removeMarkdown from 'remove-markdown';
 
 @Component({
   selector: 'app-body-component',
-  imports: [NgFor, NgIf, NgClass, MarkdownPipe],
+  imports: [NgFor, NgIf, NgClass, MarkdownPipe, Warning],
   templateUrl: './body-component.html',
   styleUrls: ['./body-component.scss'],
   animations: [
@@ -24,7 +25,7 @@ import removeMarkdown from 'remove-markdown';
   ],
 })
 export class BodyComponent {
-  public textToSpeechService = inject(TextToSpeechService);
+  @ViewChild(Warning) warning!: Warning;
   private router = inject(Router);
 
   @Input() isInitialized = false;
@@ -36,17 +37,11 @@ export class BodyComponent {
     llmType?: 'OLLAMA' | 'GROQ' | 'ERROR';
   }[] = [];
 
-  public showModalWarning = signal(false);
-
-  public isClosingModal = signal(false);
+  constructor(private textToSpeechService: TextToSpeechService) {}
 
   public activeSpeechIndex = signal<number | null>(null);
 
   public isSpeechPaused = signal(false);
-
-  private modalTimer: any;
-
-  public modalWarningText = '';
 
   public textoAtual = signal('');
 
@@ -89,41 +84,9 @@ export class BodyComponent {
     this.isSpeechPaused.set(!this.isSpeechPaused());
   }
 
-  public mostrarModalErroAutomatico(texto: string): void {
-    console.log('Mostrando modal de erro automático:', texto);
-
-    if (this.modalTimer) {
-      clearTimeout(this.modalTimer);
-    }
-
-    this.isClosingModal.set(false);
-    this.modalWarningText = texto;
-    this.showModalWarning.set(true);
-
-    this.modalTimer = setTimeout(() => {
-      this.fecharModalCOmAnimacao();
-    }, 5000);
-  }
-  public triggerCloseModalWarning(): void {
-    if (this.modalTimer) {
-      clearTimeout(this.modalTimer);
-    }
-    this.fecharModalCOmAnimacao();
-  }
-
-  public fecharModalCOmAnimacao(): void {
-    this.isClosingModal.set(true);
-
-    setTimeout(() => {
-      this.showModalWarning.set(false);
-      this.isClosingModal.set(false);
-    }, 500); // Tempo para a animação de fechamento (ajuste conforme necessário)
-  }
   public copyToClipboard(text: string) {
     navigator.clipboard.writeText(text.replace(/\*/g, '')).then(() => {
-      this.mostrarModalErroAutomatico(
-        'Texto copiado para a área de transferência!'
-      );
+      this.warning.openModal('Texto copiado para a área de transferência!');
     });
   }
 

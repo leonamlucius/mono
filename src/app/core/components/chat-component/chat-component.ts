@@ -1,4 +1,4 @@
-import { Component, signal, Input } from '@angular/core';
+import { Component, signal, ViewChild } from '@angular/core';
 import { NgIf, NgClass } from '@angular/common';
 import { BodyComponent } from '../../../core/components/body-component/body-component';
 import { InputComponent } from '../../../core/components/input-component/input-component';
@@ -7,11 +7,12 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { featherAirplay } from '@ng-icons/feather-icons';
 import { heroUsers } from '@ng-icons/heroicons/outline';
 import { bootstrapLinkedin, bootstrapGithub } from '@ng-icons/bootstrap-icons';
-import {ChatService} from '../../services/chat-service';
+import { ChatService } from '../../services/chat-service';
+import { Warning } from '../../../shared/components/warning/warning';
 
 @Component({
   selector: 'app-chat-component',
-  imports: [BodyComponent, InputComponent, NgIf, NgClass, NgIcon],
+  imports: [BodyComponent, InputComponent, NgIf, NgClass, NgIcon, Warning],
   templateUrl: './chat-component.html',
   styleUrls: ['./chat-component.scss'],
   providers: [
@@ -24,6 +25,8 @@ import {ChatService} from '../../services/chat-service';
   ],
 })
 export class ChatComponent {
+  @ViewChild(Warning) warning!: Warning;
+
   protected readonly title = signal('mono');
 
   public isInitialized = signal(false);
@@ -47,11 +50,6 @@ export class ChatComponent {
 
   public showModalWarningPai = signal(false);
 
-  public isClosingModalPai = signal(false);
-
-  public modalWarningTextPai = '';
-
-  private modalTimerPai: any;
 
   public llmType = signal<'OLLAMA' | 'GROQ' | 'ERROR'>('GROQ');
 
@@ -95,34 +93,7 @@ export class ChatComponent {
   public goBack(): void {
     window.location.href = '/login';
   }
-  public mostrarModalErroPai(texto: string): void {
-    if (this.modalTimerPai) {
-      clearTimeout(this.modalTimerPai);
-    }
-
-    this.isClosingModalPai.set(false);
-    this.modalWarningTextPai = texto;
-    this.showModalWarningPai.set(true);
-
-    this.modalTimerPai = setTimeout(() => {
-      this.fecharModalPaiComAnimacao();
-    }, 5000);
-  }
-
-  public triggerCloseModalPai(): void {
-    if (this.modalTimerPai) {
-      clearTimeout(this.modalTimerPai);
-    }
-    this.fecharModalPaiComAnimacao();
-  }
-
-  private fecharModalPaiComAnimacao(): void {
-    this.isClosingModalPai.set(true);
-    setTimeout(() => {
-      this.showModalWarningPai.set(false);
-      this.isClosingModalPai.set(false);
-    }, 500); // Tempo sincronizado com o CSS
-  }
+  
   public scrollToBottom(): void {
     setTimeout(() => {
       const chatContainer = document.querySelector(
@@ -161,7 +132,7 @@ export class ChatComponent {
     const textArea = document.querySelector('textarea');
 
     if (!this.isTypeSomething()) {
-      this.mostrarModalErroPai('Digite algo para iniciar a conversa');
+      this.warning.openModal('Digite algo para iniciar a conversa');
 
       this.scrollToBottom();
       return;
@@ -178,7 +149,7 @@ export class ChatComponent {
 
     try {
       if (this.textoValue().trim() === '') {
-        this.mostrarModalErroPai('Digite algo para continuar a conversa');
+        this.warning.openModal('Digite algo para continuar a conversa');
         this.chatHistory.set(this.chatHistory().slice(0, -2));
         this.scrollToBottom();
         return;
@@ -195,7 +166,7 @@ export class ChatComponent {
             console.log('Response:', response);
 
             if (response === 'ERROR SENDING MESSAGE') {
-              this.mostrarModalErroPai(
+              this.warning.openModal(
                 'Desculpe, ocorreu um erro ao processar sua mensagem.'
               );
               this.chatHistory.set([

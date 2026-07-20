@@ -77,15 +77,4 @@
   </div>
 </div>
 
-<div
-  class="modalWarningPai"
-  *ngIf="showModalWarningPai()"
-  [ngClass]="{'exitPai': isClosingModalPai() }"
->
-  <span #modalWarningPai class="close" (click)="triggerCloseModalPai()"
-    >&times;</span
-  >
-  <div class="modalContent">
-    <p>{{ modalWarningTextPai }}</p>
-  </div>
-</div>
+<app-warning></app-warning>

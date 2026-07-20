@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ViewChild } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgIf, NgClass } from '@angular/common';
 import { LoginService } from '../../services/login-service';
@@ -12,25 +12,21 @@ import {
   scan,
 } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { Warning } from '../../../shared/components/warning/warning';
 
 @Component({
   selector: 'app-login-component',
-  imports: [NgIcon, NgIf, NgClass, FormsModule],
+  imports: [NgIcon, NgIf, NgClass, FormsModule, Warning],
   templateUrl: './login-component.html',
   styleUrls: ['./login-component.scss'],
 })
 export class LoginComponent {
+  @ViewChild(Warning) warning!: Warning;
   public facts = signal<any>(null);
 
   public isEvenCall = signal<boolean>(true);
 
   private pollingSubscription!: Subscription;
-
-  public modalWarningText = signal<string>('');
-
-  public showModalWarning = signal<boolean>(false);
-
-  public isClosingModal = signal<boolean>(false);
 
   public showModal = false;
 
@@ -82,23 +78,6 @@ export class LoginComponent {
     this.showLoading.set(false);
   }
 
-  public showModalWarningFunction(text: string): void {
-    this.modalWarningText.set(text);
-    this.showModalWarning.set(true);
-
-    setTimeout(() => {
-      this.triggerCloseModalWarning();
-    }, 3000);
-  }
-
-  public triggerCloseModalWarning(): void {
-    this.isClosingModal.set(true);
-    setTimeout(() => {
-      this.showModalWarning.set(false);
-      this.isClosingModal.set(false);
-    }, 300);
-  }
-
   public togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
   }
@@ -130,7 +109,7 @@ export class LoginComponent {
       this.loginService
         .login(email, password)
         .then((response) => {
-          this.showModalWarningFunction(response);
+          this.warning.openModal(response);
         })
         .finally(() => {
           this.hideLoadingIndicator();
