@@ -115,7 +115,11 @@ $grey-primary: #b8b7b7;
 .actions button span {
   font-size: 20px;
 }
-
+.actions button.disabled {
+  color: $disabled-color;
+  cursor: not-allowed;
+  user-select: none;
+}
 .actions .actions-buttons {
   display: flex;
   align-items: center;

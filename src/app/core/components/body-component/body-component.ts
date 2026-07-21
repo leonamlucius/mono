@@ -37,7 +37,7 @@ export class BodyComponent {
     llmType?: 'OLLAMA' | 'GROQ' | 'ERROR';
   }[] = [];
 
-  constructor(private textToSpeechService: TextToSpeechService) {}
+  constructor(public textToSpeechService: TextToSpeechService) {}
 
   public activeSpeechIndex = signal<number | null>(null);
 
@@ -61,13 +61,19 @@ export class BodyComponent {
   ];
 
   public async speechText(text: any, index: number): Promise<void> {
+    let textSpeak = String(text);
+
+    if (/\p{Emoji_Presentation}/gu.test(textSpeak)) {
+      textSpeak = textSpeak.replace(/\p{Emoji_Presentation}/gu, '');
+    }
+
     if (!this.textToSpeechService.isSpeechEnabled()) {
       return;
     }
 
     this.activeSpeechIndex.set(index);
 
-    await this.textToSpeechService.speak(removeMarkdown(text));
+    await this.textToSpeechService.speak(removeMarkdown(textSpeak));
 
     if (this.activeSpeechIndex() === index) {
       this.activeSpeechIndex.set(null);
@@ -91,7 +97,7 @@ export class BodyComponent {
       this.textoAtual.set('');
       setTimeout(() => {
         this.indice = (this.indice + 1) % this.texts.length;
-        this.textoAtual.set(this.texts[this.indice].text);
+        this.textoAtual.set(this.texts[this.indice].text); 
       }, 50);
     }, 8000);
 

@@ -28,6 +28,7 @@
           *ngIf="activeSpeechIndex() !== i"
           type="button"
           (click)="speechText(item.text, i)"
+          [class.disabled]="activeSpeechIndex() !== i && !this.textToSpeechService.isSpeechEnabled()"
         >
           <span class="material-symbols-outlined"> volume_up </span>
         </button>
