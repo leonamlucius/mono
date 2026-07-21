@@ -45,22 +45,9 @@ export class TextToSpeechService {
     });
   }
 
-  public pauseSpeak(): void {
+  public cancelSpeak(): void {
     if ('speechSynthesis' in window) {
-      if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
-        window.speechSynthesis.pause();
-      } else if (window.speechSynthesis.paused) {
-        window.speechSynthesis.resume();
-
-        setTimeout(() => {
-          if (window.speechSynthesis.paused) {
-            window.speechSynthesis.resume();
-            const wakeUp = new SpeechSynthesisUtterance('');
-            wakeUp.volume = 0;
-            window.speechSynthesis.speak(wakeUp);
-          }
-        }, 50);
-      }
+      window.speechSynthesis.cancel();
     }
   }
 }

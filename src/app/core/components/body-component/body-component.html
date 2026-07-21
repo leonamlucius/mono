@@ -32,16 +32,8 @@
           <span class="material-symbols-outlined"> volume_up </span>
         </button>
 
-        <button
-          *ngIf="activeSpeechIndex() === i"
-          (pointerdown)="toggleSpeech()"
-        >
-          <span *ngIf="!isSpeechPaused()" class="material-symbols-outlined">
-            pause
-          </span>
-          <span *ngIf="isSpeechPaused()" class="material-symbols-outlined">
-            play_arrow
-          </span>
+        <button *ngIf="activeSpeechIndex() === i" (click)="cancelSpeak()">
+          <span class="material-symbols-outlined" id="stop"> stop_circle </span>
         </button>
       </div>
     </div>

@@ -90,7 +90,6 @@ $grey-primary: #b8b7b7;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-
 }
 .actions .llm-type {
   width: 100%;
@@ -117,19 +116,22 @@ $grey-primary: #b8b7b7;
   font-size: 20px;
 }
 
-.actions .actions-buttons{
+.actions .actions-buttons {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
 }
 
+#stop {
+  animation: pulse 1s infinite;
+}
 
-.bot .actions .actions-buttons{
+.bot .actions .actions-buttons {
   justify-content: flex-end;
 }
 
-.user .actions .actions-buttons{
+.user .actions .actions-buttons {
   justify-content: flex-start;
 }
 
@@ -153,7 +155,7 @@ $grey-primary: #b8b7b7;
 .loading {
   opacity: 0.8;
   color: transparent;
-  animation: pulse 1s infinite;
+  animation: pulseLoading 1s infinite;
   width: 60%;
   min-height: 9%;
 }
@@ -243,7 +245,7 @@ $grey-primary: #b8b7b7;
 @media (max-width: 600px) {
   :host {
     gap: 5px;
-    height: calc(99dvh - 150px)
+    height: calc(99dvh - 150px);
   }
   .message {
     max-width: 70%;
@@ -308,13 +310,25 @@ $grey-primary: #b8b7b7;
   }
 }
 
-@keyframes pulse {
+@keyframes pulseLoading {
   0% {
     transform: scale(1);
   }
 
   50% {
     transform: scale(1.01);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
   }
   100% {
     transform: scale(1);

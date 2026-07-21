@@ -41,8 +41,6 @@ export class BodyComponent {
 
   public activeSpeechIndex = signal<number | null>(null);
 
-  public isSpeechPaused = signal(false);
-
   public textoAtual = signal('');
 
   private indice = 0;
@@ -68,20 +66,17 @@ export class BodyComponent {
     }
 
     this.activeSpeechIndex.set(index);
-    this.isSpeechPaused.set(false);
 
     await this.textToSpeechService.speak(removeMarkdown(text));
 
     if (this.activeSpeechIndex() === index) {
       this.activeSpeechIndex.set(null);
-      this.isSpeechPaused.set(false);
     }
   }
 
-  public toggleSpeech(): void {
-    console.log('Stopping speech...');
-    this.textToSpeechService.pauseSpeak();
-    this.isSpeechPaused.set(!this.isSpeechPaused());
+  public cancelSpeak(): void {
+    this.textToSpeechService.cancelSpeak();
+    this.activeSpeechIndex.set(null);
   }
 
   public copyToClipboard(text: string) {
