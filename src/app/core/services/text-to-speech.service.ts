@@ -51,6 +51,15 @@ export class TextToSpeechService {
         window.speechSynthesis.pause();
       } else if (window.speechSynthesis.paused) {
         window.speechSynthesis.resume();
+
+        setTimeout(() => {
+          if (window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+            const wakeUp = new SpeechSynthesisUtterance('');
+            wakeUp.volume = 0;
+            window.speechSynthesis.speak(wakeUp);
+          }
+        }, 50);
       }
     }
   }

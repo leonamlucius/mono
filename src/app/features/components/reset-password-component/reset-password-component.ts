@@ -1,7 +1,7 @@
-import { Component, signal, ViewChild} from '@angular/core';
+import { Component, signal, ViewChild } from '@angular/core';
 import { NgIf, NgClass } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';
-import {ResetPasswordService} from '../../services/reset-password-service';
+import { ResetPasswordService } from '../../services/reset-password-service';
 import { FormsModule } from '@angular/forms';
 import { Warning } from '../../../shared/components/warning/warning';
 @Component({
@@ -15,7 +15,7 @@ export class ResetPasswordComponent {
   public showLoading = signal<boolean>(false);
 
   public showModal = false;
-  
+
   public tokenExperied = signal<boolean>(false);
 
   public showPassword = false;
@@ -74,16 +74,12 @@ export class ResetPasswordComponent {
     this.resetPasswordService
       .resetPassword(token, newPassword, confirmNewPassword)
       .then((response) => {
-        this.showLoading.set(false);
         this.warning.openModal(response);
-
-       
       })
       .catch((error) => {
         console.error('Error resetting password:', error);
         this.showLoading.set(false);
         this.warning.openModal(error);
-
       });
   }
   public togglePasswordConfirmVisibility(): void {
@@ -108,6 +104,4 @@ export class ResetPasswordComponent {
   public closeModalInfo(): void {
     this.showModal = false;
   }
-
-  
 }
