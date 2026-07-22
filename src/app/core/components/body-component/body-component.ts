@@ -60,6 +60,18 @@ export class BodyComponent {
     },
   ];
 
+
+  ngOnInit() {
+    this.textoAtual.set(this.texts[0].text);
+    setInterval(() => {
+      this.textoAtual.set('');
+      setTimeout(() => {
+        this.indice = (this.indice + 1) % this.texts.length;
+        this.textoAtual.set(this.texts[this.indice].text); 
+      }, 50);
+    }, 8000);
+  }
+
   public async speechText(text: any, index: number): Promise<void> {
     let textSpeak = String(text);
 
@@ -91,21 +103,5 @@ export class BodyComponent {
     });
   }
 
-  ngOnInit() {
-    this.textoAtual.set(this.texts[0].text);
-    setInterval(() => {
-      this.textoAtual.set('');
-      setTimeout(() => {
-        this.indice = (this.indice + 1) % this.texts.length;
-        this.textoAtual.set(this.texts[this.indice].text); 
-      }, 50);
-    }, 8000);
-
-    if (
-      localStorage.getItem('tokenUser') == null ||
-      localStorage.getItem('tokenUser') == undefined
-    ) {
-      this.router.navigate(['/login']);
-    }
-  }
+  
 }
