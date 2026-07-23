@@ -1,5 +1,6 @@
-import { Component, signal, ViewChild } from '@angular/core';
+import { Component, signal, ViewChild, DestroyRef } from '@angular/core';
 import { NgIf, NgClass } from '@angular/common';
+import { merge, fromEvent, of, throttleTime, startWith, timer } from 'rxjs';
 import { BodyComponent } from '../../../core/components/body-component/body-component';
 import { InputComponent } from '../../../core/components/input-component/input-component';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -8,8 +9,8 @@ import { heroUsers } from '@ng-icons/heroicons/outline';
 import { bootstrapLinkedin, bootstrapGithub } from '@ng-icons/bootstrap-icons';
 import { ChatService } from '../../services/chat-service';
 import { Warning } from '../../../shared/components/warning/warning';
-import { timer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-chat-component',
@@ -57,7 +58,10 @@ export class ChatComponent {
 
   public sideBarExit = signal(false);
 
-  constructor(private chatService: ChatService) {}
+  constructor(
+    private chatService: ChatService,
+    private destroyRef: DestroyRef
+  ) {}
 
   ngOnInit() {
     const token = localStorage.getItem('tokenUser');
@@ -66,14 +70,25 @@ export class ChatComponent {
     }
     const minutes = 30 * 60 * 1000;
 
-    timer(0, minutes)
+    const idleCheck$ = merge(
+      fromEvent(document, 'mousemove'),
+      fromEvent(document, 'keydown'),
+      fromEvent(document, 'click'),
+      fromEvent(document, 'scroll')
+    ).pipe(throttleTime(1000), startWith(null));
+
+    const idleLoop$ = idleCheck$.pipe(switchMap(() => timer(minutes, minutes)));
+
+    merge(of(null), idleLoop$)
       .pipe(
         switchMap(() => {
           return this.chatService.jwtTest(token);
-        })
+        }),
+        takeUntilDestroyed(this.destroyRef)
       )
-      .subscribe((isValid) => {
+      .subscribe((isValid: boolean) => {
         if (!isValid) {
+          localStorage.removeItem('token');
           window.location.href = '/login';
         }
       });
