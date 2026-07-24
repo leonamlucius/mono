@@ -57,4 +57,31 @@ export class ChatService {
       return 'Erro ao tentar verificar o JWT. Verifique suas informações e tente novamente.';
     }
   }
+
+  public async summarize(): Promise<any> {
+    try{
+
+      const apiBase = environment.apiUrl;
+
+      const response = await fetch(`${apiBase}/api/summarize`, {
+        method: 'GET',
+        headers: {
+          'ngrok-skip-browser-warning': 'true',
+          Authorization: `Bearer ${localStorage.getItem('tokenUser')}`,
+        },
+      });
+
+      if (!response.ok) {
+        console.error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.text();
+      return result;
+
+    }catch(error){
+      console.error('Error during summarize:', error);
+      return 'Erro ao tentar resumir. Verifique suas informações e tente novamente.';
+    }
+  }
 }

@@ -58,6 +58,14 @@ export class ChatComponent {
 
   public sideBarExit = signal(false);
 
+  public summaryText = signal(
+    'Bem vindo ao Mono, ' + (localStorage.getItem('name') + '!' || '')
+  );
+
+  public IsShowSkeleton = signal(false);
+
+  public dontShowSkeleton = signal(false);
+
   constructor(
     private chatService: ChatService,
     private destroyRef: DestroyRef
@@ -92,6 +100,10 @@ export class ChatComponent {
           window.location.href = '/login';
         }
       });
+  }
+
+  public showSkeletonLoading(): void {
+    this.IsShowSkeleton.set(!this.IsShowSkeleton());
   }
 
   public openSidebar(): void {
@@ -139,6 +151,10 @@ export class ChatComponent {
   public async iniciar(): Promise<void> {
     const token = localStorage.getItem('tokenUser');
 
+    if (!this.dontShowSkeleton()) {
+      this.showSkeletonLoading();
+    }
+
     this.chatService.jwtTest(token).then((isValid) => {
       console.log('Token is valid:', isValid);
       if (!isValid) {
@@ -155,8 +171,10 @@ export class ChatComponent {
 
     if (!this.isTypeSomething()) {
       this.warning.openModal('Digite algo para iniciar a conversa');
-
       this.scrollToBottom();
+      if (!this.dontShowSkeleton()) {
+        this.showSkeletonLoading();
+      }
       return;
     }
 
@@ -173,6 +191,9 @@ export class ChatComponent {
       if (this.textoValue().trim() === '') {
         this.warning.openModal('Digite algo para continuar a conversa');
         this.chatHistory.set(this.chatHistory().slice(0, -2));
+        if (!this.dontShowSkeleton()) {
+          this.showSkeletonLoading();
+        }
         this.scrollToBottom();
         return;
       }
@@ -202,6 +223,10 @@ export class ChatComponent {
               ]);
               this.makeTextAreaEnabled(textArea as HTMLTextAreaElement);
               this.scrollToBottom();
+              if (!this.dontShowSkeleton()) {
+                this.showSkeletonLoading();
+              }
+              
               return;
             }
 
@@ -217,6 +242,18 @@ export class ChatComponent {
             console.log('Chat History:', this.chatHistory());
             this.makeTextAreaEnabled(textArea as HTMLTextAreaElement);
             this.scrollToBottom();
+
+            this.chatService.summarize().then((summary) => {
+              this.summaryText.set(summary);
+
+
+              setTimeout(() => {
+                if (!this.dontShowSkeleton()) {
+                  this.showSkeletonLoading();
+                  this.dontShowSkeleton.set(true);
+                }
+              }, 1000);
+            });
           }, 500);
         });
     } catch (error) {

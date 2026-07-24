@@ -60,6 +60,7 @@ export class LoginService {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('tokenUser', data.token);
+        localStorage.setItem('name', data.name);
         this.router.navigate(['/mono']);
       }
     } catch (error) {

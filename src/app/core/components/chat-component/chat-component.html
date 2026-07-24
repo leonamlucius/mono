@@ -15,6 +15,11 @@
           <ng-icon name="bootstrapGithub" title="GitHub" />
         </button>
       </div>
+
+      <div class="logo" [ngClass]="{ 'active': isInitialized() }">
+        <img src="/img/mono.svg" alt="Logo" />
+        <p>Mono</p>
+      </div>
     </div>
 
     <div class="right-container">
@@ -23,6 +28,10 @@
           <option value="GROQ">Groq</option>
           <option value="OLLAMA">Ollama</option>
         </select>
+      </div>
+
+      <div class="nameAndSummary" [ngClass]="{ 'skeletonLoading': IsShowSkeleton(), 'notInitialized': !isInitialized() } ">
+        <span>{{ summaryText() }}</span>
       </div>
 
       <button (click)="openSidebar()">
