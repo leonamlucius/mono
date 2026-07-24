@@ -65,7 +65,7 @@ public class LoginService {
             .signWith(SignatureAlgorithm.HS256, secretKey)
             .compact();
 
-        return new LoginResponse(user.getId(), token, user.getEmail());
+        return new LoginResponse(user.getId(), token, user.getEmail(), user.getName());
     }
 
     public LoginResponse login(LoginRequest request) {
@@ -76,7 +76,7 @@ public class LoginService {
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
 
         String token = jwtUtil.generateToken(user.getEmail(), user.getId().toString());
-        return new LoginResponse(user.getId(), token, user.getEmail());
+        return new LoginResponse(user.getId(), token, user.getEmail(), user.getName());
     }
 
 }

@@ -1,5 +1,8 @@
 package com.mono.monoapi.config;
 
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +15,19 @@ public class AiConfig {
     @Bean
     @Primary
     public ChatModel defaultChatModel(OpenAiChatModel openAiChatModel) {
-        // Isso resolve o erro de inicialização do Spring Boot
         return openAiChatModel; 
     }
+
+    @Bean
+    public ChatMemory chatMemory() {
+        return new InMemoryChatMemory();
+    }
+
+    @Bean
+    public ChatClient chatClient(ChatClient.Builder builder) {
+        return builder.build();
+    }
+
+
+
 }

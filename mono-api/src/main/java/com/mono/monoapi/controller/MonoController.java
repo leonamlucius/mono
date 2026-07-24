@@ -1,8 +1,5 @@
 package com.mono.monoapi.controller;
 
-import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +14,7 @@ import com.mono.monoapi.service.OllamaAiService;
 import com.mono.monoapi.service.LoginService;
 import com.mono.monoapi.service.ResetPasswordService;
 import com.mono.monoapi.service.AssemblyAiService;
+import com.mono.monoapi.service.SummarizeService;
 import jakarta.validation.Valid;
 
 import jakarta.validation.constraints.Positive;
@@ -55,6 +53,9 @@ public class MonoController {
 
     @Autowired
     public AssemblyAiService assemblyAiService;
+
+    @Autowired
+    public SummarizeService summarizeService;
 
 
     @Autowired
@@ -175,6 +176,17 @@ public class MonoController {
         }
     }
 
+
+    @GetMapping("/summarize")
+    public ResponseEntity<String> summarize(@RequestHeader(value = "Authorization", required = true) String bearerToken) {
+        try {
+            String summary = summarizeService.summarizeText(bearerToken);
+            return ResponseEntity.ok(summary);
+        } catch (Exception e) {
+            logger.error("Erro ao resumir o texto: {}", e.getMessage());
+            return ResponseEntity.status(500).body("Erro ao resumir o texto");
+        }
+    }
 
 
 
