@@ -406,12 +406,49 @@ $grey-primary: #a8a5a5;
   padding: 15px 10px;
   box-sizing: border-box;
   cursor: pointer;
+  border-top: 1px solid $grey-primary;
   border-bottom: 1px solid $grey-primary;
+  user-select: none;
 }
 
 .sidebar .module:hover {
-  transform: scale(1.1);
-  transition: all 0.3s ease;
+  transform: scale(1.03);
+  transition: all 0.3s ease-in-out;
+}
+
+.sidebar .nameAndSummary {
+  background-color: $white-primary;
+  font-size: 1em;
+  display: none;
+  width: fit-content;
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 15px 10px;
+  font-weight: 500;
+  color: black;
+  box-sizing: border-box;
+  transition: all 0.4s ease-in-out;
+  font-family: 'Arvo', serif;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+
+.sidebar .nameAndSummary span {
+  display: inline-block;
+  white-space: nowrap;
+  transition: all 0.4s ease;
+}
+
+.sidebar .nameAndSummary span.marquee {
+  animation: deslizarTexto 15s linear infinite;
+}
+
+.sidebar .nameAndSummary span:hover {
+  transform: none;
 }
 .modalInfo {
   background-color: $white-primary;
@@ -430,6 +467,28 @@ $grey-primary: #a8a5a5;
 .modalInfo span {
   display: flex;
   justify-content: flex-end;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.sidebar-header .logoInfo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  display: none;
+}
+
+.sidebar-header .logoInfo img {
+  width: 45px;
+  height: auto;
 }
 
 .modalInfo .close {
@@ -546,6 +605,14 @@ $grey-primary: #a8a5a5;
     left: 0;
     z-index: 9999;
     font-size: 16px;
+  }
+
+  .sidebar .nameAndSummary {
+    display: flex;
+  }
+
+  .sidebar-header .logoInfo {
+    display: flex;
   }
 }
 

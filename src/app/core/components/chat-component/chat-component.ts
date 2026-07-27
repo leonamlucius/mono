@@ -77,7 +77,15 @@ export class ChatComponent {
 
   @ViewChild('caption') caption!: ElementRef<HTMLSpanElement>;
 
+  @ViewChild('nameAndSummaryInfo') nameAndSummaryInfo!: ElementRef<HTMLDivElement>;
+
+  @ViewChild('captionInfo') captionInfo!: ElementRef<HTMLSpanElement>;
+
+  
+
   public isOverflowing = signal(false);
+
+  public isOverflowingInfo = signal(false);
 
   constructor(
     private chatService: ChatService,
@@ -86,6 +94,7 @@ export class ChatComponent {
     effect(() => {
       setTimeout(() => {
         this.verificarOverflow();
+        this.verificarOverflowSidebar();
       }, 0);
     });
   }
@@ -136,6 +145,22 @@ export class ChatComponent {
     }
   }
 
+
+  private verificarOverflowSidebar() {
+    if (!this.nameAndSummaryInfo && !this.captionInfo) {
+      return;
+    }
+
+    this.isOverflowingInfo.set(false);
+
+    if (this.nameAndSummaryInfo && this.captionInfo) {
+      const larguraCaixa = this.nameAndSummaryInfo.nativeElement.clientWidth;
+      const larguraTexto = this.captionInfo.nativeElement.scrollWidth;
+
+      this.isOverflowingInfo.set(larguraTexto > larguraCaixa);
+    }
+  }
+
   public showSkeletonLoading(): void {
     this.IsShowSkeleton.set(!this.IsShowSkeleton());
   }
@@ -143,6 +168,10 @@ export class ChatComponent {
   public openSidebar(): void {
     this.showSidebar.set(true);
     this.sideBarExit.set(false);
+
+    setTimeout(() => {
+    this.verificarOverflowSidebar();
+    }, 800);
   }
 
   public closeSidebar(): void {

@@ -30,8 +30,14 @@
         </select>
       </div>
 
-      <div #nameAndSummary class="nameAndSummary" [ngClass]="{ 'skeletonLoading': IsShowSkeleton(), 'notInitialized': !isInitialized() } ">
-        <span #caption [ngClass]="{'marquee': isOverflowing() }">{{ summaryText() }}</span>
+      <div
+        #nameAndSummary
+        class="nameAndSummary"
+        [ngClass]="{ 'skeletonLoading': IsShowSkeleton(), 'notInitialized': !isInitialized() } "
+      >
+        <span #caption [ngClass]="{'marquee': isOverflowing() }"
+          >{{ summaryText() }}</span
+        >
       </div>
 
       <button (click)="openSidebar()">
@@ -70,17 +76,34 @@
       </p>
     </div>
   </div>
-  <div class="sidebar" [ngClass]="{'show': showSidebar(), 'closing': sideBarExit() }">
-    <span class="close">
-      <button type="button" (click)="closeSidebar()">
-        <span class="material-symbols-outlined"> arrow_back_ios_new </span>
-      </button>
-    </span>
-
-    <span class="module">
-      <span class="material-symbols-outlined" (click)="createModalInfo()">
-        info
+  <div
+    class="sidebar"
+    [ngClass]="{'show': showSidebar(), 'closing': sideBarExit() }"
+  >
+    <div class="sidebar-header">
+      <span class="close">
+        <button type="button" (click)="closeSidebar()">
+          <span class="material-symbols-outlined"> arrow_back_ios_new </span>
+        </button>
       </span>
+
+      <div class="logoInfo" [ngClass]="{ 'active': isInitialized() }">
+        <img src="/img/mono.svg" alt="Logo" />
+        <p>Mono</p>
+      </div>
+    </div>
+
+    <div
+      #nameAndSummaryInfo
+      class="nameAndSummary"
+    >
+      <span #captionInfo [ngClass]="{'marquee': isOverflowingInfo() }"
+        >{{ summaryText() }}</span
+      >
+    </div>
+
+    <span class="module" (click)="createModalInfo()">
+      <span class="material-symbols-outlined"> info </span>
       Info
     </span>
   </div>
