@@ -23,12 +23,3 @@ services:
       PGADMIN_DEFAULT_PASSWORD: admin
     volumes:
       - ./pgadmin:/var/lib/pgadmin
-
-
-  mailpit:
-    image: axllent/mailpit:latest
-    container_name: mono-mailpit
-    ports:
-      - "1025:1025" # Porta que o Spring vai usar para enviar e-mails
-      - "8025:8025" # Porta que você vai abrir no navegador para ver os e-mails
-    restart: always

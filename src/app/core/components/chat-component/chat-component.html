@@ -30,8 +30,8 @@
         </select>
       </div>
 
-      <div class="nameAndSummary" [ngClass]="{ 'skeletonLoading': IsShowSkeleton(), 'notInitialized': !isInitialized() } ">
-        <span>{{ summaryText() }}</span>
+      <div #nameAndSummary class="nameAndSummary" [ngClass]="{ 'skeletonLoading': IsShowSkeleton(), 'notInitialized': !isInitialized() } ">
+        <span #caption [ngClass]="{'marquee': isOverflowing() }">{{ summaryText() }}</span>
       </div>
 
       <button (click)="openSidebar()">

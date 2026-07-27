@@ -1,4 +1,11 @@
-import { Component, signal, ViewChild, DestroyRef } from '@angular/core';
+import {
+  Component,
+  signal,
+  ViewChild,
+  DestroyRef,
+  ElementRef,
+  effect,
+} from '@angular/core';
 import { NgIf, NgClass } from '@angular/common';
 import { merge, fromEvent, of, throttleTime, startWith, timer } from 'rxjs';
 import { BodyComponent } from '../../../core/components/body-component/body-component';
@@ -66,10 +73,22 @@ export class ChatComponent {
 
   public dontShowSkeleton = signal(false);
 
+  @ViewChild('nameAndSummary') nameAndSummary!: ElementRef<HTMLDivElement>;
+
+  @ViewChild('caption') caption!: ElementRef<HTMLSpanElement>;
+
+  public isOverflowing = signal(false);
+
   constructor(
     private chatService: ChatService,
     private destroyRef: DestroyRef
-  ) {}
+  ) {
+    effect(() => {
+      setTimeout(() => {
+        this.verificarOverflow();
+      }, 0);
+    });
+  }
 
   ngOnInit() {
     const token = localStorage.getItem('tokenUser');
@@ -100,6 +119,21 @@ export class ChatComponent {
           window.location.href = '/login';
         }
       });
+  }
+
+  private verificarOverflow() {
+    if (!this.nameAndSummary && !this.caption) {
+      return;
+    }
+
+    this.isOverflowing.set(false);
+
+    if (this.nameAndSummary && this.caption) {
+      const larguraCaixa = this.nameAndSummary.nativeElement.clientWidth;
+      const larguraTexto = this.caption.nativeElement.scrollWidth;
+
+      this.isOverflowing.set(larguraTexto > larguraCaixa);
+    }
   }
 
   public showSkeletonLoading(): void {
@@ -226,7 +260,7 @@ export class ChatComponent {
               if (!this.dontShowSkeleton()) {
                 this.showSkeletonLoading();
               }
-              
+
               return;
             }
 
@@ -246,11 +280,14 @@ export class ChatComponent {
             this.chatService.summarize().then((summary) => {
               this.summaryText.set(summary);
 
-
               setTimeout(() => {
                 if (!this.dontShowSkeleton()) {
                   this.showSkeletonLoading();
                   this.dontShowSkeleton.set(true);
+
+                  setTimeout(() => {
+                  this.verificarOverflow();
+                  }, 500);
                 }
               }, 1000);
             });

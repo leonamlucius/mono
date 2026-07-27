@@ -261,7 +261,8 @@ $grey-primary: #a8a5a5;
   background-color: $white-primary;
   font-size: 0.95em;
   display: flex;
-  width: 50%;
+  width: fit-content;
+  max-width: 50%;
   align-items: center;
   justify-content: center;
   height: 40px;
@@ -293,9 +294,15 @@ $grey-primary: #a8a5a5;
   font-size: 0;
 }
 
-// .right-container .nameAndSummary span {
-//   transition: none;
-// }
+.right-container .nameAndSummary span {
+  display: inline-block;
+  white-space: nowrap;
+  transition: all 0.4s ease;
+}
+
+.right-container .nameAndSummary span.marquee {
+  animation: deslizarTexto 15s linear infinite;
+}
 
 .right-container .nameAndSummary span:hover {
   transform: none;
@@ -581,5 +588,14 @@ $grey-primary: #a8a5a5;
   }
   100% {
     background-color: $disabled-color;
+  }
+}
+
+@keyframes deslizarTexto {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-105%);
   }
 }
