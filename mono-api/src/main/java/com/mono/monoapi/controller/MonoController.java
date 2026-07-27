@@ -15,6 +15,7 @@ import com.mono.monoapi.service.LoginService;
 import com.mono.monoapi.service.ResetPasswordService;
 import com.mono.monoapi.service.AssemblyAiService;
 import com.mono.monoapi.service.SummarizeService;
+import com.mono.monoapi.service.FactsService;
 import jakarta.validation.Valid;
 
 import jakarta.validation.constraints.Positive;
@@ -29,6 +30,9 @@ import com.mono.monoapi.dto.LoginRequest;
 import com.mono.monoapi.dto.RegisterRequest;
 import com.mono.monoapi.dto.ResetPasswordRequest;
 import com.mono.monoapi.dto.ForgotPasswordRequest;
+import com.mono.monoapi.dto.FactsResponse;
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api")
@@ -56,6 +60,9 @@ public class MonoController {
 
     @Autowired
     public SummarizeService summarizeService;
+
+    @Autowired
+    public FactsService factsService;
 
 
     @Autowired
@@ -126,8 +133,8 @@ public class MonoController {
     }
 
     @GetMapping("/facts")
-    public ResponseEntity<String> getFacts() {
-        String facts = groqAiService.getFacts();
+    public ResponseEntity<List<FactsResponse>> getFacts() {
+        List<FactsResponse> facts = factsService.getFact();
         return ResponseEntity.ok(facts);
     }
 

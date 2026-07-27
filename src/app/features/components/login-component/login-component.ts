@@ -11,6 +11,7 @@ import {
   map,
   scan,
 } from 'rxjs';
+import { timer } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { Warning } from '../../../shared/components/warning/warning';
 
@@ -23,6 +24,9 @@ import { Warning } from '../../../shared/components/warning/warning';
 export class LoginComponent {
   @ViewChild(Warning) warning!: Warning;
   public facts = signal<any>(null);
+
+
+  public fatoAtual = signal<any>(null);
 
   public isEvenCall = signal<boolean>(true);
 
@@ -37,30 +41,25 @@ export class LoginComponent {
   constructor(private loginService: LoginService) {}
 
   ngOnInit(): void {
-    this.pollingSubscription = interval(10000) //10 segundos
-      .pipe(
-        startWith(0),
-        scan((acumulador) => acumulador + 1, -1),
-        switchMap((contadorVerdadeiro) =>
-          from(this.loginService.getFacts()).pipe(
-            map((fatos) => ({ contador: contadorVerdadeiro, fatos }))
-          )
-        )
-      )
-      .subscribe({
-        next: ({ contador, fatos }) => {
-          const ePar = contador % 2 == 0;
+    this.loginService.getFacts().then((fatos) => {
+      this.facts.set(fatos);
 
-          this.isEvenCall.set(ePar);
-          this.facts.set(fatos);
+      // 2. Só inicia o temporizador DEPOIS que a API respondeu
+      this.pollingSubscription = timer(0, 10000).subscribe((contador) => {
+        const ePar = contador % 2 === 0;
+        this.isEvenCall.set(ePar);
 
-          console.log(
-            `Sincronizado! Chamada ${ePar ? 'Par' : 'Ímpar'} recebeu:`,
-            fatos
-          );
-        },
-        error: (err) => console.error(err),
+        const todosOsFatos = this.facts();
+
+        // Se quiser pegar um fato específico da lista baseado no contador:
+        this.fatoAtual.set(todosOsFatos[contador % todosOsFatos.length]);
+
+        console.log(
+          `Sincronizado! Chamada ${ePar ? 'Par' : 'Ímpar'} (${contador}):`,
+          this.fatoAtual()
+        );
       });
+    });
   }
 
   ngOnDestroy(): void {

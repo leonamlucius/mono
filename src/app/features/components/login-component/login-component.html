@@ -6,7 +6,7 @@
                 <img src="/img/mono.svg" alt="Logo" class="logo">
 
                 <div class="facts-container" *ngIf="facts()" [ngClass]="{'balao-par': isEvenCall(), 'balao-impar': !isEvenCall()}">
-                    <p class="facts-text">{{ facts() }}</p>
+                    <p class="facts-text">{{ fatoAtual()?.text }}</p>
                 </div>
             </div>
         </div>
