@@ -6,8 +6,9 @@ import {
   ElementRef,
   signal,
   effect,
-  AfterViewInit,
   OnDestroy,
+  OnInit,
+  Input,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
@@ -25,7 +26,6 @@ import { AudioRecordingService } from '../../services/audio-recording.service';
 export class InputComponent implements OnDestroy {
   @Output() textoChange = new EventEmitter<boolean>();
   @Output() textoValue = new EventEmitter<string>();
-  @Output() llmType = new EventEmitter<'OLLAMA' | 'GROQ'>();
   @ViewChild('meuTextarea') meuTextarea!: ElementRef<HTMLTextAreaElement>;
   @ViewChild('waveformContainer')
   waveformContainer!: ElementRef<HTMLDivElement>;
@@ -35,6 +35,10 @@ export class InputComponent implements OnDestroy {
   public micIsON = signal(false);
   public micValue = '';
   private jaEnviou = false;
+
+  @Input() llmType: 'OLLAMA' | 'GROQ'| "ERROR" = 'GROQ';
+
+  @Output() llmTypeChange = new EventEmitter<'OLLAMA' | 'GROQ'>();
 
   constructor(
     private chatComponent: ChatComponent,
@@ -156,8 +160,7 @@ export class InputComponent implements OnDestroy {
   }
 
   public changeLlmType(selectedType: HTMLSelectElement): void {
-    this.llmType.emit(selectedType.value as 'OLLAMA' | 'GROQ');
-
+    this.llmTypeChange.emit(selectedType.value as 'OLLAMA' | 'GROQ');
     console.log('Tipo de LLM selecionado:', selectedType.value);
   }
 

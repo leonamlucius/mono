@@ -489,6 +489,8 @@ $grey-primary: #a8a5a5;
 .sidebar-header .logoInfo img {
   width: 45px;
   height: auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
 }
 
 .modalInfo .close {
@@ -654,7 +656,7 @@ $grey-primary: #a8a5a5;
     background-color: $white-primary;
   }
   100% {
-    background-color: $disabled-color;
+    background-color: #dddcdc;
   }
 }
 

@@ -38,26 +38,21 @@ export class LoginComponent {
 
   public showLoading = signal<boolean>(false);
 
+  public showSkeleton = signal<boolean>(true);
+
   constructor(private loginService: LoginService) {}
 
   ngOnInit(): void {
     this.loginService.getFacts().then((fatos) => {
       this.facts.set(fatos);
 
-      // 2. Só inicia o temporizador DEPOIS que a API respondeu
       this.pollingSubscription = timer(0, 10000).subscribe((contador) => {
         const ePar = contador % 2 === 0;
         this.isEvenCall.set(ePar);
 
         const todosOsFatos = this.facts();
-
-        // Se quiser pegar um fato específico da lista baseado no contador:
         this.fatoAtual.set(todosOsFatos[contador % todosOsFatos.length]);
 
-        console.log(
-          `Sincronizado! Chamada ${ePar ? 'Par' : 'Ímpar'} (${contador}):`,
-          this.fatoAtual()
-        );
       });
     });
   }
@@ -67,6 +62,11 @@ export class LoginComponent {
       this.pollingSubscription.unsubscribe();
       console.log('Timer dos fatos destruído com sucesso!');
     }
+  }
+
+
+  public showImageLogin(): void {
+    this.showSkeleton.set(false);
   }
 
   public showLoadingIndicator(): void {

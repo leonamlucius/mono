@@ -10,7 +10,7 @@
   
   ></textarea>
 
-  <select #providerSelect (change)="changeLlmType(providerSelect)">
+<select #providerSelect (change)="changeLlmType(providerSelect)" [value]="llmType">
     <option value="GROQ">Groq</option>
     <option value="OLLAMA">Ollama</option>
   </select>

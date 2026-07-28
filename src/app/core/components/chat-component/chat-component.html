@@ -24,7 +24,7 @@
 
     <div class="right-container">
       <div class="llm-select">
-        <select (change)="onLlmTypeChange($event)">
+        <select (change)="onLlmTypeChange($event)" [value]="llmType()">
           <option value="GROQ">Groq</option>
           <option value="OLLAMA">Ollama</option>
         </select>
@@ -54,7 +54,9 @@
 <app-input-component
   (textoChange)="isTypeSomething.set($event)"
   (textoValue)="textoValue.set($event)"
-  (llmType)="llmType.set($event)"
+  (llmTypeChange)="llmType.set($event)"
+  [llmType]="llmType() === 'ERROR' ? 'GROQ' : llmType()"
+  
 ></app-input-component>
 <div class="side-bar-overlay" *ngIf="showSidebar()">
   <div class="modalInfo" *ngIf="showModal">

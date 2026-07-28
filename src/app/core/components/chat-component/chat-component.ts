@@ -5,6 +5,7 @@ import {
   DestroyRef,
   ElementRef,
   effect,
+  inject,
 } from '@angular/core';
 import { NgIf, NgClass } from '@angular/common';
 import { merge, fromEvent, of, throttleTime, startWith, timer } from 'rxjs';
@@ -77,11 +78,12 @@ export class ChatComponent {
 
   @ViewChild('caption') caption!: ElementRef<HTMLSpanElement>;
 
-  @ViewChild('nameAndSummaryInfo') nameAndSummaryInfo!: ElementRef<HTMLDivElement>;
+  @ViewChild('nameAndSummaryInfo')
+  nameAndSummaryInfo!: ElementRef<HTMLDivElement>;
 
   @ViewChild('captionInfo') captionInfo!: ElementRef<HTMLSpanElement>;
 
-  
+  public llmTypeValue = signal<'OLLAMA' | 'GROQ'>('OLLAMA');
 
   public isOverflowing = signal(false);
 
@@ -98,6 +100,8 @@ export class ChatComponent {
       }, 0);
     });
   }
+
+  @ViewChild(InputComponent) inputComponent!: InputComponent;
 
   ngOnInit() {
     const token = localStorage.getItem('tokenUser');
@@ -145,7 +149,6 @@ export class ChatComponent {
     }
   }
 
-
   private verificarOverflowSidebar() {
     if (!this.nameAndSummaryInfo && !this.captionInfo) {
       return;
@@ -170,7 +173,7 @@ export class ChatComponent {
     this.sideBarExit.set(false);
 
     setTimeout(() => {
-    this.verificarOverflowSidebar();
+      this.verificarOverflowSidebar();
     }, 800);
   }
 
@@ -306,6 +309,12 @@ export class ChatComponent {
             this.makeTextAreaEnabled(textArea as HTMLTextAreaElement);
             this.scrollToBottom();
 
+            const nameOfLLM = response.model
+              ? response.model.split('-')[0]
+              : '';
+
+              this.llmType.set(nameOfLLM as 'OLLAMA' | 'GROQ' | 'ERROR');
+
             this.chatService.summarize().then((summary) => {
               this.summaryText.set(summary);
 
@@ -315,7 +324,7 @@ export class ChatComponent {
                   this.dontShowSkeleton.set(true);
 
                   setTimeout(() => {
-                  this.verificarOverflow();
+                    this.verificarOverflow();
                   }, 500);
                 }
               }, 1000);
