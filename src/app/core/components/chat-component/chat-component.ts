@@ -17,12 +17,21 @@ import { heroUsers } from '@ng-icons/heroicons/outline';
 import { bootstrapLinkedin, bootstrapGithub } from '@ng-icons/bootstrap-icons';
 import { ChatService } from '../../services/chat-service';
 import { Warning } from '../../../shared/components/warning/warning';
+import { Menu } from '../../../features/components/menu/menu';
 import { switchMap } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-chat-component',
-  imports: [BodyComponent, InputComponent, NgIf, NgClass, NgIcon, Warning],
+  imports: [
+    BodyComponent,
+    InputComponent,
+    NgIf,
+    NgClass,
+    NgIcon,
+    Warning,
+    Menu,
+  ],
   templateUrl: './chat-component.html',
   styleUrls: ['./chat-component.scss'],
   providers: [
@@ -36,6 +45,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class ChatComponent {
   @ViewChild(Warning) warning!: Warning;
+
+  @ViewChild(Menu) menu!: Menu;
 
   protected readonly title = signal('mono');
 
@@ -56,15 +67,7 @@ export class ChatComponent {
 
   public textValueSend = signal('');
 
-  public showModal = false;
-
-  public showModalWarningPai = signal(false);
-
   public llmType = signal<'OLLAMA' | 'GROQ' | 'ERROR'>('GROQ');
-
-  public showSidebar = signal(false);
-
-  public sideBarExit = signal(false);
 
   public summaryText = signal(
     'Bem vindo ao Mono, ' + (localStorage.getItem('name') + '!' || '')
@@ -77,11 +80,6 @@ export class ChatComponent {
   @ViewChild('nameAndSummary') nameAndSummary!: ElementRef<HTMLDivElement>;
 
   @ViewChild('caption') caption!: ElementRef<HTMLSpanElement>;
-
-  @ViewChild('nameAndSummaryInfo')
-  nameAndSummaryInfo!: ElementRef<HTMLDivElement>;
-
-  @ViewChild('captionInfo') captionInfo!: ElementRef<HTMLSpanElement>;
 
   public llmTypeValue = signal<'OLLAMA' | 'GROQ'>('OLLAMA');
 
@@ -96,7 +94,6 @@ export class ChatComponent {
     effect(() => {
       setTimeout(() => {
         this.verificarOverflow();
-        this.verificarOverflowSidebar();
       }, 0);
     });
   }
@@ -134,6 +131,11 @@ export class ChatComponent {
       });
   }
 
+
+  public abrirMenu() {
+    this.menu.openSidebar();
+  }
+
   private verificarOverflow() {
     if (!this.nameAndSummary && !this.caption) {
       return;
@@ -149,40 +151,8 @@ export class ChatComponent {
     }
   }
 
-  private verificarOverflowSidebar() {
-    if (!this.nameAndSummaryInfo && !this.captionInfo) {
-      return;
-    }
-
-    this.isOverflowingInfo.set(false);
-
-    if (this.nameAndSummaryInfo && this.captionInfo) {
-      const larguraCaixa = this.nameAndSummaryInfo.nativeElement.clientWidth;
-      const larguraTexto = this.captionInfo.nativeElement.scrollWidth;
-
-      this.isOverflowingInfo.set(larguraTexto > larguraCaixa);
-    }
-  }
-
   public showSkeletonLoading(): void {
     this.IsShowSkeleton.set(!this.IsShowSkeleton());
-  }
-
-  public openSidebar(): void {
-    this.showSidebar.set(true);
-    this.sideBarExit.set(false);
-
-    setTimeout(() => {
-      this.verificarOverflowSidebar();
-    }, 800);
-  }
-
-  public closeSidebar(): void {
-    this.sideBarExit.set(true);
-
-    setTimeout(() => {
-      this.showSidebar.set(false);
-    }, 400);
   }
 
   public onLlmTypeChange(event: Event): void {
@@ -228,10 +198,6 @@ export class ChatComponent {
       }
     });
     this.scrollToBottom();
-
-    if (this.showModal) {
-      this.closeModalInfo();
-    }
 
     const textArea = document.querySelector('textarea');
 
@@ -313,10 +279,12 @@ export class ChatComponent {
               ? response.model.split('-')[0]
               : '';
 
-              this.llmType.set(nameOfLLM as 'OLLAMA' | 'GROQ' | 'ERROR');
+            this.llmType.set(nameOfLLM as 'OLLAMA' | 'GROQ' | 'ERROR');
 
             this.chatService.summarize().then((summary) => {
               this.summaryText.set(summary);
+
+              this.menu.summaryText.set(summary);
 
               setTimeout(() => {
                 if (!this.dontShowSkeleton()) {
@@ -325,6 +293,7 @@ export class ChatComponent {
 
                   setTimeout(() => {
                     this.verificarOverflow();
+                    this.menu.verificarOverflowSidebar();
                   }, 500);
                 }
               }, 1000);
@@ -345,14 +314,6 @@ export class ChatComponent {
 
   public goToGithub(): void {
     window.open('https://github.com/leonamlucius', '_blank');
-  }
-
-  public createModalInfo(): void {
-    this.showModal = true;
-  }
-
-  public closeModalInfo(): void {
-    this.showModal = false;
   }
 
   public makeTextAreaDisabled(textarea: HTMLTextAreaElement): void {
