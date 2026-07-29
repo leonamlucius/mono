@@ -3,16 +3,16 @@ import { NgIf, NgClass } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';
 import { ForgotPasswordService } from '../../services/forgot-password-service';
 import { FormsModule } from '@angular/forms';
-import { Warning } from '../../../shared/components/warning/warning';
+import { WarningComponent } from '../../../shared/components/warning-component/warning-component';
 
 @Component({
   selector: 'app-forgot-password-component',
-  imports: [NgIf, NgClass, NgIcon, FormsModule, Warning],
+  imports: [NgIf, NgClass, NgIcon, FormsModule, WarningComponent],
   templateUrl: './forgot-password-component.html',
   styleUrls: ['./forgot-password-component.scss'],
 })
 export class ForgotPasswordComponent {
-  @ViewChild(Warning) warning!: Warning;
+  @ViewChild(WarningComponent) warning!: WarningComponent;
   constructor(private forgotPasswordService: ForgotPasswordService) {}
 
   public showLoading = signal<boolean>(false);

@@ -16,8 +16,8 @@ import { featherAirplay } from '@ng-icons/feather-icons';
 import { heroUsers } from '@ng-icons/heroicons/outline';
 import { bootstrapLinkedin, bootstrapGithub } from '@ng-icons/bootstrap-icons';
 import { ChatService } from '../../services/chat-service';
-import { Warning } from '../../../shared/components/warning/warning';
-import { Menu } from '../../../features/components/menu/menu';
+import { WarningComponent } from '../../../shared/components/warning-component/warning-component';
+import { MenuComponent } from '../../../features/components/menu-component/menu-component';
 import { switchMap } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -29,8 +29,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     NgIf,
     NgClass,
     NgIcon,
-    Warning,
-    Menu,
+    WarningComponent,
+    MenuComponent,
   ],
   templateUrl: './chat-component.html',
   styleUrls: ['./chat-component.scss'],
@@ -44,9 +44,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   ],
 })
 export class ChatComponent {
-  @ViewChild(Warning) warning!: Warning;
+  @ViewChild(WarningComponent) warning!: WarningComponent;
 
-  @ViewChild(Menu) menu!: Menu;
+  @ViewChild(MenuComponent) menu!: MenuComponent;
 
   protected readonly title = signal('mono');
 
@@ -130,7 +130,6 @@ export class ChatComponent {
         }
       });
   }
-
 
   public abrirMenu() {
     this.menu.openSidebar();

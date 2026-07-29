@@ -3,15 +3,15 @@ import { NgIf, NgClass } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';
 import { ResetPasswordService } from '../../services/reset-password-service';
 import { FormsModule } from '@angular/forms';
-import { Warning } from '../../../shared/components/warning/warning';
+import { WarningComponent } from '../../../shared/components/warning-component/warning-component';
 @Component({
   selector: 'app-reset-password-component',
-  imports: [NgIf, NgClass, NgIcon, FormsModule, Warning],
+  imports: [NgIf, NgClass, NgIcon, FormsModule, WarningComponent],
   templateUrl: './reset-password-component.html',
   styleUrls: ['./reset-password-component.scss'],
 })
 export class ResetPasswordComponent {
-  @ViewChild(Warning) warning!: Warning;
+  @ViewChild(WarningComponent) warning!: WarningComponent;
   public showLoading = signal<boolean>(false);
 
   public showModal = false;

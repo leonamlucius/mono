@@ -13,20 +13,19 @@ import {
 } from 'rxjs';
 import { timer } from 'rxjs';
 import { FormsModule } from '@angular/forms';
-import { Warning } from '../../../shared/components/warning/warning';
+import { WarningComponent } from '../../../shared/components/warning-component/warning-component';
 
 @Component({
   selector: 'app-login-component',
-  imports: [NgIcon, NgIf, NgClass, FormsModule, Warning],
+  imports: [NgIcon, NgIf, NgClass, FormsModule, WarningComponent],
   templateUrl: './login-component.html',
   styleUrls: ['./login-component.scss'],
 })
 export class LoginComponent {
-  @ViewChild(Warning) warning!: Warning;
+  @ViewChild(WarningComponent) warning!: WarningComponent;
   public facts = signal<any>(null);
 
-
-  public fatoAtual = signal<any>(null);
+  public fatoAtual = signal<any>('Mono conta curiosidades');
 
   public isEvenCall = signal<boolean>(true);
 
@@ -52,7 +51,6 @@ export class LoginComponent {
 
         const todosOsFatos = this.facts();
         this.fatoAtual.set(todosOsFatos[contador % todosOsFatos.length]);
-
       });
     });
   }
@@ -63,7 +61,6 @@ export class LoginComponent {
       console.log('Timer dos fatos destruído com sucesso!');
     }
   }
-
 
   public showImageLogin(): void {
     this.showSkeleton.set(false);

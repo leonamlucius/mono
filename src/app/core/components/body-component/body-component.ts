@@ -4,12 +4,12 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { TextToSpeechService } from '../../services/text-to-speech.service';
 import { MarkdownPipe } from './markdown.pipe';
 import { Router } from '@angular/router';
-import { Warning } from '../../../shared/components/warning/warning';
+import { WarningComponent } from '../../../shared/components/warning-component/warning-component';
 import removeMarkdown from 'remove-markdown';
 
 @Component({
   selector: 'app-body-component',
-  imports: [NgFor, NgIf, NgClass, MarkdownPipe, Warning],
+  imports: [NgFor, NgIf, NgClass, MarkdownPipe, WarningComponent],
   templateUrl: './body-component.html',
   styleUrls: ['./body-component.scss'],
   animations: [
@@ -25,7 +25,7 @@ import removeMarkdown from 'remove-markdown';
   ],
 })
 export class BodyComponent {
-  @ViewChild(Warning) warning!: Warning;
+  @ViewChild(WarningComponent) warning!: WarningComponent;
   private router = inject(Router);
 
   @Input() isInitialized = false;
@@ -60,14 +60,13 @@ export class BodyComponent {
     },
   ];
 
-
   ngOnInit() {
     this.textoAtual.set(this.texts[0].text);
     setInterval(() => {
       this.textoAtual.set('');
       setTimeout(() => {
         this.indice = (this.indice + 1) % this.texts.length;
-        this.textoAtual.set(this.texts[this.indice].text); 
+        this.textoAtual.set(this.texts[this.indice].text);
       }, 50);
     }, 8000);
   }
@@ -102,6 +101,4 @@ export class BodyComponent {
       this.warning.openModal('Texto copiado para a área de transferência!');
     });
   }
-
-  
 }

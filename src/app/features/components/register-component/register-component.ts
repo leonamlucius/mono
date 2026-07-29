@@ -3,16 +3,16 @@ import { NgIcon } from '@ng-icons/core';
 import { NgIf, NgClass } from '@angular/common';
 import { RegisterService } from '../../services/register-service';
 import { FormsModule } from '@angular/forms';
-import { Warning } from '../../../shared/components/warning/warning';
+import { WarningComponent } from '../../../shared/components/warning-component/warning-component';
 
 @Component({
   selector: 'app-register-component',
-  imports: [NgIcon, NgIf, NgClass, FormsModule, Warning],
+  imports: [NgIcon, NgIf, NgClass, FormsModule, WarningComponent],
   templateUrl: './register-component.html',
   styleUrls: ['./register-component.scss'],
 })
 export class RegisterComponent {
-  @ViewChild(Warning) warning!: Warning;
+  @ViewChild(WarningComponent) warning!: WarningComponent;
   public showModal = false;
 
   public showLoading = signal<boolean>(false);
