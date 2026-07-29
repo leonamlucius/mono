@@ -91,6 +91,7 @@ public class SummarizeService {
                 """
  Escreva um título nominal (sem verbos conjugados) de no máximo 7 palavras representando o tema principal desta conversa.
                         Responda em português brasileiro, sem aspas, sem formatação e apenas em texto corrido.
+                        Se não houver informações suficientes para gerar um título, responda com informações da pergunta.
                                     """,
                 userId);
 
