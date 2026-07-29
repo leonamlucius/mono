@@ -1,0 +1,54 @@
+<div class="side-bar-overlay" *ngIf="showSidebar()">
+  <div class="modalInfo" *ngIf="showModal">
+    <div class="modalContent">
+      <span class="close" (click)="closeModalInfo()">
+        <span class="material-symbols-outlined"> close </span>
+      </span>
+      <p>
+        Mono é um chatbot de inteligência artificial para ajudar no dia a dia,
+        desenvolvido com uma interface moderna e reativa em Angular e um backend
+        robusto em Spring Boot
+      </p>
+      <p>
+        Utilizando o Spring AI para orquestração de dados, o projeto adota uma
+        arquitetura híbrida de modelos: consome a infraestrutura da Groq para
+        inferência ultrarrápida em nuvem utilizando o <code>gpt-oss-20b</code>,
+        e integra o <code>qwen2.5:0.5b</code> localmente através do Ollama. Essa
+        combinação entrega respostas fluidas com baixíssima latência, unindo a
+        robustez do ecossistema Java à agilidade dos modelos de linguagem de
+        última geração.
+      </p>
+    </div>
+  </div>
+
+  <div
+    class="sidebar"
+    [ngClass]="{'show': showSidebar(), 'closing': sideBarExit() }"
+  >
+    <div class="sidebar-header">
+      <span class="close">
+        <button type="button" (click)="closeSidebar()">
+          <span class="material-symbols-outlined">
+            <span class="material-symbols-outlined"> arrow_forward_ios </span>
+          </span>
+        </button>
+      </span>
+
+      <div class="logoInfo">
+        <img src="/img/mono.svg" alt="Logo" />
+        <p>Mono</p>
+      </div>
+    </div>
+
+    <div #nameAndSummaryInfo class="nameAndSummary">
+      <span #captionInfo [ngClass]="{'marquee': isOverflowingInfo() }"
+        >{{ summaryText() }}</span
+      >
+    </div>
+
+    <span class="module" (click)="createModalInfo()">
+      <span class="material-symbols-outlined"> info </span>
+      Info
+    </span>
+  </div>
+</div>
