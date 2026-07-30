@@ -44,7 +44,9 @@
             </div>
             <button type="submit" class="login-button" [class.disabled]="showLoading()">
                 <span *ngIf="!showLoading()">Login</span>
-                
+                <span *ngIf="showLoading()" class="material-symbols-outlined" id="loadingIcon">
+                    progress_activity
+                </span>
 
             </button>
         </form>
