@@ -72,7 +72,7 @@ public class SecurityConfig {
         System.out.println("DEBUG - O valor lido da ENV é: " + allowedOrigin);
         
         configuration.setAllowedOrigins(Arrays.asList(allowedOrigin != null ? allowedOrigin : ""));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
         

@@ -2,6 +2,7 @@ package com.mono.monoapi.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,8 @@ import com.mono.monoapi.dto.RegisterRequest;
 import com.mono.monoapi.dto.ResetPasswordRequest;
 import com.mono.monoapi.dto.ForgotPasswordRequest;
 import com.mono.monoapi.dto.FactsResponse;
+import com.mono.monoapi.dto.UserInfoResponse;
+import com.mono.monoapi.dto.UserInfoRequest;
 import java.util.List;
 
 
@@ -130,6 +133,18 @@ public class MonoController {
     @PostMapping("/register")
     public ResponseEntity<LoginResponse> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.ok(loginService.register(request));
+    }
+
+    @GetMapping("/get-user-info")
+    public ResponseEntity<UserInfoResponse> getUserInfo(@RequestHeader(value = "Authorization", required = true) String bearerToken) {
+        UserInfoResponse user = loginService.getUserInfo(bearerToken);
+        return ResponseEntity.ok(user);
+    }
+
+    @PatchMapping("/get-user-info")
+    public ResponseEntity<UserInfoResponse> updateUserInfo(@Valid @RequestBody UserInfoRequest request, @RequestHeader(value = "Authorization", required = true) String bearerToken) {
+        UserInfoResponse user = loginService.updateUserInfo(request, bearerToken);
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/facts")

@@ -1,23 +1,105 @@
 <div class="side-bar-overlay" *ngIf="showSidebar()">
-  <div class="modalInfo" *ngIf="showModal">
-    <div class="modalContent">
-      <span class="close" (click)="closeModalInfo()">
-        <span class="material-symbols-outlined"> close </span>
-      </span>
-      <p>
-        Mono é um chatbot de inteligência artificial para ajudar no dia a dia,
-        desenvolvido com uma interface moderna e reativa em Angular e um backend
-        robusto em Spring Boot
-      </p>
-      <p>
-        Utilizando o Spring AI para orquestração de dados, o projeto adota uma
-        arquitetura híbrida de modelos: consome a infraestrutura da Groq para
-        inferência ultrarrápida em nuvem utilizando o <code>gpt-oss-20b</code>,
-        e integra o <code>qwen2.5:0.5b</code> localmente através do Ollama. Essa
-        combinação entrega respostas fluidas com baixíssima latência, unindo a
-        robustez do ecossistema Java à agilidade dos modelos de linguagem de
-        última geração.
-      </p>
+  <div class="modalSidebarOverlay" *ngIf="activeModal() === 'info'">
+    <div class="modalSidebar">
+      <div class="modalContent">
+        <div class="modalHeader">
+          <span class="material-symbols-outlined"> info </span>
+          <span class="close">
+            <button type="button" (click)="closeModal()">
+              <span class="material-symbols-outlined"> close </span>
+            </button>
+          </span>
+        </div>
+        <p>
+          Mono é um chatbot de inteligência artificial para ajudar no dia a dia,
+          desenvolvido com uma interface moderna e reativa em Angular e um
+          backend robusto em Spring Boot
+        </p>
+        <p>
+          Utilizando o Spring AI para orquestração de dados, o projeto adota uma
+          arquitetura híbrida de modelos: consome a infraestrutura da Groq para
+          inferência ultrarrápida em nuvem utilizando o
+          <code>gpt-oss-20b</code>, e integra o
+          <code>qwen2.5:0.5b</code> localmente através do Ollama. Essa
+          combinação entrega respostas fluidas com baixíssima latência, unindo a
+          robustez do ecossistema Java à agilidade dos modelos de linguagem de
+          última geração.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modalSidebarOverlay" *ngIf="activeModal() === 'perfil'">
+    <div class="modalSidebar">
+      <div class="modalContent">
+        <div class="modalHeader">
+          <span class="material-symbols-outlined"> person </span>
+          <span class="close">
+            <button type="button" (click)="closeModal()">
+              <span class="material-symbols-outlined"> close </span>
+            </button>
+          </span>
+        </div>
+
+        <form (ngSubmit)="onSubmit(nameInput.value)" #userForm="ngForm">
+          <div class="form-group">
+            <label class="required" for="name">Nome:</label>
+
+            <input
+              #nameInput
+              type="text"
+              id="name"
+              [(ngModel)]="userName"
+              name="name"
+              required
+              [ngClass]="{'active': editName() }"
+            />
+          </div>
+
+          <div class="form-flex">
+            <div class="form-group">
+              <label for="email">Email:</label>
+
+              <input
+                type="email"
+                id="email"
+                [(ngModel)]="userEmail"
+                name="email"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="date">Data :</label>
+
+              <input
+                type="date"
+                id="date"
+                [(ngModel)]="userDate"
+                name="date"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-buttons">
+            <button class="cancel" type="button" (click)="closeModal()">
+              Cancelar
+            </button>
+
+            <div class="form-buttons-save-edit">
+              <button class="edit" type="button" (click)="startEditName()">
+                Editar
+              </button>
+              <button class="save" type="submit" [ngClass]="{'active': editName() }">
+                <span *ngIf="showLoading()" class="material-symbols-outlined" id="loadingIcon">
+                    progress_activity
+                </span>
+                <p *ngIf="!showLoading()">Salvar</p>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 
@@ -46,9 +128,16 @@
       >
     </div>
 
-    <span class="module" (click)="createModalInfo()">
+    <span class="module" (click)="createModalPerfil()">
+      <span class="material-symbols-outlined"> person </span>
+      Perfil
+    </span>
+
+    <span class="module pass" (click)="createModalInfo()">
       <span class="material-symbols-outlined"> info </span>
       Info
     </span>
   </div>
 </div>
+
+<app-warning></app-warning>

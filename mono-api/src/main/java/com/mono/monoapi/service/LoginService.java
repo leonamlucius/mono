@@ -3,6 +3,10 @@ package com.mono.monoapi.service;
 import com.mono.monoapi.config.JwtUtil;
 import com.mono.monoapi.dto.LoginRequest;
 import com.mono.monoapi.dto.LoginResponse;
+import com.mono.monoapi.dto.UserInfoResponse;
+import com.mono.monoapi.dto.UserInfoRequest;
+
+import java.time.LocalDateTime;
 import com.mono.monoapi.dto.RegisterRequest;
 import com.mono.monoapi.model.Login;
 import com.mono.monoapi.repository.LoginRepository;
@@ -14,11 +18,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.Date;
-import org.springframework.beans.factory.annotation.Autowired; 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
@@ -33,7 +35,6 @@ public class LoginService {
     @Lazy
     private AuthenticationManager authenticationManager;
 
-
     @Value("${jwt.secret}")
     private String secretKey;
 
@@ -42,7 +43,6 @@ public class LoginService {
 
     public LoginResponse register(RegisterRequest request) {
 
-            
         // Check if the username already exists
         if (loginRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("Email já está em uso.");
@@ -53,17 +53,18 @@ public class LoginService {
                 .name(request.getName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .createdAt(LocalDateTime.now())
                 .build();
 
         loginRepository.save(user);
 
         String token = Jwts.builder()
-            .setSubject(user.getEmail())
-            .claim("idUser", user.getId().toString()) // 🟢 O ID vai aqui dentro criptografado!
-            .setIssuedAt(new Date())
-            .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration)) // 1 dia
-            .signWith(SignatureAlgorithm.HS256, secretKey)
-            .compact();
+                .setSubject(user.getEmail())
+                .claim("idUser", user.getId().toString()) // 🟢 O ID vai aqui dentro criptografado!
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration)) // 1 dia
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
 
         return new LoginResponse(user.getId(), token, user.getEmail(), user.getName());
     }
@@ -79,4 +80,36 @@ public class LoginService {
         return new LoginResponse(user.getId(), token, user.getEmail(), user.getName());
     }
 
+    public UserInfoResponse getUserInfo(String bearerToken) {
+        if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Token de autenticação inválido.");
+        }
+
+        String token = bearerToken.substring(7);
+        String idString = jwtUtil.extractUserIdFromToken(token);
+        Long id = Long.parseLong(idString);
+
+        Login user = loginRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
+
+        return new UserInfoResponse(user.getEmail(), user.getName(), user.getCreatedAt());
+    }
+
+    public UserInfoResponse updateUserInfo(UserInfoRequest request, String bearerToken) {
+        if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Token de autenticação inválido.");
+        }
+
+        String token = bearerToken.substring(7);
+        String idString = jwtUtil.extractUserIdFromToken(token);
+        Long id = Long.parseLong(idString);
+
+        Login user = loginRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
+
+        user.setName(request.getName());
+        loginRepository.save(user);
+
+        return new UserInfoResponse(user.getEmail(), user.getName(), user.getCreatedAt());
+    }
 }

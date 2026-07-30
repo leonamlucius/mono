@@ -2,7 +2,7 @@ package com.mono.monoapi.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
@@ -24,4 +24,8 @@ public class Login {
 
     @Column(nullable = false)
     private String password;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
 }

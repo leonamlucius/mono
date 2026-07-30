@@ -1,17 +1,25 @@
-import { Component, signal } from '@angular/core';
+import {
+  Component,
+  signal,
+  OnInit,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NgIf, NgClass } from '@angular/common';
-import { ViewChild, ElementRef } from '@angular/core';
+import { MenuService } from '../../services/menu-service';
+import { WarningComponent } from '../../../shared/components/warning-component/warning-component';
 
 @Component({
   selector: 'app-menu',
-  imports: [NgIf, NgClass],
+  imports: [NgIf, NgClass, FormsModule, WarningComponent],
   templateUrl: './menu-component.html',
   styleUrls: ['./menu-component.scss'],
 })
-export class MenuComponent {
-  public showModal = false;
+export class MenuComponent implements OnInit {
+  public showModalInfo = signal(false);
 
-  public showModalWarningPai = signal(false);
+  public activeModal = signal<'info' | 'perfil' | null>(null);
 
   public showSidebar = signal(false);
 
@@ -19,14 +27,83 @@ export class MenuComponent {
 
   public isOverflowingInfo = signal(false);
 
+  public userName = signal('');
+
+  public userEmail = signal('');
+  public userDate = signal('');
+
+  public editName = signal(false);
+
+  public showLoading = signal<boolean>(false);
+
   @ViewChild('nameAndSummaryInfo')
   nameAndSummaryInfo!: ElementRef<HTMLDivElement>;
 
   @ViewChild('captionInfo') captionInfo!: ElementRef<HTMLSpanElement>;
 
+  @ViewChild(WarningComponent) warning!: WarningComponent;
+
   public summaryText = signal(
     'Bem vindo ao Mono, ' + (localStorage.getItem('name') + '!' || '')
   );
+
+  constructor(private menuService: MenuService) {}
+
+  ngOnInit(): void {
+    this.menuService.getUserInfo().then((userInfo) => {
+      if (userInfo) {
+        this.userName.set(userInfo.name || '');
+        this.userEmail.set(userInfo.email || '');
+        this.userDate.set(this.formatDate(userInfo.createdAt) || '');
+      }
+    });
+  }
+
+  public showLoadingIndicator(): void {
+    this.showLoading.set(true);
+  }
+
+  public hideLoadingIndicator(): void {
+    this.showLoading.set(false);
+  }
+
+  public async onSubmit(name: string) {
+
+    this.showLoadingIndicator();
+    if (!this.editName()) {
+      this.hideLoadingIndicator();
+      return;
+    }
+
+    try {
+      await this.menuService.patchUserInfo(name).then((updatedUserInfo) => {
+        if (updatedUserInfo) {
+          if (updatedUserInfo === 'No name provided') {
+            this.warning.openModal('Por favor, insira um nome válido.');
+            this.hideLoadingIndicator();
+            return;
+          }
+          this.warning.openModal(
+            'Atualização do nome foi realizada com sucesso!'
+          );
+          this.editName.set(false);
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        }
+      });
+    } catch (error) {
+      console.error('Error updating user info:', error);
+    }
+  }
+  public formatDate(dateString: string): string {
+    return dateString.split('T')[0];
+  }
+
+  public startEditName() {
+    this.editName.set(!this.editName());
+  }
 
   public verificarOverflowSidebar() {
     if (!this.nameAndSummaryInfo && !this.captionInfo) {
@@ -60,12 +137,23 @@ export class MenuComponent {
   }
 
   public createModalInfo(): void {
-    this.showModal = true;
+    if (this.activeModal() === 'info') {
+      this.activeModal.set(null);
+      return;
+    }
+
+    this.activeModal.set('info');
   }
 
-  public closeModalInfo(): void {
-    this.showModal = false;
+  public createModalPerfil(): void {
+    if (this.activeModal() === 'perfil') {
+      this.activeModal.set(null);
+      return;
+    }
+    this.activeModal.set('perfil');
   }
 
-  
+  public closeModal(): void {
+    this.activeModal.set(null);
+  }
 }

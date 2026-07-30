@@ -46,7 +46,7 @@ $grey-primary: #a8a5a5;
   animation: slideRightOut 0.5s ease-in-out;
 }
 
-.sidebar .close button {
+.close button {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -54,9 +54,10 @@ $grey-primary: #a8a5a5;
   align-items: center;
   justify-content: center;
   user-select: none;
+  cursor: pointer;
   transition: all 0.3s ease;
 }
-.sidebar .close button:hover {
+.close button:hover {
   scale: 1.1;
 }
 
@@ -72,6 +73,11 @@ $grey-primary: #a8a5a5;
   border-top: 1px solid $grey-primary;
   border-bottom: 1px solid $grey-primary;
   user-select: none;
+}
+
+.sidebar .module.pass {
+  border-top: none;
+  border-bottom: 1px solid $grey-primary;
 }
 
 .sidebar .module:hover {
@@ -112,7 +118,12 @@ $grey-primary: #a8a5a5;
 .sidebar .nameAndSummary span:hover {
   transform: none;
 }
-.modalInfo {
+
+.modalSidebarOverlay {
+  height: 100%;
+  width: 100%;
+}
+.modalSidebar {
   background-color: $white-primary;
   color: black;
   width: 100%;
@@ -124,11 +135,67 @@ $grey-primary: #a8a5a5;
   white-space: pre-wrap;
   text-align: justify;
   text-indent: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
-.modalInfo span {
+.modalSidebar span {
   display: flex;
   justify-content: flex-end;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 30px;
+  box-sizing: border-box;
+  text-indent: 0;
+}
+
+form .form-flex {
+  display: flex;
+  gap: 10px;
+}
+
+form .form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  gap: 5px;
+  box-sizing: border-box;
+}
+
+.form-group input {
+  width: 100%;
+  border: none;
+  background-color: $disabled-color;
+  border-radius: 8px;
+  padding: 7px 10px;
+  box-sizing: border-box;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.form-group input.active {
+  border: 0.5px solid $grey-primary;
+  background-color: transparent;
+  cursor: text;
+  pointer-events: auto;
+}
+.form-group label.required::after {
+  content: ' *';
+  color: $orange-primary;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 .sidebar-header {
@@ -155,8 +222,71 @@ $grey-primary: #a8a5a5;
   border-radius: 50%;
 }
 
-.modalInfo .close {
+.sidebar .module {
+  font-size: 1.07em;
+}
+
+.sidebar .module span {
+  font-size: 1.4em;
+}
+
+.form-buttons {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.form-buttons-save-edit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.form-buttons button {
+  color: #fcfcfc;
+  border: none;
+  width: 7em;
+  height: 40px;
+  border-radius: 10px;
+  user-select: none;
+  font-family: 'Arvo', serif;
   cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 15px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.form-buttons button.cancel {
+  background-color: $disabled-color;
+  color: #000000;
+}
+
+.form-buttons button.save {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.form-buttons button.save.active {
+  background-color: $orange-primary;
+  cursor: pointer !important;
+  pointer-events: auto;
+}
+
+.form-buttons button.save p {
+  margin: 0;
+}
+
+.form-buttons button.save #loadingIcon {
+  justify-content: center;
+  align-items: center;
+  animation: rotate 1s linear infinite;
+}
+.form-buttons button.edit {
+  background-color: $orange-primary;
+  color: $white-primary;
 }
 
 @media screen and (max-width: 600px) {
@@ -164,7 +294,7 @@ $grey-primary: #a8a5a5;
     width: 100%;
   }
 
-  .modalInfo {
+  .modalSidebarOverlay {
     width: 100%;
     height: 100%;
     top: 0px;
@@ -172,6 +302,11 @@ $grey-primary: #a8a5a5;
     right: 0;
     left: 0;
     z-index: 9999;
+    font-size: 16px;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  .modalSidebar {
     font-size: 16px;
   }
 
@@ -181,6 +316,38 @@ $grey-primary: #a8a5a5;
 
   .sidebar-header .logoInfo {
     display: flex;
+  }
+  .modalHeader span {
+    font-size: 1.7em;
+  }
+  .modalHeader span button {
+    font-size: 0.63em;
+  }
+
+  .form-group {
+    font-size: 1.1em;
+  }
+
+  .form-group input {
+    font-size: 1em;
+    flex-shrink: 0;
+  }
+
+  .form-flex {
+    flex-direction: column;
+  }
+
+  .form-buttons {
+    gap: 5px;
+    overflow: hidden;
+  }
+
+  .form-buttons button {
+    width: 5.5em;
+  }
+  .form-buttons-save-edit {
+    gap: 5px;
+    width: auto;
   }
 }
 
@@ -223,5 +390,13 @@ $grey-primary: #a8a5a5;
   to {
     transform: translateX(2%);
     opacity: 1;
+  }
+}
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
