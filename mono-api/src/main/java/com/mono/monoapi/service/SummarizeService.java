@@ -74,6 +74,7 @@ public class SummarizeService {
                                                Responda em português brasileiro, sem aspas, sem formatação e apenas em texto corrido.
                                                Se não houver informações suficientes para gerar um título, responda com informações da pergunta.
                                                Evite usar a palavra "nominal" no título.
+                                               Evite usar as intruções do prompt no título.
                                                            """,
                 userId);
 

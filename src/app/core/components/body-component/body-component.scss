@@ -285,6 +285,7 @@ $grey-primary: #b8b7b7;
   .logo-container {
     gap: 15px;
     flex-direction: row;
+    overflow-y: auto;
   }
 }
 
