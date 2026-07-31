@@ -13,5 +13,10 @@ body {
     linear-gradient(to bottom, rgba(0,0,0,0.2) 1px, transparent 1px);
   background-size: 20px 20px;
   font-family: 'Arvo', serif;
+}
 
+main, .content, .container {
+  width: 100%;
+  max-width: 1200px; /* Evita que o texto se espalhe demais em telas grandes */
+  margin: 0 auto;
 }

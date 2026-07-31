@@ -6,6 +6,7 @@
                 <img src="/img/mono.svg" alt="Logo" class="logo" (load)="showImageLogin()">
 
                 <div class="facts-container" *ngIf="!showSkeleton()" [ngClass]="{'balao-par': isEvenCall(), 'balao-impar': !isEvenCall()}">
+                    <p *ngIf="!fatoAtual()" class="facts-text">O mono conta curiosidades!</p>
                     <p *ngIf="fatoAtual()" class="facts-text"> {{ fatoAtual().text}}</p>
                 </div>
             </div>

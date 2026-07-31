@@ -25,7 +25,7 @@ export class LoginComponent {
   @ViewChild(WarningComponent) warning!: WarningComponent;
   public facts = signal<any>(null);
 
-  public fatoAtual = signal<any>('Mono conta curiosidades');
+  public fatoAtual = signal<any>(null);
 
   public isEvenCall = signal<boolean>(true);
 

@@ -453,6 +453,38 @@ form .login-button:hover{
     }
 }
 
+@media (max-height: 500px) {
+  .logo-container {
+    gap: 15px;
+    flex-direction: row;
+  }
+  .login-container .welcome-message{
+    margin-bottom: 0px;
+    padding: 0px;
+  }
+  .login-container .login-instruction{
+    margin-bottom: 15px;
+    padding: 0px 10px;
+  }
+
+  .login-container{
+    height: 100vh;
+    overflow-y: auto;
+    
+  }
+
+  .logo-square-container{
+    height: 100vh;
+  }
+  form{
+    padding: 0px 40px;
+    gap: 5px;
+  }
+  .login-container .divider{
+    margin: 10px 0;
+  }
+}
+
 @keyframes slideRight {
     from {
         transform: translateX(40%);
