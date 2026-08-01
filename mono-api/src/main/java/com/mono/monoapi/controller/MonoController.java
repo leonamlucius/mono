@@ -148,7 +148,7 @@ public class MonoController {
         jwtCookie.setSecure(true); 
         jwtCookie.setPath("/");
         jwtCookie.setMaxAge(60 * 60); 
-        jwtCookie.setAttribute("SameSite", "Strict"); 
+        jwtCookie.setAttribute("SameSite", "None"); 
 
         response.addCookie(jwtCookie);
         return ResponseEntity.ok(loginResponse);
@@ -167,7 +167,7 @@ public class MonoController {
         jwtCookie.setSecure(true);
         jwtCookie.setPath("/");
         jwtCookie.setMaxAge(60 * 60); 
-        jwtCookie.setAttribute("SameSite", "Strict");
+        jwtCookie.setAttribute("SameSite", "None");
 
         response.addCookie(jwtCookie);
         return ResponseEntity.ok(loginResponse);
