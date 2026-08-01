@@ -58,15 +58,9 @@ public class LoginService {
 
         loginRepository.save(user);
 
-        String token = Jwts.builder()
-                .setSubject(user.getEmail())
-                .claim("idUser", user.getId().toString()) // 🟢 O ID vai aqui dentro criptografado!
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration)) // 1 dia
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
+      
 
-        return new LoginResponse(user.getId(), token, user.getEmail(), user.getName());
+        return new LoginResponse(user.getId(), user.getEmail(), user.getName());
     }
 
     public LoginResponse login(LoginRequest request) {
@@ -76,16 +70,15 @@ public class LoginService {
         Login user = loginRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
 
-        String token = jwtUtil.generateToken(user.getEmail(), user.getId().toString());
-        return new LoginResponse(user.getId(), token, user.getEmail(), user.getName());
+        return new LoginResponse(user.getId(), user.getEmail(), user.getName());
     }
 
     public UserInfoResponse getUserInfo(String bearerToken) {
-        if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
+        if (bearerToken == null) {
             throw new IllegalArgumentException("Token de autenticação inválido.");
         }
 
-        String token = bearerToken.substring(7);
+        String token = bearerToken;
         String idString = jwtUtil.extractUserIdFromToken(token);
         Long id = Long.parseLong(idString);
 
@@ -96,11 +89,11 @@ public class LoginService {
     }
 
     public UserInfoResponse updateUserInfo(UserInfoRequest request, String bearerToken) {
-        if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
+        if (bearerToken == null) {
             throw new IllegalArgumentException("Token de autenticação inválido.");
         }
 
-        String token = bearerToken.substring(7);
+        String token = bearerToken;
         String idString = jwtUtil.extractUserIdFromToken(token);
         Long id = Long.parseLong(idString);
 

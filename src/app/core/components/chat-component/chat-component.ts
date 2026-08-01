@@ -101,10 +101,11 @@ export class ChatComponent {
   @ViewChild(InputComponent) inputComponent!: InputComponent;
 
   ngOnInit() {
-    const token = localStorage.getItem('tokenUser');
-    if (!token) {
-      this.goBack();
-    }
+    this.chatService.jwtTest().then((isValid) => {
+      if (!isValid) {
+        window.location.href = '/login';
+      }
+    });
     const minutes = 30 * 60 * 1000;
 
     const idleCheck$ = merge(
@@ -119,7 +120,7 @@ export class ChatComponent {
     merge(of(null), idleLoop$)
       .pipe(
         switchMap(() => {
-          return this.chatService.jwtTest(token);
+          return this.chatService.jwtTest();
         }),
         takeUntilDestroyed(this.destroyRef)
       )
@@ -160,7 +161,7 @@ export class ChatComponent {
   }
 
   public goBack(): void {
-    window.location.href = '/login';
+    this.chatService.logout();
   }
 
   public scrollToBottom(): void {
@@ -184,13 +185,11 @@ export class ChatComponent {
     this.textoValue.set('');
   }
   public async iniciar(): Promise<void> {
-    const token = localStorage.getItem('tokenUser');
-
     if (!this.dontShowSkeleton()) {
       this.showSkeletonLoading();
     }
 
-    this.chatService.jwtTest(token).then((isValid) => {
+    this.chatService.jwtTest().then((isValid) => {
       console.log('Token is valid:', isValid);
       if (!isValid) {
         window.location.href = '/login';
@@ -280,23 +279,25 @@ export class ChatComponent {
 
             this.llmType.set(nameOfLLM as 'OLLAMA' | 'GROQ' | 'ERROR');
 
-            this.chatService.summarize().then((summary) => {
-              this.summaryText.set(summary);
+            if (!this.dontShowSkeleton()) {
+              this.chatService.summarize().then((summary) => {
+                this.summaryText.set(summary);
 
-              this.menu.summaryText.set(summary);
+                this.menu.summaryText.set(summary);
 
-              setTimeout(() => {
-                if (!this.dontShowSkeleton()) {
-                  this.showSkeletonLoading();
-                  this.dontShowSkeleton.set(true);
+                setTimeout(() => {
+                  if (!this.dontShowSkeleton()) {
+                    this.showSkeletonLoading();
+                    this.dontShowSkeleton.set(true);
 
-                  setTimeout(() => {
-                    this.verificarOverflow();
-                    this.menu.verificarOverflowSidebar();
-                  }, 500);
-                }
-              }, 1000);
-            });
+                    setTimeout(() => {
+                      this.verificarOverflow();
+                      this.menu.verificarOverflowSidebar();
+                    }, 500);
+                  }
+                }, 1000);
+              });
+            }
           }, 500);
         });
     } catch (error) {

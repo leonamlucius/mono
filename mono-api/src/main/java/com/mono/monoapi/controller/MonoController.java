@@ -35,7 +35,9 @@ import com.mono.monoapi.dto.FactsResponse;
 import com.mono.monoapi.dto.UserInfoResponse;
 import com.mono.monoapi.dto.UserInfoRequest;
 import java.util.List;
-
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api")
@@ -46,17 +48,14 @@ public class MonoController {
     @Autowired
     public GroqAiService groqAiService;
 
-
     @Autowired
     public OllamaAiService ollamaAiService;
-
 
     @Autowired
     public ResetPasswordService resetPasswordService;
 
     @Autowired
     public LoginService loginService;
-
 
     @Autowired
     public AssemblyAiService assemblyAiService;
@@ -67,21 +66,32 @@ public class MonoController {
     @Autowired
     public FactsService factsService;
 
-
     @Autowired
     private JwtUtil jwtUtil;
-   
+
     @PostMapping("/chat")
-    public ResponseEntity<ChatResponseDTO> chat(@RequestBody String message, @RequestHeader(value = "X-AI-Provider", defaultValue = "GROQ") String provider, @RequestHeader(value = "Authorization", required = true) String bearerToken) {
+    public ResponseEntity<ChatResponseDTO> chat(@RequestBody String message,
+            @RequestHeader(value = "X-AI-Provider", defaultValue = "GROQ") String provider,
+            HttpServletRequest request) {
 
+        String token = null;
 
-        logger.info("Recebida solicitação de chat com mensagem: '{}', provedor: '{}', token: '{}'", message, provider, bearerToken);
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("jwt".equals(cookie.getName())) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
 
-        String ChatId = "usuario-anonimo"; 
+        logger.info("Recebida solicitação de chat com mensagem: '{}', provedor: '{}', token: '{}'", message, provider,
+                token);
 
+        String ChatId = "usuario-anonimo";
 
-        if(bearerToken != null) {
-            String token = bearerToken.substring(7).trim();
+        if (token != null) {
 
             token = token.replaceAll("[\\p{Cntrl}]", "");
             try {
@@ -94,55 +104,120 @@ public class MonoController {
             }
         } else {
             logger.info("Nenhum token de autorização fornecido. Usando ID de chat padrão: '{}'", ChatId);
-            return ResponseEntity.status(401).body(new ChatResponseDTO(null, null, "ERROR: Nenhum token de autorização fornecido."));
+            return ResponseEntity.status(401)
+                    .body(new ChatResponseDTO(null, null, "ERROR: Nenhum token de autorização fornecido."));
         }
-
-       
-
-
 
         if ("OLLAMA".equalsIgnoreCase(provider)) {
 
-            try{
+            try {
                 String response = ollamaAiService.chat(message, ChatId);
                 return ResponseEntity.ok(new ChatResponseDTO(response, "OLLAMA-qwen2.5:0.5b", "SUCCESS"));
-            }catch (Exception e) {
-                logger.info("Erro ao processar a mensagem com Ollama, passando para Groq: '{}'. Detalhes do erro: {}", message, e.getMessage());
+            } catch (Exception e) {
+                logger.info("Erro ao processar a mensagem com Ollama, passando para Groq: '{}'. Detalhes do erro: {}",
+                        message, e.getMessage());
                 String response = groqAiService.chat(message, ChatId);
-                return ResponseEntity.ok(new ChatResponseDTO(response, "GROQ-openai/gpt-oss-20b", "ERROR: Ollama falhou, mas Groq respondeu com sucesso."));
+                return ResponseEntity.ok(new ChatResponseDTO(response, "GROQ-openai/gpt-oss-20b",
+                        "ERROR: Ollama falhou, mas Groq respondeu com sucesso."));
             }
 
         } else {
 
-            try{
+            try {
                 String response = groqAiService.chat(message, ChatId);
                 return ResponseEntity.ok(new ChatResponseDTO(response, "GROQ-openai/gpt-oss-20b", "SUCCESS"));
-            }catch (Exception e) {
-                logger.info("Erro ao processar a mensagem com Groq: '{}'. Detalhes do erro: {}", message, e.getMessage());
+            } catch (Exception e) {
+                logger.info("Erro ao processar a mensagem com Groq: '{}'. Detalhes do erro: {}", message,
+                        e.getMessage());
                 String response = ollamaAiService.chat(message, ChatId);
-                return ResponseEntity.ok(new ChatResponseDTO(response, "OLLAMA-qwen2.5:0.5b", "ERROR: Groq falhou, mas Ollama respondeu com sucesso."));
+                return ResponseEntity.ok(new ChatResponseDTO(response, "OLLAMA-qwen2.5:0.5b",
+                        "ERROR: Groq falhou, mas Ollama respondeu com sucesso."));
             }
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-        return ResponseEntity.ok(loginService.login(request));
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request, HttpServletResponse response) {
+        LoginResponse loginResponse = loginService.login(request);
+
+        Cookie jwtCookie = new Cookie("jwt",
+                jwtUtil.generateToken(loginResponse.getEmail(), loginResponse.getId().toString()));
+                                                                                                   
+                                                                                                    
+        jwtCookie.setHttpOnly(true); 
+        jwtCookie.setSecure(true); 
+        jwtCookie.setPath("/");
+        jwtCookie.setMaxAge(60 * 60); 
+        jwtCookie.setAttribute("SameSite", "Strict"); 
+
+        response.addCookie(jwtCookie);
+        return ResponseEntity.ok(loginResponse);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<LoginResponse> register(@Valid @RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(loginService.register(request));
+    public ResponseEntity<LoginResponse> register(@Valid @RequestBody RegisterRequest request,
+            HttpServletResponse response) {
+        LoginResponse loginResponse = loginService.register(request);
+
+        Cookie jwtCookie = new Cookie("jwt",
+                jwtUtil.generateToken(loginResponse.getEmail(), loginResponse.getId().toString())); 
+                                                                                                    
+                                                                                                    
+        jwtCookie.setHttpOnly(true); 
+        jwtCookie.setSecure(true);
+        jwtCookie.setPath("/");
+        jwtCookie.setMaxAge(60 * 60); 
+        jwtCookie.setAttribute("SameSite", "Strict");
+
+        response.addCookie(jwtCookie);
+        return ResponseEntity.ok(loginResponse);
+
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletResponse response) {
+        Cookie jwtCookie = new Cookie("jwt", null);
+        jwtCookie.setHttpOnly(true);
+        jwtCookie.setSecure(true);
+        jwtCookie.setPath("/");
+        jwtCookie.setMaxAge(0); // 🟢 Expira imediatamente
+        response.addCookie(jwtCookie);
+
+        return ResponseEntity.ok("Logout realizado com sucesso");
     }
 
     @GetMapping("/get-user-info")
-    public ResponseEntity<UserInfoResponse> getUserInfo(@RequestHeader(value = "Authorization", required = true) String bearerToken) {
-        UserInfoResponse user = loginService.getUserInfo(bearerToken);
+    public ResponseEntity<UserInfoResponse> getUserInfo(
+            HttpServletRequest request) {
+        String token = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("jwt".equals(cookie.getName())) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
+        UserInfoResponse user = loginService.getUserInfo(token);
         return ResponseEntity.ok(user);
     }
 
     @PatchMapping("/get-user-info")
-    public ResponseEntity<UserInfoResponse> updateUserInfo(@Valid @RequestBody UserInfoRequest request, @RequestHeader(value = "Authorization", required = true) String bearerToken) {
+    public ResponseEntity<UserInfoResponse> updateUserInfo(@Valid @RequestBody UserInfoRequest request,
+            HttpServletRequest httpRequest) {
+
+        String bearerToken = null;
+        Cookie[] cookies = httpRequest.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("jwt".equals(cookie.getName())) {
+                    bearerToken = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
         UserInfoResponse user = loginService.updateUserInfo(request, bearerToken);
         return ResponseEntity.ok(user);
     }
@@ -172,18 +247,36 @@ public class MonoController {
     }
 
     @GetMapping("/jwt-test")
-    public ResponseEntity<Boolean> jwtTest(@RequestHeader(value = "Authorization", required = true) String bearerToken) {
-        if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
+    public ResponseEntity<Boolean> jwtTest(
+            HttpServletRequest request) {
+
+        String token = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("jwt".equals(cookie.getName())) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+        if (token == null) {
             return ResponseEntity.status(401).body(false);
         }
-        String token = bearerToken.substring(7);
+
         boolean isValid = jwtUtil.isTokenValid(token);
         return ResponseEntity.ok(isValid);
     }
 
     @PostMapping("/transcribe")
-    public ResponseEntity<String> transcribe(@RequestParam("file") MultipartFile file, @RequestHeader(value = "Authorization", required = true) String bearerToken) throws Exception {
+    public ResponseEntity<String> transcribe(@RequestParam("file") MultipartFile file,
+            HttpServletRequest request) {
 
+
+        if (request == null) {
+            return ResponseEntity.badRequest().body("Cookie de autorização não fornecida");
+        }
 
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("Arquivo de áudio não fornecido");
@@ -198,10 +291,20 @@ public class MonoController {
         }
     }
 
-
     @GetMapping("/summarize")
-    public ResponseEntity<String> summarize(@RequestHeader(value = "Authorization", required = true) String bearerToken) {
+    public ResponseEntity<String> summarize(
+            HttpServletRequest request) {
         try {
+            String bearerToken = null;
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if ("jwt".equals(cookie.getName())) {
+                        bearerToken = cookie.getValue();
+                        break;
+                    }
+                }
+            }
             String summary = summarizeService.summarizeText(bearerToken);
             return ResponseEntity.ok(summary);
         } catch (Exception e) {
@@ -209,8 +312,5 @@ public class MonoController {
             return ResponseEntity.status(500).body("Erro ao resumir o texto");
         }
     }
-
-
-
 
 }

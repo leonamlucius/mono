@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChatService {
+  constructor(private router: Router) {}
   public async sendMessage(
     message: string,
     provider: 'OLLAMA' | 'GROQ' | 'ERROR'
@@ -17,8 +19,8 @@ export class ChatService {
         headers: {
           'X-AI-Provider': provider, // ou 'GROQ' dependendo do provedor que você deseja usar
           'Content-Type': 'text/plain',
-          Authorization: `Bearer ${localStorage.getItem('tokenUser')}`,
         },
+        credentials: 'include',
         body: message,
       });
 
@@ -33,7 +35,7 @@ export class ChatService {
       return 'ERROR SENDING MESSAGE';
     }
   }
-  public async jwtTest(token: any): Promise<any> {
+  public async jwtTest(): Promise<any> {
     try {
       const apiBase = environment.apiUrl;
 
@@ -41,8 +43,8 @@ export class ChatService {
         method: 'GET',
         headers: {
           'ngrok-skip-browser-warning': 'true',
-          Authorization: `Bearer ${token}`,
         },
+        credentials: 'include',
       });
 
       if (!response.ok) {
@@ -59,16 +61,15 @@ export class ChatService {
   }
 
   public async summarize(): Promise<any> {
-    try{
-
+    try {
       const apiBase = environment.apiUrl;
 
       const response = await fetch(`${apiBase}/api/summarize`, {
         method: 'GET',
         headers: {
           'ngrok-skip-browser-warning': 'true',
-          Authorization: `Bearer ${localStorage.getItem('tokenUser')}`,
         },
+        credentials: 'include',
       });
 
       if (!response.ok) {
@@ -78,10 +79,24 @@ export class ChatService {
 
       const result = await response.text();
       return result;
-
-    }catch(error){
+    } catch (error) {
       console.error('Error during summarize:', error);
       return 'Erro ao tentar resumir. Verifique suas informações e tente novamente.';
+    }
+  }
+
+  public async logout(): Promise<void> {
+    try {
+      const apiBase = environment.apiUrl;
+      await fetch(`${apiBase}/api/logout`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+
+      localStorage.clear();
+      this.router.navigate(['/login']);
+    } catch (error) {
+      console.error('Error during logout:', error);
     }
   }
 }

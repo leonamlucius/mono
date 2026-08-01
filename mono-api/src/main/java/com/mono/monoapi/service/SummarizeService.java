@@ -24,11 +24,11 @@ public class SummarizeService {
 
     public String summarizeText(String bearerToken) {
 
-        if (bearerToken == null || !bearerToken.startsWith("Bearer ")) {
+        if (bearerToken == null) {
             throw new IllegalArgumentException("Token de autorização inválido");
         }
 
-        String token = bearerToken.replace("Bearer ", "");
+        String token = bearerToken;
 
         String userIdStr = jwtUtil.extractUserIdFromToken(token);
         Long userId = Long.parseLong(userIdStr);

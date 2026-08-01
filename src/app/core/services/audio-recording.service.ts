@@ -90,10 +90,8 @@ export class AudioRecordingService {
     try {
       const response = await fetch(`${apiBase}/api/transcribe`, {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('tokenUser')}`,
-        },
         body: formData,
+        credentials: 'include',
       });
 
       if (!response.ok) {

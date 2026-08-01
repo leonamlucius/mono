@@ -18,8 +18,8 @@ export class MenuService {
         headers: {
           'Content-Type': 'application/json',
           'ngrok-skip-browser-warning': 'true', // Isso é obrigatório para o ngrok funcionar no navegador
-          Authorization: `Bearer ${localStorage.getItem('tokenUser')}`,
         },
+        credentials: 'include',
       });
 
       if (!response.ok) {
@@ -45,8 +45,8 @@ export class MenuService {
         body: JSON.stringify({ name }),
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('tokenUser')}`,
         },
+        credentials: 'include',
       });
 
       if (!response.ok) {
