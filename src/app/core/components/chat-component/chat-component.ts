@@ -101,11 +101,6 @@ export class ChatComponent {
   @ViewChild(InputComponent) inputComponent!: InputComponent;
 
   ngOnInit() {
-    this.chatService.jwtTest().then((isValid) => {
-      if (!isValid) {
-        window.location.href = '/login';
-      }
-    });
     const minutes = 30 * 60 * 1000;
 
     const idleCheck$ = merge(
@@ -124,10 +119,9 @@ export class ChatComponent {
         }),
         takeUntilDestroyed(this.destroyRef)
       )
-      .subscribe((isValid: boolean) => {
-        if (!isValid) {
-          localStorage.removeItem('token');
-          window.location.href = '/login';
+      .subscribe((isValid: string) => {
+        if (isValid == 'Error: ERROR 401') {
+          this.chatService.logout();
         }
       });
   }
@@ -190,9 +184,8 @@ export class ChatComponent {
     }
 
     this.chatService.jwtTest().then((isValid) => {
-      console.log('Token is valid:', isValid);
-      if (!isValid) {
-        window.location.href = '/login';
+      if (isValid == 'Error: ERROR 401') {
+        this.chatService.logout();
       }
     });
     this.scrollToBottom();

@@ -48,15 +48,14 @@ export class ChatService {
       });
 
       if (!response.ok) {
-        console.error(`HTTP error! status: ${response.status}`);
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`ERROR ${response.status}`);
       }
 
       const result = await response.json();
       return result;
     } catch (error) {
       console.error('Error during JWT test:', error);
-      return 'Erro ao tentar verificar o JWT. Verifique suas informações e tente novamente.';
+      return error;
     }
   }
 
