@@ -13,8 +13,13 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class FactsService {
+
+    private static final Logger logger = LoggerFactory.getLogger(FactsService.class);
 
     @Autowired
     private GroqAiService groqAiService;
@@ -33,11 +38,14 @@ public class FactsService {
 
         if (todayFacts == null || todayFacts.isEmpty()) {
 
+            logger.info("Nenhum fato do dia encontrado no banco de dados. Solicitando novos fatos ao Groq.");
+
             factsRepository.deleteAll();
 
             List<Facts> newFactsList = new ArrayList<>();
 
             for (int i = 0; i <= 4; i++) {
+                logger.info("Solicitando fato {} ao Groq.", i + 1);
                 String receivedFacts = groqAiService.getFacts();
 
                 Facts factRef = new Facts();
@@ -53,6 +61,7 @@ public class FactsService {
                     .toList();
 
         } else {
+            logger.info("Fatos do dia já existem no banco de dados. Retornando fatos existentes.");
             return todayFacts.stream()
                     .map(f -> new FactsResponse(f.getId(), f.getText()))
                     .toList();

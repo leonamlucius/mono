@@ -10,8 +10,13 @@ import com.mono.monoapi.model.User;
 import com.mono.monoapi.model.Summarize;
 import java.time.LocalDateTime;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class SummarizeService {
+
+    private static final Logger logger = LoggerFactory.getLogger(SummarizeService.class);
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -25,6 +30,7 @@ public class SummarizeService {
     public String summarizeText(String bearerToken) {
 
         if (bearerToken == null) {
+            logger.error("Token de autorização não fornecido");
             throw new IllegalArgumentException("Token de autorização inválido");
         }
 
@@ -43,6 +49,7 @@ public class SummarizeService {
             boolean isWithinTwoHours = record.getUpdatedAt().plusHours(2).isAfter(now);
 
             if (isWithinTwoHours) {
+                logger.info("Resumo existente encontrado para o usuário {}. Retornando resumo existente.", userId);
                 return record.getText();
             }
         }
@@ -62,6 +69,8 @@ public class SummarizeService {
         summarizeToSave.setUpdatedAt(now);
 
         summarizeRepository.save(summarizeToSave);
+
+        logger.info("Novo resumo gerado e salvo para o usuário {}.", userId);
 
         return newSummaryText;
     }

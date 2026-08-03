@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 @Service
 public class GroqAiService {
 
-    private static final List<String> TERMOS_PROIBIDOS = List.of("hacker", "scrpit malicioso", "ataque cibernético",
+    private static final List<String> TERMOS_PROIBIDOS = List.of("hacker", "script malicioso", "ataque cibernético",
             "phishing", "malware", "ransomware", "spyware", "adware", "keylogger", "rootkit", "botnet", "exploit",
             "vulnerabilidade", "zero-day", "DDoS", "SQL injection", "cross-site scripting", "XSS", "CSRF", "flooding",
             "spoofing", "sniffer", "backdoor", "trojan", "worm");
@@ -41,7 +41,6 @@ public class GroqAiService {
                 .build();
     }
 
-    // Criamos o builder usando o modelo da OpenAI (Groq)
     public GroqAiService(OpenAiChatModel openAiChatModel) {
         this.chatClient = ChatClient.builder(openAiChatModel).build();
     }
@@ -53,7 +52,7 @@ public class GroqAiService {
         for (String termo : TERMOS_PROIBIDOS) {
             if (message.toLowerCase().contains(termo.toLowerCase())) {
                 logger.warn("Mensagem contém termo proibido: {}", termo);
-                return "Desculpe, sua mensagem contém conteúdo proibido.";
+                throw new IllegalArgumentException("Mensagem contém termo proibido: " + termo);
             }
         }
         return this.chatClient.prompt(message)

@@ -7,6 +7,7 @@ import com.mono.monoapi.dto.UserInfoResponse;
 import com.mono.monoapi.dto.UserInfoRequest;
 
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import com.mono.monoapi.dto.RegisterRequest;
 import com.mono.monoapi.model.PasswordResetToken;
@@ -27,9 +28,14 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.beans.factory.annotation.Value;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     @Lazy
@@ -38,7 +44,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    private final UserRepository loginRepository;
 
     private final TokenRepository tokenRepository;
 
@@ -56,6 +61,7 @@ public class UserService {
     public UserResponse register(RegisterRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
+            logger.warn("Tentativa de registro com email já existente: {}", request.getEmail());
             throw new IllegalArgumentException("Email já está em uso.");
         }
         User user = User.builder()
@@ -67,6 +73,8 @@ public class UserService {
 
         userRepository.save(user);
 
+        logger.info("Novo usuário registrado com sucesso: {}", request.getEmail());
+
         return new UserResponse(user.getId(), user.getEmail(), user.getName());
     }
 
@@ -75,13 +83,20 @@ public class UserService {
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
+                .orElseThrow(() -> {
+                    logger.warn("Tentativa de login com email não existente: {}", request.getEmail());
+                    return new IllegalArgumentException("Usuário não encontrado.");
+                });
+
+
+        logger.info("Login bem-sucedido para o usuário: {}", request.getEmail());
 
         return new UserResponse(user.getId(), user.getEmail(), user.getName());
     }
 
     public UserInfoResponse getUserInfo(String bearerToken) {
         if (bearerToken == null) {
+            logger.warn("Token de autenticação não fornecido.");
             throw new IllegalArgumentException("Token de autenticação inválido.");
         }
 
@@ -90,7 +105,12 @@ public class UserService {
         Long id = Long.parseLong(idString);
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
+                .orElseThrow(() -> {
+                    logger.warn("Usuário não encontrado para o ID extraído do token: {}", id);
+                    return new IllegalArgumentException("Usuário não encontrado.");
+                });
+
+        logger.info("Informações do usuário recuperadas com sucesso para o ID: {}", id);
 
         return new UserInfoResponse(user.getEmail(), user.getName(), user.getCreatedAt());
     }
@@ -98,6 +118,8 @@ public class UserService {
     public UserInfoResponse updateUserInfo(UserInfoRequest request, String bearerToken) {
 
         if (bearerToken == null) {
+
+            logger.warn("Token de autenticação não fornecido.");
             throw new IllegalArgumentException("Token de autenticação inválido.");
         }
 
@@ -106,19 +128,26 @@ public class UserService {
         Long id = Long.parseLong(idString);
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
+                .orElseThrow(() -> {
+                    logger.warn("Usuário não encontrado para o ID extraído do token: {}", id);
+                    return new IllegalArgumentException("Usuário não encontrado.");
+                });
 
         user.setName(request.getName());
         userRepository.save(user);
+
+        logger.info("Informações do usuário atualizadas com sucesso para o ID: {}", id);
 
         return new UserInfoResponse(user.getEmail(), user.getName(), user.getCreatedAt());
     }
 
     public void forgotPassword(String email) {
 
-        User user = loginRepository.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Usuário não encontrado com o email: " + email));
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> {
+                    logger.warn("Usuário não encontrado com o email: {}", email);
+                    return new NoSuchElementException("Usuário não encontrado com o email: " + email);
+                });
 
         String token = UUID.randomUUID().toString();
         PasswordResetToken resetToken = tokenRepository.findByUser(user)
@@ -140,26 +169,36 @@ public class UserService {
                 urlDoFront + "\n\n" +
                 "Este link é válido 1 hora. Se você não solicitou a alteração de senha, por favor ignore este e-mail.\n\n");
 
+        logger.info("Enviando email de recuperação de senha para: {}", user.getEmail());
         mailSender.send(message);
 
     }
 
     public String resetPassword(String token, String newPassword) {
         PasswordResetToken resetToken = tokenRepository.findByToken(token)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token inválido"));
+                .orElseThrow(() -> {
+                    logger.warn("Token inválido: {}", token);
+                    return new IllegalArgumentException("Token inválido");
+                });
+
         if (resetToken.getExpiryDate().isBefore(LocalDateTime.now())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token expirado");
+            logger.warn("Token expirado: {}", token);
+            throw new IllegalArgumentException("Token expirado");
         }
         User user = resetToken.getUser();
         user.setPassword(passwordEncoder.encode(newPassword));
-        loginRepository.save(user);
+        userRepository.save(user);
         tokenRepository.delete(resetToken);
+        logger.info("Password reset successful for token: {}", token);
         return "Password reset successful for token: " + token;
     }
 
     public boolean tokenIsExpired(String token) {
         PasswordResetToken resetToken = tokenRepository.findByToken(token)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token inválido"));
+                .orElseThrow(() -> {
+                    logger.warn("Token inválido: {}", token);
+                    return new IllegalArgumentException("Token inválido");
+                });
         return resetToken.getExpiryDate().isBefore(LocalDateTime.now());
     }
 

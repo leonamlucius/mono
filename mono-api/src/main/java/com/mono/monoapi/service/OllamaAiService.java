@@ -14,7 +14,7 @@ import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 @Service
 public class OllamaAiService {
 
-    private static final List<String> TERMOS_PROIBIDOS = List.of("hacker", "scrpit malicioso", "ataque cibernético", "phishing", "malware", "ransomware", "spyware", "adware", "keylogger", "rootkit", "botnet", "exploit", "vulnerabilidade", "zero-day", "DDoS", "SQL injection", "cross-site scripting", "XSS", "CSRF", "flooding", "spoofing", "sniffer", "backdoor", "trojan", "worm");
+    private static final List<String> TERMOS_PROIBIDOS = List.of("hacker", "script malicioso", "ataque cibernético", "phishing", "malware", "ransomware", "spyware", "adware", "keylogger", "rootkit", "botnet", "exploit", "vulnerabilidade", "zero-day", "DDoS", "SQL injection", "cross-site scripting", "XSS", "CSRF", "flooding", "spoofing", "sniffer", "backdoor", "trojan", "worm");
 
     private static final Logger logger = LoggerFactory.getLogger(OllamaAiService.class);
     private final ChatClient chatClient;
@@ -49,7 +49,7 @@ public class OllamaAiService {
         for (String termo : TERMOS_PROIBIDOS) {
             if (message.toLowerCase().contains(termo.toLowerCase())) {
                 logger.warn("Mensagem contém termo proibido: {}", termo);
-                return "Desculpe, sua mensagem contém conteúdo proibido.";
+                throw new IllegalArgumentException("Mensagem contém termo proibido: " + termo);
             }
         }
 

@@ -17,6 +17,10 @@ public class AssemblyAiService {
     private final String baseUrl = "https://api.assemblyai.com/v2";
 
     public String transcreverAudio(byte[] audioBytes) throws Exception {
+
+        if (audioBytes == null || audioBytes.length == 0) {
+            throw new IllegalArgumentException("O áudio não pode estar vazio.");
+        }
         String uploadUrl = realizarUpload(audioBytes);
 
         String transcriptId = iniciarTranscricao(uploadUrl);
@@ -42,7 +46,7 @@ public class AssemblyAiService {
 
         Map<String, String> body = new HashMap<>();
         body.put("audio_url", uploadUrl);
-        body.put("language_code", "pt"); 
+        body.put("language_code", "pt");
 
         HttpEntity<Map<String, String>> request = new HttpEntity<>(body, headers);
         ResponseEntity<Map> response = restTemplate.postForEntity(baseUrl + "/transcript", request, Map.class);
