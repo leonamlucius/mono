@@ -23,7 +23,7 @@ public class Summarize {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private Login user;
+    private User user;
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;

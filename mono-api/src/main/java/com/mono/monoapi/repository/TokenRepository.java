@@ -12,5 +12,5 @@ public interface TokenRepository extends JpaRepository<PasswordResetToken, Long>
     Optional<PasswordResetToken> findByToken(String token);
 
     // Método para buscar o token associado a um usuário específico
-    Optional<PasswordResetToken> findByUser(com.mono.monoapi.model.Login user);
+    Optional<PasswordResetToken> findByUser(com.mono.monoapi.model.User user);
 }

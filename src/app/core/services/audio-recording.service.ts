@@ -46,10 +46,11 @@ export class AudioRecordingService {
 
       if (this.audioChunks.length > 0 && !this.audioCancelado()) {
         this.enviarAudio().then((transcription) => {
-
           if (transcription.trim() === '') {
             console.error('Transcrição vazia recebida do servidor.');
-            this.textTranscription.set('ERRO: Transcrição vazia recebida do servidor.');
+            this.textTranscription.set(
+              'ERRO: Transcrição vazia recebida do servidor.'
+            );
             return;
           }
           this.textTranscription.set(transcription);
@@ -88,7 +89,7 @@ export class AudioRecordingService {
     }
 
     try {
-      const response = await fetch(`${apiBase}/api/transcribe`, {
+      const response = await fetch(`${apiBase}/mono/transcribe`, {
         method: 'POST',
         body: formData,
         credentials: 'include',

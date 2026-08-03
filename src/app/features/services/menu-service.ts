@@ -13,7 +13,7 @@ export class MenuService {
   public async getUserInfo(): Promise<any> {
     try {
       const apiBase = environment.apiUrl;
-      const response = await fetch(`${apiBase}/api/get-user-info`, {
+      const response = await fetch(`${apiBase}/user/get-user-info`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ export class MenuService {
     }
     try {
       const apiBase = environment.apiUrl;
-      const response = await fetch(`${apiBase}/api/get-user-info`, {
+      const response = await fetch(`${apiBase}/user/get-user-info`, {
         method: 'PATCH',
         body: JSON.stringify({ name }),
         headers: {

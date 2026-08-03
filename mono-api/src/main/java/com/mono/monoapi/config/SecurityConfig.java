@@ -1,6 +1,6 @@
 package com.mono.monoapi.config;
 
-import com.mono.monoapi.repository.LoginRepository;
+import com.mono.monoapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +35,7 @@ public class SecurityConfig {
 
     // 1. Ensinamos o Spring a buscar o usuário usando o seu LoginRepository existente
     @Bean
-    public UserDetailsService userDetailsService(LoginRepository loginRepository) {
+    public UserDetailsService userDetailsService(UserRepository loginRepository) {
         return username -> loginRepository.findByEmail(username)
                 .map(user -> User.builder()
                         .username(user.getEmail())

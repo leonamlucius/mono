@@ -14,7 +14,7 @@ export class ChatService {
     try {
       const apiBase = environment.apiUrl;
 
-      const response = await fetch(`${apiBase}/api/chat`, {
+      const response = await fetch(`${apiBase}/mono/chat`, {
         method: 'POST',
         headers: {
           'X-AI-Provider': provider, // ou 'GROQ' dependendo do provedor que você deseja usar
@@ -39,7 +39,7 @@ export class ChatService {
     try {
       const apiBase = environment.apiUrl;
 
-      const response = await fetch(`${apiBase}/api/jwt-test`, {
+      const response = await fetch(`${apiBase}/auth/jwt-test`, {
         method: 'GET',
         headers: {
           'ngrok-skip-browser-warning': 'true',
@@ -63,7 +63,7 @@ export class ChatService {
     try {
       const apiBase = environment.apiUrl;
 
-      const response = await fetch(`${apiBase}/api/summarize`, {
+      const response = await fetch(`${apiBase}/mono/summarize`, {
         method: 'GET',
         headers: {
           'ngrok-skip-browser-warning': 'true',
@@ -87,7 +87,7 @@ export class ChatService {
   public async logout(): Promise<void> {
     try {
       const apiBase = environment.apiUrl;
-      await fetch(`${apiBase}/api/logout`, {
+      await fetch(`${apiBase}/auth/logout`, {
         method: 'POST',
         credentials: 'include',
       });

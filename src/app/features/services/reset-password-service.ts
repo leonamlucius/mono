@@ -6,9 +6,9 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root',
 })
 export class ResetPasswordService {
-    private router = inject(Router);
+  private router = inject(Router);
 
-     public async resetPassword(
+  public async resetPassword(
     token: any,
     newPassword: string,
     confirmNewPassword: string
@@ -28,7 +28,7 @@ export class ResetPasswordService {
     try {
       const apiBase = environment.apiUrl;
 
-      const response = await fetch(`${apiBase}/api/reset-password`, {
+      const response = await fetch(`${apiBase}/auth/reset-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -57,12 +57,15 @@ export class ResetPasswordService {
     try {
       const apiBase = environment.apiUrl;
 
-      const response = await fetch(`${apiBase}/api/token-test?token=${token}`, {
-        method: 'GET',
-        headers: {
-          'ngrok-skip-browser-warning': 'true',
-        },
-      });
+      const response = await fetch(
+        `${apiBase}/auth/token-test?token=${token}`,
+        {
+          method: 'GET',
+          headers: {
+            'ngrok-skip-browser-warning': 'true',
+          },
+        }
+      );
 
       if (response.status === 400) {
         console.error('Token is invalid or expired:', token);
@@ -81,5 +84,4 @@ export class ResetPasswordService {
       return 'Erro ao tentar verificar o token. Verifique suas informações e tente novamente.';
     }
   }
-
 }

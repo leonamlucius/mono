@@ -6,7 +6,7 @@ import java.util.Optional;
 import com.mono.monoapi.config.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.mono.monoapi.repository.SummarizeRepository;
-import com.mono.monoapi.model.Login;
+import com.mono.monoapi.model.User;
 import com.mono.monoapi.model.Summarize;
 import java.time.LocalDateTime;
 
@@ -49,7 +49,7 @@ public class SummarizeService {
 
         String newSummaryText = generateNewSummaryText(userIdStr);
 
-        Login userRef = new Login();
+        User userRef = new User();
 
         userRef.setId(userId);
 

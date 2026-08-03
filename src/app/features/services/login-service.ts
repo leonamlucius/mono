@@ -11,7 +11,7 @@ export class LoginService {
     try {
       const apiBase = environment.apiUrl;
 
-      const response = await fetch(`${apiBase}/api/facts`, {
+      const response = await fetch(`${apiBase}/mono/facts`, {
         method: 'GET',
         headers: {
           'ngrok-skip-browser-warning': 'true', // Isso é obrigatório para o ngrok funcionar no navegador
@@ -45,7 +45,7 @@ export class LoginService {
     try {
       const apiBase = environment.apiUrl;
 
-      const response = await fetch(`${apiBase}/api/login`, {
+      const response = await fetch(`${apiBase}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
