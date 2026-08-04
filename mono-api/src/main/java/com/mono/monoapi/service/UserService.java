@@ -154,7 +154,7 @@ public class UserService {
         if (tokenOpt.isPresent()){
           PasswordResetToken token = tokenOpt.get();
           LocalDateTime now = LocalDateTime.now();
-          LocalDateTime cooldownExpiration = token.getCreatedAt().plusSeconds(15);
+          LocalDateTime cooldownExpiration = token.getCreatedAt().plusSeconds(30);
 
           if (now.isBefore(cooldownExpiration)){
             logger.warn("Tempo de colldown não acabou{} ", email);
