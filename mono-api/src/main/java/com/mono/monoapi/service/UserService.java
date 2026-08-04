@@ -45,7 +45,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-
     private final TokenRepository tokenRepository;
 
     private final JavaMailSender mailSender;
@@ -88,7 +87,6 @@ public class UserService {
                     logger.warn("Tentativa de login com email não existente: {}", request.getEmail());
                     return new IllegalArgumentException("Usuário não encontrado.");
                 });
-
 
         logger.info("Login bem-sucedido para o usuário: {}", request.getEmail());
 
@@ -143,33 +141,32 @@ public class UserService {
     }
 
     public void forgotPassword(String email) {
-      Optional<Long> userIdOpt = userRepository.findIdByEmail(email);
+        Optional<Long> userIdOpt = userRepository.findIdByEmail(email);
 
-      if(userIdOpt.isPresent()){
+        if (userIdOpt.isPresent()) {
 
-        Long userId = userIdOpt.get();
+            Long userId = userIdOpt.get();
 
-        Optional<PasswordResetToken> tokenOpt = tokenRepository.findTopByUserIdOrderByCreatedAtDesc(userId);
+            Optional<PasswordResetToken> tokenOpt = tokenRepository.findTopByUserIdOrderByCreatedAtDesc(userId);
 
-        if (tokenOpt.isPresent()){
-          PasswordResetToken token = tokenOpt.get();
-          LocalDateTime now = LocalDateTime.now();
-          LocalDateTime cooldownExpiration = token.getCreatedAt().plusSeconds(30);
+            if (tokenOpt.isPresent()) {
+                PasswordResetToken token = tokenOpt.get();
+                LocalDateTime now = LocalDateTime.now();
+                LocalDateTime cooldownExpiration = token.getCreatedAt().plusSeconds(30);
 
-          if (now.isBefore(cooldownExpiration)){
-            logger.warn("Tempo de colldown não acabou{} ", email);
-            return;
-          }
+                if (now.isBefore(cooldownExpiration)) {
+                    logger.warn("Tempo de colldown não acabou{}" , email);
+                    throw new IllegalArgumentException("Tempo de cooldown não acabou. Por favor, aguarde antes de solicitar outro link de recuperação.");
+                }
+            }
+
         }
 
-      }
-
-      User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> {
                     logger.warn("Usuário não encontrado com o email: {}", email);
                     return new NoSuchElementException("Usuário não encontrado com o email: " + email);
                 });
-
 
         String token = UUID.randomUUID().toString();
 
