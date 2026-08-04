@@ -1,4 +1,4 @@
-import { Component, signal, ViewChild } from '@angular/core';
+import { Component, signal, ViewChild, OnInit } from '@angular/core';
 import { NgIf, NgClass } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';
 import { ForgotPasswordService } from '../../services/forgot-password-service';
@@ -11,10 +11,13 @@ import { WarningComponent } from '../../../shared/components/warning-component/w
   templateUrl: './forgot-password-component.html',
   styleUrls: ['./forgot-password-component.scss'],
 })
-export class ForgotPasswordComponent {
+export class ForgotPasswordComponent implements OnInit {
   @ViewChild(WarningComponent) warning!: WarningComponent;
   constructor(private forgotPasswordService: ForgotPasswordService) {}
 
+  public storedTime = signal<string | null>(
+    localStorage.getItem('timeRemaining')
+  );
   public showLoading = signal<boolean>(false);
 
   public showModal = false;
@@ -26,6 +29,17 @@ export class ForgotPasswordComponent {
   public isButtonDisabled = signal<boolean>(false);
 
   public timerInterval: any;
+
+  ngOnInit(): void {
+    if (this.storedTime()) {
+      const remainingTime = parseInt(this.storedTime()!, 10);
+      if (remainingTime > 0) {
+        this.startTimer(remainingTime);
+        this.showLoading.set(false);
+        return;
+      }
+    }
+  }
 
   public forgotPassword(email: string): void {
     if (!email) {
@@ -44,6 +58,7 @@ export class ForgotPasswordComponent {
         console.log('Forgot password response:', response);
         this.showLoading.set(false);
         this.warning.openModal(response);
+
         this.startTimer(30);
       })
       .catch((error) => {
@@ -66,8 +81,10 @@ export class ForgotPasswordComponent {
       if (current <= 1) {
         this.timeRemaining.set(0);
         this.isButtonDisabled.set(false);
+        localStorage.removeItem('timeRemaining');
         clearInterval(this.timerInterval);
       } else {
+        localStorage.setItem('timeRemaining', (current - 1).toString());
         this.timeRemaining.set(current - 1);
       }
     }, 1000);

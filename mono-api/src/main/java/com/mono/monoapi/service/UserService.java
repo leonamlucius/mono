@@ -8,6 +8,7 @@ import com.mono.monoapi.dto.UserInfoRequest;
 
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 import com.mono.monoapi.dto.RegisterRequest;
 import com.mono.monoapi.model.PasswordResetToken;
@@ -142,20 +143,43 @@ public class UserService {
     }
 
     public void forgotPassword(String email) {
+      Optional<Long> userIdOpt = userRepository.findIdByEmail(email);
 
-        User user = userRepository.findByEmail(email)
+      if(userIdOpt.isPresent()){
+
+        Long userId = userIdOpt.get();
+
+        Optional<PasswordResetToken> tokenOpt = tokenRepository.findTopByUserIdOrderByCreatedAtDesc(userId);
+
+        if (tokenOpt.isPresent()){
+          PasswordResetToken token = tokenOpt.get();
+          LocalDateTime now = LocalDateTime.now();
+          LocalDateTime cooldownExpiration = token.getCreatedAt().plusSeconds(15);
+
+          if (now.isBefore(cooldownExpiration)){
+            logger.warn("Tempo de colldown não acabou{} ", email);
+            return;
+          }
+        }
+
+      }
+
+      User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> {
                     logger.warn("Usuário não encontrado com o email: {}", email);
                     return new NoSuchElementException("Usuário não encontrado com o email: " + email);
                 });
 
+
         String token = UUID.randomUUID().toString();
+
         PasswordResetToken resetToken = tokenRepository.findByUser(user)
                 .orElse(new PasswordResetToken());
 
         resetToken.setToken(token);
         resetToken.setUser(user);
         resetToken.setExpiryDate(LocalDateTime.now().plusHours(1));
+        resetToken.setCreatedAt(LocalDateTime.now());
 
         tokenRepository.save(resetToken);
 
