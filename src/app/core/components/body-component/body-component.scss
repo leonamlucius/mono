@@ -71,9 +71,9 @@ $grey-primary: #b8b7b7;
   font-size: 15px;
   font-weight: 500;
   background-image: url('/img/pngtree-vintage-crumpled-craft-package-wrapping-paper-texture-as-a-transparent-background-png-image_11989598.png');
-  background-size: cover; /* ou contain */
-  background-position: center;
-  background-repeat: no-repeat;
+  background-size: 1200px; /* ou contain */
+  background-position: top right;
+  background-repeat: repeat;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 .message p {

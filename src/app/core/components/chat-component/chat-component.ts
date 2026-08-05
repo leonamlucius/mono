@@ -146,7 +146,11 @@ export class ChatComponent {
   }
 
   public showSkeletonLoading(): void {
-    this.IsShowSkeleton.set(!this.IsShowSkeleton());
+    this.IsShowSkeleton.set(true);
+  }
+
+  public hideSkeletonLoading(): void {
+    this.IsShowSkeleton.set(false);
   }
 
   public onLlmTypeChange(event: Event): void {
@@ -196,7 +200,7 @@ export class ChatComponent {
       this.warning.openModal('Digite algo para iniciar a conversa');
       this.scrollToBottom();
       if (!this.dontShowSkeleton()) {
-        this.showSkeletonLoading();
+        this.hideSkeletonLoading();
       }
       return;
     }
@@ -215,7 +219,7 @@ export class ChatComponent {
         this.warning.openModal('Digite algo para continuar a conversa');
         this.chatHistory.set(this.chatHistory().slice(0, -2));
         if (!this.dontShowSkeleton()) {
-          this.showSkeletonLoading();
+          this.hideSkeletonLoading();
         }
         this.scrollToBottom();
         return;
@@ -247,7 +251,7 @@ export class ChatComponent {
               this.makeTextAreaEnabled(textArea as HTMLTextAreaElement);
               this.scrollToBottom();
               if (!this.dontShowSkeleton()) {
-                this.showSkeletonLoading();
+                this.hideSkeletonLoading();
               }
 
               return;
@@ -272,25 +276,28 @@ export class ChatComponent {
 
             this.llmType.set(nameOfLLM as 'OLLAMA' | 'GROQ' | 'ERROR');
 
-            if (!this.dontShowSkeleton()) {
-              this.chatService.summarize().then((summary) => {
-                this.summaryText.set(summary);
+            this.chatService.summarize().then((summary) => {
+              if (
+                this.summaryText() === summary ||
+                this.menu.summaryText() === summary
+              ) {
+                return;
+              }
 
-                this.menu.summaryText.set(summary);
+              this.showSkeletonLoading();
+              this.summaryText.set(summary);
+              this.menu.summaryText.set(summary);
+
+              setTimeout(() => {
+                this.hideSkeletonLoading();
+                this.dontShowSkeleton.set(true);
 
                 setTimeout(() => {
-                  if (!this.dontShowSkeleton()) {
-                    this.showSkeletonLoading();
-                    this.dontShowSkeleton.set(true);
-
-                    setTimeout(() => {
-                      this.verificarOverflow();
-                      this.menu.verificarOverflowSidebar();
-                    }, 500);
-                  }
-                }, 1000);
-              });
-            }
+                  this.verificarOverflow();
+                  this.menu.verificarOverflowSidebar();
+                }, 500);
+              }, 1000);
+            });
           }, 500);
         });
     } catch (error) {
