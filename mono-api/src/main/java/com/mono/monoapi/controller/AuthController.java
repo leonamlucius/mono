@@ -80,6 +80,7 @@ public class AuthController {
         jwtCookie.setSecure(true);
         jwtCookie.setPath("/");
         jwtCookie.setMaxAge(0); // Expira imediatamente
+        jwtCookie.setAttribute("SameSite", "None");
         response.addCookie(jwtCookie);
 
         return ResponseEntity.ok("Logout realizado com sucesso");
