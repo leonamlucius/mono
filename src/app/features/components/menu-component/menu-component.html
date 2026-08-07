@@ -90,9 +90,17 @@
               <button class="edit" type="button" (click)="startEditName()">
                 Editar
               </button>
-              <button class="save" type="submit" [ngClass]="{'active': editName() }">
-                <span *ngIf="showLoading()" class="material-symbols-outlined" id="loadingIcon">
-                    progress_activity
+              <button
+                class="save"
+                type="submit"
+                [ngClass]="{'active': editName() }"
+              >
+                <span
+                  *ngIf="showLoading()"
+                  class="material-symbols-outlined"
+                  id="loadingIcon"
+                >
+                  progress_activity
                 </span>
                 <p *ngIf="!showLoading()">Salvar</p>
               </button>
@@ -126,6 +134,23 @@
       <span #captionInfo [ngClass]="{'marquee': isOverflowingInfo() }"
         >{{ summaryText() }}</span
       >
+    </div>
+
+    <div class="search-container" [ngClass]="{ 'active': isInitialized() }">
+      <span class="material-symbols-outlined"> search </span>
+      <input
+        type="text"
+        placeholder="Pesquisar no chat"
+        (input)="search($event)"
+        (keydown.enter)="$event.preventDefault(); search($event)"
+      />
+      <button
+        *ngIf="searchTerm()"
+        (pointerdown)="clearSearch()"
+        title="Limpar pesquisa"
+      >
+        <span class="material-symbols-outlined"> close </span>
+      </button>
     </div>
 
     <span class="module" (click)="createModalPerfil()">

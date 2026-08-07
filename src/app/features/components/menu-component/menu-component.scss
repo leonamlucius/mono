@@ -119,6 +119,11 @@ $grey-primary: #a8a5a5;
   transform: none;
 }
 
+.sidebar .search-container {
+  display: none;
+  width: 0px;
+}
+
 .modalSidebarOverlay {
   height: 100%;
   width: 100%;
@@ -312,6 +317,49 @@ form .form-group {
 
   .sidebar .nameAndSummary {
     display: flex;
+  }
+
+  .sidebar .search-container {
+    display: none;
+  }
+
+  .sidebar .search-container.active {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    padding: 5px 10px;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+
+  .sidebar .search-container input {
+    border: none;
+    background: none;
+    outline: none;
+    width: 0px;
+    font-size: 0.95em;
+    color: black;
+    font-family: 'Arvo', serif;
+    margin: 0;
+  }
+
+  .sidebar .search-container.active button {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  .sidebar .search-container.active input {
+    width: 80%;
   }
 
   .sidebar-header .logoInfo {

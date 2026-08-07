@@ -20,6 +20,23 @@
         <img src="/img/mono.svg" alt="Logo" />
         <p>Mono</p>
       </div>
+
+      <div class="search" [ngClass]="{ 'active': isInitialized() }">
+        <span class="material-symbols-outlined"> search </span>
+        <input
+          type="text"
+          placeholder="Pesquisar..."
+          (input)="search($event)"
+          (keydown.enter)="$event.preventDefault(); search($event)"
+        />
+        <button
+          *ngIf="searchTerm()"
+          (click)="clearSearch()"
+          title="Limpar pesquisa"
+        >
+          <span class="material-symbols-outlined"> close </span>
+        </button>
+      </div>
     </div>
 
     <div class="right-container">
@@ -57,7 +74,6 @@
   (llmTypeChange)="llmType.set($event)"
   [llmType]="llmType() === 'ERROR' ? 'GROQ' : llmType()"
 ></app-input-component>
-
 
 <app-warning></app-warning>
 
