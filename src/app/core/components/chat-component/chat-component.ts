@@ -103,6 +103,8 @@ export class ChatComponent {
 
   public searchTerm = signal('');
 
+  public showButton = signal(false);
+
   public selectedMessages = signal<number[]>([]);
 
   constructor(

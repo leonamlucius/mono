@@ -15,6 +15,7 @@ $grey-primary: #a8a5a5;
   box-sizing: border-box;
   user-select: none;
   color: black;
+  transition: all 0.3s ease;
 }
 
 input {
@@ -52,7 +53,7 @@ button {
 }
 
 :host-context(.active) {
-  gap: 10px;
+  gap: 20px;
 
   input {
     width: 70%;

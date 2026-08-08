@@ -68,9 +68,11 @@ export class MenuComponent implements OnInit {
 
   public lastSearchIndex = signal(-1);
 
-  public searchTerm = signal('');
+  @Input() searchTerm = signal('');
 
-  public selectedMessages = signal<number[]>([]);
+  @Input() showButton = signal(false);
+
+  @Input() selectedMessages = signal<number[]>([]);
 
   private searchSubject$ = new Subject<string>();
 

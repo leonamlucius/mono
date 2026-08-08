@@ -13,20 +13,22 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { WarningComponent } from '../../../shared/components/warning-component/warning-component';
-import { MenuService } from '../../services/menu-service';
+import { FilterButtonComponent } from '../../../shared/components/filter-button-component/filter-button-component';
 
 @Component({
   selector: 'app-search-component',
-  imports: [NgIf, WarningComponent],
+  imports: [NgIf, WarningComponent, FilterButtonComponent],
   templateUrl: './search-component.html',
   styleUrls: ['./search-component.scss'],
 })
 export class SearchComponent {
   public lastSearchIndex = signal(-1);
 
-  public searchTerm = signal('');
+  @Input() searchTerm = signal('');
 
-  public selectedMessages = signal<number[]>([]);
+  @Input() showButton = signal(false);
+
+  @Input() selectedMessages = signal<number[]>([]);
 
   private searchSubject$ = new Subject<string>();
 
@@ -36,11 +38,7 @@ export class SearchComponent {
 
   constructor(private destroyRef: DestroyRef) {
     this.searchSubject$
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged(),
-        takeUntilDestroyed(this.destroyRef)
-      )
+      .pipe(debounceTime(1000), takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.performSearch();
       });
@@ -57,8 +55,20 @@ export class SearchComponent {
     }[]
   >([]);
 
-  // private menucomponent = inject(MenuComponent, { optional: true, host: true });
+  public closeSidebarOnNavigation(): void {
+    this.sideBarExitSignal.emit(true);
+    setTimeout(() => {
+      this.showSidebarSignal.emit(false);
+    }, 400);
+  }
 
+  public showButtons(): void {
+    this.showButton.set(true);
+  }
+
+  public hideButtons(): void {
+    this.showButton.set(false);
+  }
   public scrollToBottom(): void {
     setTimeout(() => {
       const chatContainer = document.querySelector(
@@ -101,25 +111,22 @@ export class SearchComponent {
   }
 
   public clearSearch(): void {
+    this.hideButtons();
     this.lastSearchIndex.set(-1);
-    const searchInputs = document.querySelectorAll(
-      '.search-input'
-    ) as NodeListOf<HTMLInputElement>;
-    searchInputs.forEach((searchInput) => {
-      searchInput.value = '';
-    });
     this.searchTerm.set('');
+    this.selectedMessages.set([]);
 
     const chatContainer = document.querySelector(
       '.chat-container'
     ) as HTMLElement;
 
-    const messageElements = chatContainer.querySelectorAll('.message');
-
-    messageElements.forEach((messageElement) => {
-      const targetElement = messageElement as HTMLElement;
-      targetElement.style.boxShadow = '';
-    });
+    if (chatContainer) {
+      const messageElements = chatContainer.querySelectorAll('.message');
+      messageElements.forEach((messageElement) => {
+        const targetElement = messageElement as HTMLElement;
+        targetElement.style.boxShadow = '';
+      });
+    }
   }
 
   private scrollToMessage(index: number[]): void {
@@ -166,6 +173,7 @@ export class SearchComponent {
       this.selectedMessages.set([]);
       this.disableMessageHighlighting();
       this.scrollToBottom();
+      this.hideButtons();
       return;
     }
 
@@ -177,12 +185,14 @@ export class SearchComponent {
       this.warning.openModal('Nenhum resultado encontrado');
       this.disableMessageHighlighting();
       this.scrollToBottom();
+      this.hideButtons();
       return;
     }
 
     console.log('Filtered messages:', filterMessages);
 
     if (filterMessages.length > 0) {
+      this.showButtons();
       const newIndices: number[] = [];
       filterMessages.forEach((item) => {
         const index = this.chatHistory().indexOf(item);

@@ -22,7 +22,14 @@
       </div>
 
       <div class="search" [ngClass]="{ 'active': isInitialized() }">
-        <app-search-component [chatHistory]="chatHistory"></app-search-component>
+        <app-search-component
+          [chatHistory]="chatHistory"
+          [searchTerm]="searchTerm"
+          [showButton]="showButton"
+          [selectedMessages]="selectedMessages"
+        >
+          > ></app-search-component
+        >
       </div>
     </div>
 
@@ -64,4 +71,11 @@
 
 <app-warning></app-warning>
 
-<app-menu [chatHistory]="chatHistory" [isInitialized]="isInitialized"></app-menu>
+<app-menu
+  [chatHistory]="chatHistory"
+  [isInitialized]="isInitialized"
+  [searchTerm]="searchTerm"
+  [showButton]="showButton"
+  [selectedMessages]="selectedMessages"></app-menu>
+>
+

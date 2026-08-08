@@ -35,6 +35,8 @@ export class InputComponent implements OnDestroy {
   public micValue = '';
   private jaEnviou = false;
 
+
+
   @Input() llmType: 'OLLAMA' | 'GROQ'| "ERROR" = 'GROQ';
 
   @Output() llmTypeChange = new EventEmitter<'OLLAMA' | 'GROQ'>();

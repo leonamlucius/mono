@@ -3,11 +3,18 @@
   class="search-input"
   type="text"
   placeholder="Pesquisar..."
+  [value]="searchTerm()"
   (input)="search($event)"
   (keydown.enter)="$event.preventDefault(); search($event)"
 />
-<button *ngIf="searchTerm()" (pointerdown)="clearSearch()" title="Limpar pesquisa">
+<button *ngIf="searchTerm()" (click)="clearSearch()" title="Limpar pesquisa">
   <span class="material-symbols-outlined"> close </span>
 </button>
+
+<app-filter-button-component
+  *ngIf="showButton()"
+  [selectedMessages]="selectedMessages"
+  (navigationOccurred)="closeSidebarOnNavigation()">
+  </app-filter-button-component>
 
 <app-warning></app-warning>
