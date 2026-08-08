@@ -137,20 +137,7 @@
     </div>
 
     <div class="search-container" [ngClass]="{ 'active': isInitialized() }">
-      <span class="material-symbols-outlined"> search </span>
-      <input
-        type="text"
-        placeholder="Pesquisar no chat"
-        (input)="search($event)"
-        (keydown.enter)="$event.preventDefault(); search($event)"
-      />
-      <button
-        *ngIf="searchTerm()"
-        (pointerdown)="clearSearch()"
-        title="Limpar pesquisa"
-      >
-        <span class="material-symbols-outlined"> close </span>
-      </button>
+      <app-search-component *ngIf="isInitialized()" [chatHistory]="chatHistory" (sideBarExitSignal)="sideBarExit.set($event)" (showSidebarSignal)="showSidebar.set($event)"></app-search-component>
     </div>
 
     <span class="module" (click)="createModalPerfil()">

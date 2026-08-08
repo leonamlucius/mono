@@ -7,7 +7,6 @@ import {
   signal,
   effect,
   OnDestroy,
-  OnInit,
   Input,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';

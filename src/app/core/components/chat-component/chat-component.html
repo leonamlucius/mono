@@ -22,20 +22,7 @@
       </div>
 
       <div class="search" [ngClass]="{ 'active': isInitialized() }">
-        <span class="material-symbols-outlined"> search </span>
-        <input
-          type="text"
-          placeholder="Pesquisar..."
-          (input)="search($event)"
-          (keydown.enter)="$event.preventDefault(); search($event)"
-        />
-        <button
-          *ngIf="searchTerm()"
-          (click)="clearSearch()"
-          title="Limpar pesquisa"
-        >
-          <span class="material-symbols-outlined"> close </span>
-        </button>
+        <app-search-component [chatHistory]="chatHistory"></app-search-component>
       </div>
     </div>
 
@@ -77,4 +64,4 @@
 
 <app-warning></app-warning>
 
-<app-menu></app-menu>
+<app-menu [chatHistory]="chatHistory" [isInitialized]="isInitialized"></app-menu>

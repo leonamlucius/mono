@@ -19,6 +19,7 @@ import {
 } from 'rxjs';
 import { BodyComponent } from '../../../core/components/body-component/body-component';
 import { InputComponent } from '../../../core/components/input-component/input-component';
+import { SearchComponent } from '../../../features/components/search-component/search-component';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { featherAirplay } from '@ng-icons/feather-icons';
 import { heroUsers } from '@ng-icons/heroicons/outline';
@@ -39,6 +40,7 @@ import { switchMap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
     NgIcon,
     WarningComponent,
     MenuComponent,
+    SearchComponent,
   ],
   templateUrl: './chat-component.html',
   styleUrls: ['./chat-component.scss'],
@@ -55,6 +57,8 @@ export class ChatComponent {
   @ViewChild(WarningComponent) warning!: WarningComponent;
 
   @ViewChild(MenuComponent) menu!: MenuComponent;
+
+  @ViewChild(SearchComponent) search!: SearchComponent;
 
   protected readonly title = signal('mono');
 
@@ -101,8 +105,6 @@ export class ChatComponent {
 
   public selectedMessages = signal<number[]>([]);
 
-  private searchSubject$ = new Subject<string>();
-
   constructor(
     private chatService: ChatService,
     private destroyRef: DestroyRef
@@ -113,15 +115,6 @@ export class ChatComponent {
       }, 0);
     });
 
-    this.searchSubject$
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged(),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe(() => {
-        this.performSearch();
-      });
   }
 
   @ViewChild(InputComponent) inputComponent!: InputComponent;
@@ -150,127 +143,6 @@ export class ChatComponent {
           this.chatService.logout();
         }
       });
-  }
-
-  public disableMessageHighlighting(): void {
-    const chatContainer = document.querySelector(
-      '.chat-container'
-    ) as HTMLElement;
-
-    const messageElements = chatContainer.querySelectorAll('.message');
-
-    messageElements.forEach((messageElement) => {
-      const targetElement = messageElement as HTMLElement;
-      targetElement.style.boxShadow = '';
-    });
-  }
-
-  public makeMessageHighlighted(index: number[]): void {
-    const chatContainer = document.querySelector(
-      '.chat-container'
-    ) as HTMLElement;
-    const messageElements = chatContainer.querySelectorAll('.message');
-
-    index.forEach((i) => {
-      if (messageElements[i]) {
-        const targetElement = messageElements[i] as HTMLElement;
-        targetElement.style.boxShadow = '0 0 0 2px yellow';
-        targetElement.style.transition = 'box-shadow 0.3s ease';
-      }
-    });
-  }
-
-  public clearSearch(): void {
-    this.lastSearchIndex.set(-1);
-    const searchInput = document.querySelector(
-      '.search input'
-    ) as HTMLInputElement;
-    if (searchInput) {
-      searchInput.value = '';
-    }
-    this.searchTerm.set('');
-
-    const chatContainer = document.querySelector(
-      '.chat-container'
-    ) as HTMLElement;
-
-    const messageElements = chatContainer.querySelectorAll('.message');
-
-    messageElements.forEach((messageElement) => {
-      const targetElement = messageElement as HTMLElement;
-      targetElement.style.boxShadow = '';
-    });
-  }
-
-  private scrollToMessage(index: number[]): void {
-    console.log('Scrolling to message at index:', index);
-    setTimeout(() => {
-      const chatContainer = document.querySelector(
-        '.chat-container'
-      ) as HTMLElement;
-
-      if (!chatContainer) {
-        return;
-      }
-
-      const messageElements = chatContainer.querySelectorAll('.message');
-
-      if (messageElements.length > 0 && index.length > 0) {
-        const targetElement = messageElements[index[0]] as HTMLElement;
-
-        targetElement.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center',
-        });
-
-        this.makeMessageHighlighted(index);
-      }
-    }, 100);
-  }
-
-  public search(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.searchTerm.set(input.value.toLowerCase().trim());
-
-    console.log('Search term:', this.searchTerm());
-
-    this.searchSubject$.next(this.searchTerm());
-  }
-
-  public performSearch(): void {
-    this.disableMessageHighlighting();
-    this.selectedMessages.set([]);
-
-    if (!this.searchTerm()) {
-      this.lastSearchIndex.set(-1);
-      this.selectedMessages.set([]);
-      this.disableMessageHighlighting();
-      this.scrollToBottom();
-      return;
-    }
-
-    let filterMessages = this.chatHistory().filter((item) =>
-      item.text.toLowerCase().includes(this.searchTerm())
-    );
-
-    if (filterMessages.length === 0) {
-      this.warning.openModal('Nenhum resultado encontrado');
-      this.disableMessageHighlighting();
-      this.scrollToBottom();
-      return;
-    }
-
-    console.log('Filtered messages:', filterMessages);
-
-    if (filterMessages.length > 0) {
-      const newIndices: number[] = [];
-      filterMessages.forEach((item) => {
-        const index = this.chatHistory().indexOf(item);
-        newIndices.push(index);
-      });
-      this.selectedMessages.set(newIndices);
-    }
-    this.scrollToMessage(this.selectedMessages());
   }
 
   public abrirMenu() {
@@ -357,17 +229,7 @@ export class ChatComponent {
       { text: this.textoValue(), sendBy: 'User', loading: false },
     ]);
 
-    this.menu.chatHistory.set([
-      ...this.chatHistory(),
-      { text: this.textoValue(), sendBy: 'User', loading: false },
-    ]);
-
     this.chatHistory.set([
-      ...this.chatHistory(),
-      { text: '', sendBy: 'Bot', loading: true, llmType: this.llmType() },
-    ]);
-
-    this.menu.chatHistory.set([
       ...this.chatHistory(),
       { text: '', sendBy: 'Bot', loading: true, llmType: this.llmType() },
     ]);
@@ -376,7 +238,6 @@ export class ChatComponent {
       if (this.textoValue().trim() === '') {
         this.warning.openModal('Digite algo para continuar a conversa');
         this.chatHistory.set(this.chatHistory().slice(0, -2));
-        this.menu.chatHistory.set(this.menu.chatHistory().slice(0, -2));
         if (!this.dontShowSkeleton()) {
           this.hideSkeletonLoading();
         }
@@ -408,16 +269,6 @@ export class ChatComponent {
                 },
               ]);
 
-              this.menu.chatHistory.set([
-                ...this.menu.chatHistory().slice(0, -1),
-                {
-                  text: 'Erro ao enviar a mensagem.',
-                  sendBy: 'Bot',
-                  loading: false,
-                  llmType: 'ERROR',
-                },
-              ]);
-
               this.makeTextAreaEnabled(textArea as HTMLTextAreaElement);
               this.scrollToBottom();
               if (!this.dontShowSkeleton()) {
@@ -428,16 +279,6 @@ export class ChatComponent {
             }
 
             this.chatHistory.set([
-              ...this.chatHistory().slice(0, -1),
-              {
-                text: response.message,
-                sendBy: 'Bot',
-                loading: false,
-                llmType: response.model,
-              },
-            ]);
-
-            this.menu.chatHistory.set([
               ...this.chatHistory().slice(0, -1),
               {
                 text: response.message,

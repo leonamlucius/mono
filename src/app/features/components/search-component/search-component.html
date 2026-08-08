@@ -1,0 +1,13 @@
+<span class="material-symbols-outlined"> search </span>
+<input
+  class="search-input"
+  type="text"
+  placeholder="Pesquisar..."
+  (input)="search($event)"
+  (keydown.enter)="$event.preventDefault(); search($event)"
+/>
+<button *ngIf="searchTerm()" (pointerdown)="clearSearch()" title="Limpar pesquisa">
+  <span class="material-symbols-outlined"> close </span>
+</button>
+
+<app-warning></app-warning>
