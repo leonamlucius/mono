@@ -1,5 +1,6 @@
 package com.mono.monoapi.config;
 
+import com.mono.monoapi.config.PgSqlChatMemory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.InMemoryChatMemory;
@@ -15,19 +16,17 @@ public class AiConfig {
     @Bean
     @Primary
     public ChatModel defaultChatModel(OpenAiChatModel openAiChatModel) {
-        return openAiChatModel; 
+        return openAiChatModel;
     }
 
     @Bean
-    public ChatMemory chatMemory() {
-        return new InMemoryChatMemory();
+    public ChatMemory chatMemory(PgSqlChatMemory pgSqlChatMemory) {
+        return pgSqlChatMemory;
     }
 
     @Bean
     public ChatClient chatClient(ChatClient.Builder builder) {
         return builder.build();
     }
-
-
 
 }

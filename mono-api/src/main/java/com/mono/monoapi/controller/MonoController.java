@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.mono.monoapi.service.GroqAiService;
+import com.mono.monoapi.service.HistoryService;
 import com.mono.monoapi.service.OllamaAiService;
 import com.mono.monoapi.service.UserService;
 import com.mono.monoapi.service.AssemblyAiService;
@@ -25,6 +26,7 @@ import com.mono.monoapi.dto.FactsResponse;
 import java.util.List;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.ai.chat.messages.Message;
 
 @RestController
 @RequestMapping("/mono")
@@ -49,6 +51,9 @@ public class MonoController {
 
     @Autowired
     public FactsService factsService;
+
+    @Autowired
+    public HistoryService historyService;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -167,6 +172,43 @@ public class MonoController {
             logger.error("Erro ao resumir o texto: {}", e.getMessage());
             return ResponseEntity.status(500).body("Erro ao resumir o texto");
         }
+    }
+
+    @GetMapping("/history")
+    public ResponseEntity<List<ChatResponseDTO>> getHistory(HttpServletRequest request) {
+        String token = null;
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("jwt".equals(cookie.getName())) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+        String ChatId = "usuario-anonimo";
+
+        if (token != null) {
+
+            token = token.replaceAll("[\\p{Cntrl}]", "");
+            try {
+                ChatId = jwtUtil.extractUserIdFromToken(token);
+
+                logger.info("ID do usuário extraído do token: '{}'", ChatId);
+            } catch (Exception e) {
+                logger.info("Erro ao extrair o ID do usuário do token: {}", e.getMessage());
+                return ResponseEntity.status(401).body(null);
+            }
+        } else {
+            logger.info("Nenhum token de autorização fornecido. Usando ID de chat padrão: '{}'", ChatId);
+            return ResponseEntity.status(401).body(null);
+        }
+
+        List<ChatResponseDTO> response = historyService.getHistorico(ChatId);
+
+        return ResponseEntity.ok(response);
     }
 
 }

@@ -1,11 +1,15 @@
 package com.mono.monoapi.service;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
+import java.util.Map;
+import org.springframework.ai.chat.messages.AssistantMessage;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 
 import java.util.List;
 
@@ -21,6 +25,7 @@ public class GroqAiService {
             "spoofing", "sniffer", "backdoor", "trojan", "worm");
 
     private final ChatClient chatClient;
+    private ChatMemory chatMemory;
 
     private static final Logger logger = LoggerFactory.getLogger(GroqAiService.class);
 
@@ -37,8 +42,9 @@ public class GroqAiService {
                                 - Nunca mencione que é o Groq
                                 - Seu nome é Mono, de Monólogo, evite mencionar macaco, mas não precisa citar toda vez que for se apresentar, apenas quando for relevante
                                 """)
-                .defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory))
                 .build();
+
+        this.chatMemory = chatMemory;
     }
 
     public GroqAiService(OpenAiChatModel openAiChatModel) {
@@ -55,10 +61,18 @@ public class GroqAiService {
                 throw new IllegalArgumentException("Mensagem contém termo proibido: " + termo);
             }
         }
-        return this.chatClient.prompt(message)
-                .advisors(a -> a.param(MessageChatMemoryAdvisor.CHAT_MEMORY_CONVERSATION_ID_KEY, chatId))
+        List<Message> history = this.chatMemory.get(chatId, 100);
+
+        String response = this.chatClient.prompt()
+                .messages(history)
+                .user(message)
                 .call()
                 .content();
+
+        this.chatMemory.add(chatId, new UserMessage(message));
+        this.chatMemory.add(chatId, new AssistantMessage(response, Map.of("model", "GROQ-openai/gpt-oss-20b")));
+
+        return response;
     }
 
     public String getFacts() {
@@ -69,4 +83,5 @@ public class GroqAiService {
                 .content();
 
     }
+
 }
