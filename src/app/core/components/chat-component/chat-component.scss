@@ -265,19 +265,7 @@ $grey-primary: #a8a5a5;
   display: none;
 }
 
-.right-container select {
-  width: 100%;
-  height: 100%;
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-weight: 400;
-  font-family: 'Arvo', serif;
-}
 
-.right-container select:focus {
-  outline: none;
-}
 
 .right-container .nameAndSummary {
   background-color: $white-primary;
@@ -441,6 +429,8 @@ $grey-primary: #a8a5a5;
 
   .right-container .llm-select {
     display: flex;
+    align-items: center;
+    justify-content: center;
     height: 50px;
     width: 110px;
   }
@@ -449,12 +439,7 @@ $grey-primary: #a8a5a5;
     display: none;
   }
 
-  .right-container select {
-    font-size: 15px;
-  }
-  .right-container select option {
-    font-size: 15px;
-  }
+  
 
   .madeBy {
     height: 50px;

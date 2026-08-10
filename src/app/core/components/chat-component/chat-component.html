@@ -35,10 +35,9 @@
 
     <div class="right-container">
       <div class="llm-select">
-        <select (change)="onLlmTypeChange($event)" [value]="llmType()">
-          <option value="GROQ">Groq</option>
-          <option value="OLLAMA">Ollama</option>
-        </select>
+        <app-select-llm-component
+          [llmType]="llmType"
+        ></app-select-llm-component>
       </div>
 
       <div
@@ -65,8 +64,7 @@
 <app-input-component
   (textoChange)="isTypeSomething.set($event)"
   (textoValue)="textoValue.set($event)"
-  (llmTypeChange)="llmType.set($event)"
-  [llmType]="llmType() === 'ERROR' ? 'GROQ' : llmType()"
+  [llmType]="llmType"
 ></app-input-component>
 
 <app-warning></app-warning>
@@ -76,6 +74,6 @@
   [isInitialized]="isInitialized"
   [searchTerm]="searchTerm"
   [showButton]="showButton"
-  [selectedMessages]="selectedMessages"></app-menu>
+  [selectedMessages]="selectedMessages"
+></app-menu>
 >
-

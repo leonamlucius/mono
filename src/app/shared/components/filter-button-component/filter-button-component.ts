@@ -16,7 +16,6 @@ import { NgIf, NgClass } from '@angular/common';
 export class FilterButtonComponent {
   @Input() selectedMessages = signal<number[]>([]);
 
-  @Output() navigationOccurred = new EventEmitter<void>();
   public index = signal(-1);
 
   constructor() {

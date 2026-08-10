@@ -1,0 +1,9 @@
+<select
+  #providerSelect
+  (change)="changeLlmType(providerSelect)"
+  [value]="llmType()"
+  title="Selecionar provedor de LLM"
+>
+  <option value="GROQ">Groq</option>
+  <option value="OLLAMA">Ollama</option>
+</select>

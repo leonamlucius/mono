@@ -1,5 +1,9 @@
 <form (ngSubmit)="sendText()">
-  <div #waveformContainer class="waveform-visualizer" [class.invisible]="!micIsON()"></div>
+  <div
+    #waveformContainer
+    class="waveform-visualizer"
+    [class.invisible]="!micIsON()"
+  ></div>
   <textarea
     #meuTextarea
     (input)="onInput(meuTextarea)"
@@ -8,16 +12,19 @@
     "
     [class.invisible]="micIsON()"
     title="Digite sua dúvida"
-  
   ></textarea>
 
-<select #providerSelect (change)="changeLlmType(providerSelect)" [value]="llmType" title="Selecionar provedor de LLM">
-    <option value="GROQ">Groq</option>
-    <option value="OLLAMA">Ollama</option>
-  </select>
+  <app-select-llm-component id="llmSelect" [llmType]="llmType">
+  </app-select-llm-component>
 
-  <button type="button" class="microphone-button" (click)="recordingMic()"  [disabled]="showLoading()" title="Gravar Áudio">
-    <span class="material-symbols-outlined" *ngIf="!micIsON()"> mic </span >
+  <button
+    type="button"
+    class="microphone-button"
+    (click)="recordingMic()"
+    [disabled]="showLoading()"
+    title="Gravar Áudio"
+  >
+    <span class="material-symbols-outlined" *ngIf="!micIsON()"> mic </span>
     <span
       class="material-symbols-outlined"
       id="listeningIcon"
@@ -29,11 +36,22 @@
     </span>
   </button>
 
-  <button type="button" class="cancel-button" *ngIf="micIsON()" (click)="cancelRecording()" title="Cancelar gravação">
+  <button
+    type="button"
+    class="cancel-button"
+    *ngIf="micIsON()"
+    (click)="cancelRecording()"
+    title="Cancelar gravação"
+  >
     <span class="material-symbols-outlined"> cancel </span>
   </button>
 
-  <button type="submit" class="send-button" [disabled]="showLoading() || micIsON()" title="Enviar">
+  <button
+    type="submit"
+    class="send-button"
+    [disabled]="showLoading() || micIsON()"
+    title="Enviar"
+  >
     <span *ngIf="!showLoading()" class="material-symbols-outlined">
       chevron_right
     </span>

@@ -27,6 +27,7 @@ import { bootstrapLinkedin, bootstrapGithub } from '@ng-icons/bootstrap-icons';
 import { ChatService } from '../../services/chat-service';
 import { WarningComponent } from '../../../shared/components/warning-component/warning-component';
 import { MenuComponent } from '../../../features/components/menu-component/menu-component';
+import { SelectLlmComponent } from '../../../shared/components/select-llm-component/select-llm-component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { switchMap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
@@ -41,6 +42,7 @@ import { switchMap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
     WarningComponent,
     MenuComponent,
     SearchComponent,
+    SelectLlmComponent,
   ],
   templateUrl: './chat-component.html',
   styleUrls: ['./chat-component.scss'],
@@ -172,11 +174,6 @@ export class ChatComponent {
 
   public hideSkeletonLoading(): void {
     this.IsShowSkeleton.set(false);
-  }
-
-  public onLlmTypeChange(event: Event): void {
-    const select = event.target as HTMLSelectElement;
-    this.llmType.set(select.value as 'OLLAMA' | 'GROQ');
   }
 
   public goBack(): void {

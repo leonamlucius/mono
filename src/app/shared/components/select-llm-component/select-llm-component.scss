@@ -1,0 +1,17 @@
+
+
+
+select {
+  width: 5em;
+  font-size: 16px;
+  border: none;
+  font-family: 'Arvo', serif;
+  cursor: pointer;
+  background-color: transparent;
+  color: black;
+}
+
+select:focus {
+  border: none;
+  outline: none;
+}

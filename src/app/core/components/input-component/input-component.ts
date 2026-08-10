@@ -15,10 +15,11 @@ import { ChatComponent } from '../../components/chat-component/chat-component';
 import WaveSurfer from 'wavesurfer.js';
 import RecordPlugin from 'wavesurfer.js/dist/plugins/record.js';
 import { AudioRecordingService } from '../../services/audio-recording.service';
+import { SelectLlmComponent } from '../../../shared/components/select-llm-component/select-llm-component';
 
 @Component({
   selector: 'app-input-component',
-  imports: [FormsModule, NgIf],
+  imports: [FormsModule, NgIf, SelectLlmComponent],
   templateUrl: './input-component.html',
   styleUrls: ['./input-component.scss'],
 })
@@ -35,11 +36,8 @@ export class InputComponent implements OnDestroy {
   public micValue = '';
   private jaEnviou = false;
 
+  @Input() llmType = signal<'OLLAMA' | 'GROQ' | 'ERROR'>('GROQ');
 
-
-  @Input() llmType: 'OLLAMA' | 'GROQ'| "ERROR" = 'GROQ';
-
-  @Output() llmTypeChange = new EventEmitter<'OLLAMA' | 'GROQ'>();
 
   constructor(
     private chatComponent: ChatComponent,
@@ -160,10 +158,7 @@ export class InputComponent implements OnDestroy {
     textarea.style.height = textarea.scrollHeight + 'px';
   }
 
-  public changeLlmType(selectedType: HTMLSelectElement): void {
-    this.llmTypeChange.emit(selectedType.value as 'OLLAMA' | 'GROQ');
-    console.log('Tipo de LLM selecionado:', selectedType.value);
-  }
+
 
   public async sendText(): Promise<void> {
     if (this.micValue.trim().length === 0) {
