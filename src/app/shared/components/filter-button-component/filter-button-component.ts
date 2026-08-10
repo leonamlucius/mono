@@ -1,4 +1,11 @@
-import { Component, Input, signal, effect, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  signal,
+  effect,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { NgIf, NgClass } from '@angular/common';
 @Component({
   selector: 'app-filter-button-component',
@@ -9,7 +16,7 @@ import { NgIf, NgClass } from '@angular/common';
 export class FilterButtonComponent {
   @Input() selectedMessages = signal<number[]>([]);
 
-   @Output() navigationOccurred = new EventEmitter<void>();
+  @Output() navigationOccurred = new EventEmitter<void>();
   public index = signal(-1);
 
   constructor() {
@@ -44,7 +51,13 @@ export class FilterButtonComponent {
     const currentMessage = messages[this.index()];
     console.log('Valor no índice:', currentMessage);
     this.scrollToMessageAndHighlight([currentMessage]);
-    this.navigationOccurred.emit();
+
+    const sidebarOverlay = document.querySelector('.side-bar-overlay') as HTMLElement;
+
+    if (sidebarOverlay) {
+      sidebarOverlay.classList.add('close');
+
+    }
   }
 
   public goingDown() {
@@ -68,7 +81,13 @@ export class FilterButtonComponent {
     const currentMessage = messages[this.index()];
     console.log('Valor no índice:', currentMessage);
     this.scrollToMessageAndHighlight([currentMessage]);
-    this.navigationOccurred.emit();
+
+    const sidebarOverlay = document.querySelector('.side-bar-overlay') as HTMLElement;
+
+    if (sidebarOverlay) {
+      sidebarOverlay.classList.add('close');
+
+    }
   }
 
   private scrollToMessageAndHighlight(index: number[]): void {

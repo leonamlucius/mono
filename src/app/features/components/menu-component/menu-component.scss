@@ -21,6 +21,14 @@ $grey-primary: #a8a5a5;
   box-sizing: border-box;
 }
 
+.side-bar-overlay.close{
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+
 .sidebar {
   width: 0px;
   height: 0px;
