@@ -3,6 +3,7 @@ package com.mono.monoapi.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnTransformer;
 import lombok.Builder;
 import lombok.Data;
 import java.time.LocalDateTime;
@@ -25,7 +26,11 @@ public class ChatMessage {
     @Column(name = "message_type", nullable = false)
     private String messageType;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @ColumnTransformer(
+        read = "pgp_sym_decrypt(content, current_setting('app.encrypt_key'))",
+        write = "pgp_sym_encrypt(?, current_setting('app.encrypt_key'))"
+    )
+    @Column(columnDefinition = "bytea")
     private String content;
 
     @Column(name = "model_name")
