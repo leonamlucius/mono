@@ -84,4 +84,19 @@ public class GroqAiService {
 
     }
 
+    public String getSummary(String text, String chatId) {
+        logger.info("Iniciando chamada Groq para obter resumo.");
+
+        String prompt = text;
+
+        List<Message> history = this.chatMemory.get(chatId, 100);
+
+        String responseString = this.chatClient.prompt()
+                .messages(history)
+                .user(prompt)
+                .call()
+                .content();
+        return responseString;
+    }
+
 }

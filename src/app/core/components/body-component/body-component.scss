@@ -80,7 +80,6 @@ $grey-primary: #b8b7b7;
   padding: 0;
   margin: 0;
   word-break: break-word;
-  white-space: pre-wrap;
   font-family: 'Arvo', serif;
 }
 
@@ -94,6 +93,8 @@ $grey-primary: #b8b7b7;
 .actions .llm-type {
   width: 100%;
   font-size: 14px;
+  display: flex;
+  justify-content: flex-start;
   font-style: italic;
 }
 
@@ -142,8 +143,8 @@ $grey-primary: #b8b7b7;
 .bot {
   background-color: $blue-primary;
   align-self: flex-start;
+  justify-content: flex-start;
   min-width: 140px;
-  text-align: left;
 }
 
 .user {
@@ -152,9 +153,6 @@ $grey-primary: #b8b7b7;
   min-width: 170px;
 }
 
-.user p {
-  margin: 15px 0;
-}
 
 .loading {
   opacity: 0.8;

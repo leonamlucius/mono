@@ -13,7 +13,7 @@
     class="message"
   >
     <p
-      [innerHTML]="item.sendBy === 'Bot' ? (item.text | markdown) : item.text"
+      [innerHTML]="item.text | markdown"
     ></p>
 
     <div class="actions">

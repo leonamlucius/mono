@@ -7,6 +7,29 @@ import { Router } from '@angular/router';
 })
 export class ChatService {
   constructor(private router: Router) {}
+
+  public async getChatHistory(): Promise<any> {
+    try {
+      const apiBase = environment.apiUrl;
+
+      const response = await fetch(`${apiBase}/mono/history`, {
+        method: 'GET',
+        headers: {
+          'ngrok-skip-browser-warning': 'true',
+        },
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching chat history:', error);
+      return 'ERROR FETCHING CHAT HISTORY';
+    }
+  }
   public async sendMessage(
     message: string,
     provider: 'OLLAMA' | 'GROQ' | 'ERROR'

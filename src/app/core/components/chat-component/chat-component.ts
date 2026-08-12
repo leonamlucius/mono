@@ -118,7 +118,6 @@ export class ChatComponent {
         this.verificarOverflow();
       }, 0);
     });
-
   }
 
   @ViewChild(InputComponent) inputComponent!: InputComponent;
@@ -147,6 +146,49 @@ export class ChatComponent {
           this.chatService.logout();
         }
       });
+
+    this.chatService.getChatHistory().then((history) => {
+      if (history === 'ERROR FETCHING CHAT HISTORY') {
+        this.warning.openModal(
+          'Desculpe, ocorreu um erro ao buscar o histórico de chat.'
+        );
+        return;
+      }
+
+      history.forEach((item: any) => {
+        this.adjustTextAlignment();
+        this.chatHistory.set([
+          ...this.chatHistory(),
+          {
+            text: item.message,
+            sendBy: item.model == 'USER' ? 'User' : 'Bot',
+            loading: false,
+            llmType: item.model == 'USER' ? undefined : item.model,
+          },
+        ]);
+      });
+    });
+  }
+
+  private adjustTextAlignment(): void {
+    setTimeout(() => {
+      const messageDiv = document.querySelectorAll(
+        '.message'
+      ) as NodeListOf<HTMLElement>;
+
+      messageDiv.forEach((message) => {
+        const width = message.offsetWidth; // ← pega largura REAL renderizada
+        const paragraph = message.querySelector('p');
+
+        if (paragraph) {
+          if (width > 300) {
+            paragraph.style.textAlign = 'left';
+          } else {
+            paragraph.style.textAlign = 'center';
+          }
+        }
+      });
+    }, 100); // aguarda renderização
   }
 
   public abrirMenu() {
@@ -288,6 +330,7 @@ export class ChatComponent {
             ]);
             console.log('Chat History:', this.chatHistory());
             this.makeTextAreaEnabled(textArea as HTMLTextAreaElement);
+            this.adjustTextAlignment();
             this.scrollToBottom();
 
             const nameOfLLM = response.model
