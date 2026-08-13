@@ -68,4 +68,35 @@ export class LoginService {
       return 'Erro no login. Verifique suas credenciais e tente novamente.';
     }
   }
+
+  public async loginGoogle(idToken: string): Promise<any> {
+    if (!idToken) {
+      return 'Por favor, forneça um ID Token válido para o login do Google.';
+    }
+
+    try {
+      const apiBase = environment.apiUrl;
+
+      const response = await fetch(`${apiBase}/auth/login-google`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ idToken }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('name', data.name);
+        this.router.navigate(['/mono']);
+      }
+    } catch (error) {
+      console.error('Error during Google login:', error);
+    }
+  }
 }

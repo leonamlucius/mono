@@ -33,6 +33,7 @@ export class RegisterService {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({ name, email, password, confirmPassword }),
       });
 
@@ -46,12 +47,47 @@ export class RegisterService {
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem('tokenUser', data.token);
+        localStorage.setItem('name', data.name);
         this.router.navigate(['/mono']);
       }
     } catch (error) {
       console.error('Error during registration:', error);
       return 'Erro no registro. Verifique suas informações e tente novamente.';
+    }
+  }
+
+  public async registerWithGoogle(idToken: string): Promise<any> {
+    if (!idToken) {
+      return 'Token do Google não fornecido. Por favor, tente novamente.';
+    }
+    try {
+      const apiBase = environment.apiUrl;
+
+      const response = await fetch(`${apiBase}/auth/register-google`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ idToken }),
+      });
+
+      if (response.status === 500) {
+        return 'Erro no registro com Google. Por favor, tente novamente.';
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('name', data.name);
+        this.router.navigate(['/mono']);
+      }
+    } catch (error) {
+      console.error('Error during Google registration:', error);
+      return 'Erro no registro com Google. Verifique suas informações e tente novamente.';
     }
   }
 }

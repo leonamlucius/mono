@@ -1,4 +1,4 @@
-import { Component, signal, ViewChild } from '@angular/core';
+import { Component, signal, ViewChild, AfterViewInit } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { NgIf, NgClass } from '@angular/common';
 import { LoginService } from '../../services/login-service';
@@ -15,13 +15,15 @@ import { timer } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { WarningComponent } from '../../../shared/components/warning-component/warning-component';
 
+declare const google: any;
+
 @Component({
   selector: 'app-login-component',
   imports: [NgIcon, NgIf, NgClass, FormsModule, WarningComponent],
   templateUrl: './login-component.html',
   styleUrls: ['./login-component.scss'],
 })
-export class LoginComponent {
+export class LoginComponent implements AfterViewInit {
   @ViewChild(WarningComponent) warning!: WarningComponent;
   public facts = signal<any>(null);
 
@@ -41,6 +43,9 @@ export class LoginComponent {
 
   constructor(private loginService: LoginService) {}
 
+  ngAfterViewInit(): void {
+    this.inicializarGoogleAuth();
+  }
   ngOnInit(): void {
     this.loginService.getFacts().then((fatos) => {
       this.facts.set(fatos);
@@ -59,6 +64,44 @@ export class LoginComponent {
     if (this.pollingSubscription) {
       this.pollingSubscription.unsubscribe();
       console.log('Timer dos fatos destruído com sucesso!');
+    }
+  }
+
+  private inicializarGoogleAuth(): void {
+    if (typeof google !== 'undefined') {
+      google.accounts.id.initialize({
+        client_id:
+          '702780356802-kk87855m6nqj8fjrs4kn7d89hmhuangd.apps.googleusercontent.com',
+        callback: (response: any) => this.handleGoogleCallback(response),
+      });
+
+      google.accounts.id.renderButton(document.getElementById('google-btn'), {
+        theme: 'outline',
+        shape: 'circle',
+        size: 'large',
+        text: 'signin',
+        width: '100%',
+      });
+    } else {
+      setTimeout(() => this.inicializarGoogleAuth(), 100);
+    }
+  }
+
+  private handleGoogleCallback(response: any): void {
+    const idToken = response.credential;
+
+    if (idToken) {
+      this.loginService
+        .loginGoogle(idToken)
+        .then((response) => {
+          this.warning.openModal(response);
+        })
+        .catch((error) => {
+          console.error('Erro durante o login do Google:', error);
+          this.warning.openModal(
+            'Erro no login do Google. Verifique suas credenciais e tente novamente.'
+          );
+        });
     }
   }
 

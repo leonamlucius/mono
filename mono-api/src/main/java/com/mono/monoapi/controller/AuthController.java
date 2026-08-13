@@ -13,7 +13,9 @@ import com.mono.monoapi.dto.RegisterRequest;
 import com.mono.monoapi.dto.ResetPasswordRequest;
 import com.mono.monoapi.dto.UserRequest;
 import com.mono.monoapi.dto.UserResponse;
+import com.mono.monoapi.dto.GoogleRequest;
 import com.mono.monoapi.service.UserService;
+import com.mono.monoapi.service.GoogleAuthService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 
 @RestController
 @RequestMapping("/auth")
@@ -34,6 +35,8 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private GoogleAuthService googleAuthService;
 
     @PostMapping("/login")
     public ResponseEntity<UserResponse> login(@Valid @RequestBody UserRequest request, HttpServletResponse response) {
@@ -125,6 +128,65 @@ public class AuthController {
 
         boolean isValid = jwtUtil.isTokenValid(token);
         return ResponseEntity.ok(isValid);
+    }
+
+    @PostMapping("/login-google")
+    public ResponseEntity<UserResponse> loginWithGoogle(@RequestBody GoogleRequest googleRequest,
+            HttpServletResponse response) {
+        try {
+            ResponseEntity<UserResponse> googleResponse = googleAuthService.loginWithGoogle(googleRequest.getIdToken());
+            UserResponse userResponse = googleResponse.getBody();
+
+            if (userResponse == null) {
+                return ResponseEntity.status(500).body(null);
+            }
+
+            Cookie jwtCookie = new Cookie("jwt",
+                    jwtUtil.generateToken(userResponse.getEmail(), userResponse.getId().toString()));
+
+            jwtCookie.setHttpOnly(true);
+            jwtCookie.setSecure(true);
+            jwtCookie.setPath("/");
+            jwtCookie.setMaxAge(60 * 60);
+            jwtCookie.setAttribute("SameSite", "None");
+
+            response.addCookie(jwtCookie);
+
+            return ResponseEntity.ok(userResponse);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+
+    @PostMapping("/register-google")
+    public ResponseEntity<UserResponse> registerWithGoogle(@RequestBody GoogleRequest googleRequest,
+            HttpServletResponse response) {
+        try {
+            ResponseEntity<UserResponse> googleResponse = googleAuthService
+                    .registerWithGoogle(googleRequest.getIdToken());
+            UserResponse userResponse = googleResponse.getBody();
+
+            if (userResponse == null) {
+                return ResponseEntity.status(500).body(null);
+            }
+
+            Cookie jwtCookie = new Cookie("jwt",
+                    jwtUtil.generateToken(userResponse.getEmail(), userResponse.getId().toString()));
+
+            jwtCookie.setHttpOnly(true);
+            jwtCookie.setSecure(true);
+            jwtCookie.setPath("/");
+            jwtCookie.setMaxAge(60 * 60);
+            jwtCookie.setAttribute("SameSite", "None");
+
+            response.addCookie(jwtCookie);
+
+            return ResponseEntity.ok(userResponse);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(null);
+        }
     }
 
 }

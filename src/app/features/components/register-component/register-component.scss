@@ -15,6 +15,9 @@ $grey-text: #777575;
   position: relative;
 }
 
+
+
+
 .information {
   background-color: $white-primary;
   width: 40px;
@@ -192,7 +195,6 @@ $grey-text: #777575;
 
 .register-container .register-instruction {
   font-size: 17px;
-  margin-bottom: 30px;
   animation: slideRight 0.5s ease-in-out;
 }
 
@@ -207,6 +209,20 @@ form {
   gap: 15px;
 }
 
+.or-separator {
+  display: block;
+  text-align: center;
+  flex-shrink: 0;
+  margin: 5px 0;
+  font-size: 13px;
+}
+#google-btn {
+  animation: slideRight 0.5s ease-in-out;
+  transition: all 0.3s ease;
+}
+#google-btn:hover {
+  transform: scale(1.07);
+}
 form .register-button {
   background-color: $orange-primary;
   color: $white-primary;
@@ -438,6 +454,10 @@ form .register-button:hover {
     scale: 1.1;
     width: 23%;
     height: 40px;
+  }
+
+  #google-btn {
+    scale: 1.1;
   }
 
   .modalError {

@@ -1,92 +1,121 @@
+<div
+  class="login-body"
+  (keydown.enter)="$event.preventDefault(); login(emailInput.value, passwordInput.value)"
+>
+  <div class="logo-square-container">
+    <div class="logo-square">
+      <div class="logo-container">
+        <img
+          src="/img/mono.svg"
+          alt="Logo"
+          class="logo"
+          (load)="showImageLogin()"
+        />
 
-<div class="login-body"  (keydown.enter)="$event.preventDefault(); login(emailInput.value, passwordInput.value)">
-    <div class="logo-square-container">
-        <div class="logo-square">
-           <div class="logo-container">
-                <img src="/img/mono.svg" alt="Logo" class="logo" (load)="showImageLogin()">
-
-                <div class="facts-container" *ngIf="!showSkeleton()" [ngClass]="{'balao-par': isEvenCall(), 'balao-impar': !isEvenCall()}">
-                    <p *ngIf="!fatoAtual()" class="facts-text">O mono conta curiosidades!</p>
-                    <p *ngIf="fatoAtual()" class="facts-text"> {{ fatoAtual().text}}</p>
-                </div>
-            </div>
+        <div
+          class="facts-container"
+          *ngIf="!showSkeleton()"
+          [ngClass]="{'balao-par': isEvenCall(), 'balao-impar': !isEvenCall()}"
+        >
+          <p *ngIf="!fatoAtual()" class="facts-text">
+            O mono conta curiosidades!
+          </p>
+          <p *ngIf="fatoAtual()" class="facts-text">{{ fatoAtual().text}}</p>
         </div>
+      </div>
     </div>
-    <div class="login-container">
-        <div class="icon">
+  </div>
+  <div class="login-container">
+    <div class="icon">
+      <span class="material-symbols-outlined"> login </span>
+    </div>
+    <p class="welcome-message">Bem-vindo!</p>
+
+    <p class="login-instruction">
+      Faça login para continuar e conversar com o mono!
+    </p>
+    <form (ngSubmit)="login(emailInput.value, passwordInput.value)">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="text" id="email" required #emailInput />
+      </div>
+      <div class="form-group">
+        <label for="password">Senha</label>
+        <div class="password-container">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            required
+            #passwordInput
+          />
+          <button type="button" (click)="togglePasswordVisibility()">
             <span class="material-symbols-outlined">
-                login
-            </span>    
+              {{ showPassword ? 'visibility_off' : 'visibility' }}
+            </span>
+          </button>
         </div>
-        <p class="welcome-message">Bem-vindo!</p>
-        
-        <p class="login-instruction">Faça login para continuar e conversar com o mono!</p>
-        <form (ngSubmit)="login(emailInput.value, passwordInput.value)">
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="text" id="email" required #emailInput>
-            </div>
-            <div class="form-group">
-                <label for="password">Senha</label>
-                <div class="password-container">
-                    <input [type]="showPassword ? 'text' : 'password'" id="password" required #passwordInput>
-                    <button type="button" (click)="togglePasswordVisibility()">
-                        <span class="material-symbols-outlined">
-                            {{ showPassword ? 'visibility_off' : 'visibility' }}
-                        </span>
-                    </button>
-                </div>
 
-                <div class="links">
-                <a href="/forgot-password" >Esqueceu a senha?</a>
+        <div class="links">
+          <a href="/forgot-password">Esqueceu a senha?</a>
 
-                <a href="/register">Registrar-se</a>
-                </div>
-            </div>
-            <button type="submit" class="login-button" [class.disabled]="showLoading()">
-                <span *ngIf="!showLoading()">Login</span>
-                <span *ngIf="showLoading()" class="material-symbols-outlined" id="loadingIcon">
-                    progress_activity
-                </span>
-
-            </button>
-        </form>
-
-        <hr class="divider">
-
-        <div class="footer">
-            <div class="madeBy" (click)="goToLinkedin()">
-                <button   >
-                    <ng-icon name="bootstrapLinkedin" title="LinkedIn"/>
-                </button>
-            </div>
-
-             <div class="madeBy" (click)="goToGithub()">
-                <button>
-                    <ng-icon name="bootstrapGithub" title="GitHub"/>
-                </button>
-            </div>
-
-
-            <div class="information" (click)="createModalInfo()">
-                    <button>
-                        <span class="material-symbols-outlined" >
-                            info
-                        </span>
-                    </button>
-            </div>
+          <a href="/register">Registrar-se</a>
         </div>
-            
+      </div>
+
+      <button
+        type="submit"
+        class="login-button"
+        [class.disabled]="showLoading()"
+      >
+        <span *ngIf="!showLoading()">Login</span>
+        <span
+          *ngIf="showLoading()"
+          class="material-symbols-outlined"
+          id="loadingIcon"
+        >
+          progress_activity
+        </span>
+      </button>
+      <span class="or-separator">OU</span>
+      <div id="google-btn"></div>
+    </form>
+
+    <hr class="divider" />
+
+    <div class="footer">
+      <div class="madeBy" (click)="goToLinkedin()">
+        <button>
+          <ng-icon name="bootstrapLinkedin" title="LinkedIn" />
+        </button>
+      </div>
+
+      <div class="madeBy" (click)="goToGithub()">
+        <button>
+          <ng-icon name="bootstrapGithub" title="GitHub" />
+        </button>
+      </div>
+
+      <div class="information" (click)="createModalInfo()">
+        <button>
+          <span class="material-symbols-outlined"> info </span>
+        </button>
+      </div>
     </div>
+  </div>
 </div>
 
 <div class="modalInfo" *ngIf="showModal">
-    <div class="modalContent">
-        <span class="close" (click)="closeModalInfo()">&times;</span>
-        <p>Mono é um chatbot de inteligência artificial para ajudar no dia a dia, desenvolvido com uma interface moderna e reativa em Angular e um backend moderno em Spring Boot. Utilizando o Spring AI para orquestração de dados e a infraestrutura da Groq para inferência ultrarrápida, o projeto entrega respostas fluidas e com baixíssima latência, unindo o poder do ecossistema Java à agilidade dos modelos de linguagem de última geração.</p>
-    </div>
+  <div class="modalContent">
+    <span class="close" (click)="closeModalInfo()">&times;</span>
+    <p>
+      Mono é um chatbot de inteligência artificial para ajudar no dia a dia,
+      desenvolvido com uma interface moderna e reativa em Angular e um backend
+      moderno em Spring Boot. Utilizando o Spring AI para orquestração de dados
+      e a infraestrutura da Groq para inferência ultrarrápida, o projeto entrega
+      respostas fluidas e com baixíssima latência, unindo o poder do ecossistema
+      Java à agilidade dos modelos de linguagem de última geração.
+    </p>
+  </div>
 </div>
 
 <app-warning></app-warning>
-
-

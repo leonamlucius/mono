@@ -1,9 +1,11 @@
-import { Component, signal, ViewChild } from '@angular/core';
+import { Component, signal, ViewChild, AfterViewInit } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { NgIf, NgClass } from '@angular/common';
 import { RegisterService } from '../../services/register-service';
 import { FormsModule } from '@angular/forms';
 import { WarningComponent } from '../../../shared/components/warning-component/warning-component';
+
+declare const google: any;
 
 @Component({
   selector: 'app-register-component',
@@ -28,6 +30,46 @@ export class RegisterComponent {
   public showConfirmPassword = false;
 
   constructor(private registerService: RegisterService) {}
+
+  ngAfterViewInit(): void {
+    this.inicializarGoogleAuth();
+  }
+
+  private inicializarGoogleAuth(): void {
+    if (typeof google !== 'undefined') {
+      google.accounts.id.initialize({
+        client_id:
+          '702780356802-kk87855m6nqj8fjrs4kn7d89hmhuangd.apps.googleusercontent.com',
+        callback: (response: any) => this.handleGoogleCallback(response),
+      });
+
+      google.accounts.id.renderButton(document.getElementById('google-btn'), {
+        theme: 'outline',
+        shape: 'circle',
+        size: 'large',
+        text: 'signup_with',
+        width: '100%',
+      });
+    } else {
+      setTimeout(() => this.inicializarGoogleAuth(), 100);
+    }
+  }
+
+  private handleGoogleCallback(response: any): void {
+    const idToken = response.credential;
+
+    this.registerService
+      .registerWithGoogle(idToken)
+      .then((response) => {
+        this.warning.openModal(response);
+      })
+      .catch((error) => {
+        console.error('Error during Google registration:', error);
+        this.warning.openModal(
+          'Erro ao registrar com o Google. Por favor, tente novamente.'
+        );
+      });
+  }
 
   public showLoadingIndicator(): void {
     this.showLoading.set(true);
