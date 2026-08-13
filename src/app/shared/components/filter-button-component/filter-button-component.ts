@@ -6,10 +6,10 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-import { NgIf, NgClass } from '@angular/common';
+
 @Component({
   selector: 'app-filter-button-component',
-  imports: [NgIf, NgClass],
+  imports: [],
   templateUrl: './filter-button-component.html',
   styleUrls: ['./filter-button-component.scss'],
 })
@@ -51,11 +51,12 @@ export class FilterButtonComponent {
     console.log('Valor no índice:', currentMessage);
     this.scrollToMessageAndHighlight([currentMessage]);
 
-    const sidebarOverlay = document.querySelector('.side-bar-overlay') as HTMLElement;
+    const sidebarOverlay = document.querySelector(
+      '.side-bar-overlay'
+    ) as HTMLElement;
 
     if (sidebarOverlay) {
       sidebarOverlay.classList.add('close');
-
     }
   }
 
@@ -81,11 +82,12 @@ export class FilterButtonComponent {
     console.log('Valor no índice:', currentMessage);
     this.scrollToMessageAndHighlight([currentMessage]);
 
-    const sidebarOverlay = document.querySelector('.side-bar-overlay') as HTMLElement;
+    const sidebarOverlay = document.querySelector(
+      '.side-bar-overlay'
+    ) as HTMLElement;
 
     if (sidebarOverlay) {
       sidebarOverlay.classList.add('close');
-
     }
   }
 
