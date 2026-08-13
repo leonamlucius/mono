@@ -73,7 +73,7 @@ export class RegisterService {
       });
 
       if (response.status === 500) {
-        return 'Erro no registro com Google. Por favor, tente novamente.';
+        return 'Email já cadastrado. Por favor, tente outro email.';
       }
 
       if (!response.ok) {
