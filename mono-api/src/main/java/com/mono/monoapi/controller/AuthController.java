@@ -15,6 +15,7 @@ import com.mono.monoapi.dto.UserRequest;
 import com.mono.monoapi.dto.UserResponse;
 import com.mono.monoapi.dto.GoogleRequest;
 import com.mono.monoapi.service.UserService;
+import com.mono.monoapi.service.CookieService;
 import com.mono.monoapi.service.GoogleAuthService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,19 +39,14 @@ public class AuthController {
     @Autowired
     private GoogleAuthService googleAuthService;
 
+    @Autowired
+    private CookieService cookieService;
+
     @PostMapping("/login")
     public ResponseEntity<UserResponse> login(@Valid @RequestBody UserRequest request, HttpServletResponse response) {
         UserResponse loginResponse = userService.login(request);
 
-        Cookie jwtCookie = new Cookie("jwt",
-                jwtUtil.generateToken(loginResponse.getEmail(), loginResponse.getId().toString()));
-
-        jwtCookie.setHttpOnly(true);
-        jwtCookie.setSecure(true);
-        jwtCookie.setPath("/");
-        jwtCookie.setMaxAge(60 * 60);
-        jwtCookie.setAttribute("SameSite", "None");
-
+        Cookie jwtCookie = cookieService.createJwtCookie(loginResponse.getEmail(), loginResponse.getId().toString());
         response.addCookie(jwtCookie);
         return ResponseEntity.ok(loginResponse);
     }
@@ -60,16 +56,9 @@ public class AuthController {
             HttpServletResponse response) {
         UserResponse loginResponse = userService.register(request);
 
-        Cookie jwtCookie = new Cookie("jwt",
-                jwtUtil.generateToken(loginResponse.getEmail(), loginResponse.getId().toString()));
-
-        jwtCookie.setHttpOnly(true);
-        jwtCookie.setSecure(true);
-        jwtCookie.setPath("/");
-        jwtCookie.setMaxAge(60 * 60);
-        jwtCookie.setAttribute("SameSite", "None");
-
+        Cookie jwtCookie = cookieService.createJwtCookie(loginResponse.getEmail(), loginResponse.getId().toString());
         response.addCookie(jwtCookie);
+
         return ResponseEntity.ok(loginResponse);
 
     }
@@ -77,13 +66,7 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletResponse response) {
 
-        Cookie jwtCookie = new Cookie("jwt",
-                null);
-        jwtCookie.setHttpOnly(true);
-        jwtCookie.setSecure(true);
-        jwtCookie.setPath("/");
-        jwtCookie.setMaxAge(0); // Expira imediatamente
-        jwtCookie.setAttribute("SameSite", "None");
+        Cookie jwtCookie = cookieService.deleteJwtCookie();
         response.addCookie(jwtCookie);
 
         return ResponseEntity.ok("Logout realizado com sucesso");
@@ -141,14 +124,7 @@ public class AuthController {
                 return ResponseEntity.status(500).body(null);
             }
 
-            Cookie jwtCookie = new Cookie("jwt",
-                    jwtUtil.generateToken(userResponse.getEmail(), userResponse.getId().toString()));
-
-            jwtCookie.setHttpOnly(true);
-            jwtCookie.setSecure(true);
-            jwtCookie.setPath("/");
-            jwtCookie.setMaxAge(60 * 60);
-            jwtCookie.setAttribute("SameSite", "None");
+            Cookie jwtCookie = cookieService.createJwtCookie(userResponse.getEmail(), userResponse.getId().toString());
 
             response.addCookie(jwtCookie);
 
@@ -171,14 +147,7 @@ public class AuthController {
                 return ResponseEntity.status(500).body(null);
             }
 
-            Cookie jwtCookie = new Cookie("jwt",
-                    jwtUtil.generateToken(userResponse.getEmail(), userResponse.getId().toString()));
-
-            jwtCookie.setHttpOnly(true);
-            jwtCookie.setSecure(true);
-            jwtCookie.setPath("/");
-            jwtCookie.setMaxAge(60 * 60);
-            jwtCookie.setAttribute("SameSite", "None");
+            Cookie jwtCookie = cookieService.createJwtCookie(userResponse.getEmail(), userResponse.getId().toString());
 
             response.addCookie(jwtCookie);
 

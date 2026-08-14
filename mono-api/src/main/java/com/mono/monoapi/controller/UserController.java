@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mono.monoapi.dto.UserInfoRequest;
 import com.mono.monoapi.dto.UserInfoResponse;
 import com.mono.monoapi.service.UserService;
+import com.mono.monoapi.service.CookieService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,19 +24,16 @@ public class UserController {
     @Autowired
     public UserService userService;
 
+    @Autowired
+    public CookieService cookieService;
+
     @GetMapping("/get-user-info")
     public ResponseEntity<UserInfoResponse> getUserInfo(
             HttpServletRequest request) {
-        String token = null;
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("jwt".equals(cookie.getName())) {
-                    token = cookie.getValue();
-                    break;
-                }
-            }
-        }
+        String token = cookieService.getJwtCookieFromRequest(request) != null
+                ? cookieService.getJwtCookieFromRequest(request).getValue()
+                : null;
+
         UserInfoResponse user = userService.getUserInfo(token);
         return ResponseEntity.ok(user);
     }
@@ -44,16 +42,9 @@ public class UserController {
     public ResponseEntity<UserInfoResponse> updateUserInfo(@Valid @RequestBody UserInfoRequest request,
             HttpServletRequest httpRequest) {
 
-        String bearerToken = null;
-        Cookie[] cookies = httpRequest.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("jwt".equals(cookie.getName())) {
-                    bearerToken = cookie.getValue();
-                    break;
-                }
-            }
-        }
+        String bearerToken = cookieService.getJwtCookieFromRequest(httpRequest) != null
+                ? cookieService.getJwtCookieFromRequest(httpRequest).getValue()
+                : null;
 
         UserInfoResponse user = userService.updateUserInfo(request, bearerToken);
         return ResponseEntity.ok(user);

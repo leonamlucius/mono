@@ -16,6 +16,7 @@ import com.mono.monoapi.service.UserService;
 import com.mono.monoapi.service.AssemblyAiService;
 import com.mono.monoapi.service.SummarizeService;
 import com.mono.monoapi.service.FactsService;
+import com.mono.monoapi.service.CookieService;
 import org.springframework.http.ResponseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +56,9 @@ public class MonoController {
     public HistoryService historyService;
 
     @Autowired
+    public CookieService cookieService;
+
+    @Autowired
     private JwtUtil jwtUtil;
 
     @PostMapping("/chat")
@@ -62,17 +66,9 @@ public class MonoController {
             @RequestHeader(value = "X-AI-Provider", defaultValue = "GROQ") String provider,
             HttpServletRequest request) {
 
-        String token = null;
-
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("jwt".equals(cookie.getName())) {
-                    token = cookie.getValue();
-                    break;
-                }
-            }
-        }
+        String token = cookieService.getJwtCookieFromRequest(request) != null
+                ? cookieService.getJwtCookieFromRequest(request).getValue()
+                : null;
 
         logger.info("Recebida solicitação de chat com mensagem: '{}', provedor: '{}', token: '{}'", message, provider,
                 token);
@@ -155,16 +151,10 @@ public class MonoController {
     public ResponseEntity<String> summarize(
             HttpServletRequest request) {
         try {
-            String bearerToken = null;
-            Cookie[] cookies = request.getCookies();
-            if (cookies != null) {
-                for (Cookie cookie : cookies) {
-                    if ("jwt".equals(cookie.getName())) {
-                        bearerToken = cookie.getValue();
-                        break;
-                    }
-                }
-            }
+            String bearerToken = cookieService.getJwtCookieFromRequest(request) != null
+                    ? cookieService.getJwtCookieFromRequest(request).getValue()
+                    : null;
+
             String summary = summarizeService.summarizeText(bearerToken);
             return ResponseEntity.ok(summary);
         } catch (Exception e) {
@@ -175,17 +165,9 @@ public class MonoController {
 
     @GetMapping("/history")
     public ResponseEntity<List<ChatResponseDTO>> getHistory(HttpServletRequest request) {
-        String token = null;
-
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("jwt".equals(cookie.getName())) {
-                    token = cookie.getValue();
-                    break;
-                }
-            }
-        }
+        String token = cookieService.getJwtCookieFromRequest(request) != null
+                ? cookieService.getJwtCookieFromRequest(request).getValue()
+                : null;
 
         String ChatId = "usuario-anonimo";
 
