@@ -18,6 +18,12 @@ export class AuthService {
         credentials: 'include',
       });
 
+      if (response.status === 401) {
+        console.warn('User is not authenticated. Redirecting to login page.');
+        this.logout();
+        return false;
+      }
+
       if (!response.ok) {
         throw new Error(`ERROR ${response.status}`);
       }
