@@ -4,17 +4,19 @@ import { NgIcon } from '@ng-icons/core';
 import { ResetPasswordService } from '../../services/reset-password-service';
 import { FormsModule } from '@angular/forms';
 import { WarningComponent } from '../../../../shared/components/warning-component/warning-component';
+import { InfoComponent } from '../../../../shared/components/info-component/info-component';
 @Component({
   selector: 'app-reset-password-component',
-  imports: [NgIf, NgIcon, FormsModule, WarningComponent],
+  imports: [NgIf, NgIcon, FormsModule, WarningComponent, InfoComponent],
   templateUrl: './reset-password-component.html',
   styleUrls: ['./reset-password-component.scss'],
 })
 export class ResetPasswordComponent {
   @ViewChild(WarningComponent) warning!: WarningComponent;
+  @ViewChild(InfoComponent) info!: InfoComponent;
   public showLoading = signal<boolean>(false);
 
-  public showModal = false;
+ 
 
   public tokenExperied = signal<boolean>(false);
 
@@ -98,10 +100,10 @@ export class ResetPasswordComponent {
   }
 
   public createModalInfo(): void {
-    this.showModal = true;
+    this.info.displayModal();
   }
 
   public closeModalInfo(): void {
-    this.showModal = false;
+    this.info.closeModal();
   }
 }

@@ -13,18 +13,20 @@ import {
 } from 'rxjs';
 import { timer } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { InfoComponent } from '../../../../shared/components/info-component/info-component';
 import { WarningComponent } from '../../../../shared/components/warning-component/warning-component';
 
 declare const google: any;
 
 @Component({
   selector: 'app-login-component',
-  imports: [NgIcon, NgIf, NgClass, FormsModule, WarningComponent],
+  imports: [NgIcon, NgIf, NgClass, FormsModule, WarningComponent, InfoComponent],
   templateUrl: './login-component.html',
   styleUrls: ['./login-component.scss'],
 })
 export class LoginComponent implements AfterViewInit {
   @ViewChild(WarningComponent) warning!: WarningComponent;
+  @ViewChild(InfoComponent) info!: InfoComponent;
   public facts = signal<any>(null);
 
   public fatoAtual = signal<any>(null);
@@ -32,8 +34,6 @@ export class LoginComponent implements AfterViewInit {
   public isEvenCall = signal<boolean>(true);
 
   private pollingSubscription!: Subscription;
-
-  public showModal = false;
 
   public showPassword = false;
 
@@ -130,11 +130,11 @@ export class LoginComponent implements AfterViewInit {
   }
 
   public createModalInfo(): void {
-    this.showModal = true;
+    this.info.displayModal();
   }
 
   public closeModalInfo(): void {
-    this.showModal = false;
+    this.info.closeModal();
   }
 
   public login(email: string, password: string): void {
@@ -148,7 +148,9 @@ export class LoginComponent implements AfterViewInit {
       this.loginService
         .login(email, password)
         .then((response) => {
-          this.warning.openModal(response);
+          if (response) {
+            this.warning.openModal(response);
+          }
         })
         .finally(() => {
           this.hideLoadingIndicator();

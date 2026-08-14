@@ -116,18 +116,6 @@
   </div>
 </div>
 
-<div class="modalInfo" *ngIf="showModal">
-  <div class="modalContent">
-    <span class="close" (click)="closeModalInfo()">&times;</span>
-    <p>
-      Mono é um chatbot de inteligência artificial para ajudar no dia a dia,
-      desenvolvido com uma interface moderna e reativa em Angular e um backend
-      moderno em Spring Boot. Utilizando o Spring AI para orquestração de dados
-      e a infraestrutura da Groq para inferência ultrarrápida, o projeto entrega
-      respostas fluidas e com baixíssima latência, unindo o poder do ecossistema
-      Java à agilidade dos modelos de linguagem de última geração.
-    </p>
-  </div>
-</div>
+<app-info-component></app-info-component>
 
 <app-warning></app-warning>

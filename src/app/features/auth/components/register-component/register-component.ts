@@ -4,18 +4,18 @@ import { NgIf } from '@angular/common';
 import { RegisterService } from '../../services/register-service';
 import { FormsModule } from '@angular/forms';
 import { WarningComponent } from '../../../../shared/components/warning-component/warning-component';
-
+import { InfoComponent } from '../../../../shared/components/info-component/info-component';
 declare const google: any;
 
 @Component({
   selector: 'app-register-component',
-  imports: [NgIcon, NgIf, FormsModule, WarningComponent],
+  imports: [NgIcon, NgIf, FormsModule, WarningComponent, InfoComponent],
   templateUrl: './register-component.html',
   styleUrls: ['./register-component.scss'],
 })
 export class RegisterComponent {
   @ViewChild(WarningComponent) warning!: WarningComponent;
-  public showModal = false;
+  @ViewChild(InfoComponent) info!: InfoComponent;
 
   public showLoading = signal<boolean>(false);
 
@@ -129,10 +129,10 @@ export class RegisterComponent {
   }
 
   public createModalInfo(): void {
-    this.showModal = true;
+    this.info.displayModal();
   }
 
   public closeModalInfo(): void {
-    this.showModal = false;
+    this.info.closeModal();
   }
 }

@@ -310,28 +310,7 @@ form .login-button:hover {
   justify-content: center;
   gap: 10px;
 }
-.modalInfo {
-  position: absolute;
-  top: 30px;
-  left: 20px;
-  background-color: $white-primary;
-  color: black;
-  width: 30%;
-  padding: 10px;
-  box-sizing: border-box;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
 
-.modalInfo span {
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.modalInfo .close {
-  cursor: pointer;
-}
 .password-container {
   align-items: center;
   width: 100%;
@@ -426,12 +405,6 @@ form .login-button:hover {
   .madeBy ng-icon {
     width: 26px;
     height: 26px;
-  }
-
-  .modalInfo {
-    width: 90%;
-    top: 30px;
-    right: 20px;
   }
 
   .login-instruction {

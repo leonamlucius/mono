@@ -4,23 +4,30 @@ import { NgIcon } from '@ng-icons/core';
 import { ForgotPasswordService } from '../../services/forgot-password-service';
 import { FormsModule } from '@angular/forms';
 import { WarningComponent } from '../../../../shared/components/warning-component/warning-component';
+import { InfoComponent } from '../../../../shared/components/info-component/info-component';
 
 @Component({
   selector: 'app-forgot-password-component',
-  imports: [NgIf, NgClass, NgIcon, FormsModule, WarningComponent],
+  imports: [
+    NgIf,
+    NgClass,
+    NgIcon,
+    FormsModule,
+    WarningComponent,
+    InfoComponent,
+  ],
   templateUrl: './forgot-password-component.html',
   styleUrls: ['./forgot-password-component.scss'],
 })
 export class ForgotPasswordComponent implements OnInit {
   @ViewChild(WarningComponent) warning!: WarningComponent;
+  @ViewChild(InfoComponent) info!: InfoComponent;
   constructor(private forgotPasswordService: ForgotPasswordService) {}
 
   public storedTime = signal<string | null>(
     localStorage.getItem('timeRemaining')
   );
   public showLoading = signal<boolean>(false);
-
-  public showModal = false;
 
   public isClosingModal = signal<boolean>(false);
 
@@ -113,10 +120,9 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   public createModalInfo(): void {
-    this.showModal = true;
+    this.info.displayModal();
   }
-
   public closeModalInfo(): void {
-    this.showModal = false;
+    this.info.closeModal();
   }
 }
