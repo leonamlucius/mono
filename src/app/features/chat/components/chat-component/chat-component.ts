@@ -157,7 +157,6 @@ export class ChatComponent {
       }
 
       history.forEach((item: any) => {
-        this.adjustTextAlignment();
         this.chatHistory.set([
           ...this.chatHistory(),
           {
@@ -182,7 +181,7 @@ export class ChatComponent {
         const paragraph = message.querySelector('p');
 
         if (paragraph) {
-          if (width > 300) {
+          if (width > 250) {
             paragraph.style.textAlign = 'left';
           } else {
             paragraph.style.textAlign = 'center';

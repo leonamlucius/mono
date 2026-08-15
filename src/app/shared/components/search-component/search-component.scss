@@ -70,4 +70,11 @@ button {
     height: 20px;
     font-size: 1em;
   }
+
+  @media screen and (max-width: 600px) {
+    span {
+      width: auto;
+      font-size: 1.4em;
+    }
+  }
 }

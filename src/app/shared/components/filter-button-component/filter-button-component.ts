@@ -16,6 +16,9 @@ import {
 export class FilterButtonComponent {
   @Input() selectedMessages = signal<number[]>([]);
 
+  @Input() public sideBarExitSignal = new EventEmitter<boolean>();
+
+  @Input() public showSidebarSignal = new EventEmitter<boolean>();
   public index = signal(-1);
 
   constructor() {
@@ -51,13 +54,10 @@ export class FilterButtonComponent {
     console.log('Valor no índice:', currentMessage);
     this.scrollToMessageAndHighlight([currentMessage]);
 
-    const sidebarOverlay = document.querySelector(
-      '.side-bar-overlay'
-    ) as HTMLElement;
-
-    if (sidebarOverlay) {
-      sidebarOverlay.classList.add('close');
-    }
+    this.sideBarExitSignal.emit(true);
+    setTimeout(() => {
+      this.showSidebarSignal.emit(false);
+    }, 400);
   }
 
   public goingDown() {
@@ -82,13 +82,10 @@ export class FilterButtonComponent {
     console.log('Valor no índice:', currentMessage);
     this.scrollToMessageAndHighlight([currentMessage]);
 
-    const sidebarOverlay = document.querySelector(
-      '.side-bar-overlay'
-    ) as HTMLElement;
-
-    if (sidebarOverlay) {
-      sidebarOverlay.classList.add('close');
-    }
+    this.sideBarExitSignal.emit(true);
+    setTimeout(() => {
+      this.showSidebarSignal.emit(false);
+    }, 400);
   }
 
   private scrollToMessageAndHighlight(index: number[]): void {

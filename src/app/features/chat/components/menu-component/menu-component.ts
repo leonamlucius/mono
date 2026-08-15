@@ -148,16 +148,11 @@ export class MenuComponent implements OnInit {
     }
   }
   public openSidebar(): void {
-    this.showSidebar.set(true);
+
     this.sideBarExit.set(false);
 
-    const sidebarOverlay = document.querySelector(
-      '.side-bar-overlay'
-    ) as HTMLElement;
-
-    if (sidebarOverlay.classList.contains('close')) {
-      sidebarOverlay.classList.remove('close');
-    }
+    this.showSidebar.set(true);
+    
 
     setTimeout(() => {
       this.verificarOverflowSidebar();

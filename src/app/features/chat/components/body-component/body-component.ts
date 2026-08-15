@@ -69,6 +69,29 @@ export class BodyComponent {
         this.textoAtual.set(this.texts[this.indice].text);
       }, 50);
     }, 8000);
+
+    this.adjustTextAlignment();
+  }
+
+  private adjustTextAlignment(): void {
+    setTimeout(() => {
+      const messageDiv = document.querySelectorAll(
+        '.message'
+      ) as NodeListOf<HTMLElement>;
+
+      messageDiv.forEach((message) => {
+        const width = message.offsetWidth; // ← pega largura REAL renderizada
+        const paragraph = message.querySelector('p');
+
+        if (paragraph) {
+          if (width > 250) {
+            paragraph.style.textAlign = 'left';
+          } else {
+            paragraph.style.textAlign = 'center';
+          }
+        }
+      });
+    }, 100); // aguarda renderização
   }
 
   public async speechText(text: any, index: number): Promise<void> {

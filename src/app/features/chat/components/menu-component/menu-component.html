@@ -1,4 +1,4 @@
-<div class="side-bar-overlay" *ngIf="showSidebar()">
+<div class="side-bar-overlay" [ngClass]="{'active': showSidebar()}">
   <div class="modalSidebarOverlay" *ngIf="activeModal() === 'info'">
     <div class="modalSidebar">
       <div class="modalContent">
@@ -136,6 +136,14 @@
       >
     </div>
 
+    <div
+        class="search-count"
+        [ngClass]="{ 'active': selectedMessages().length > 0 }"
+      >
+        <span class="search-num"
+          >Itens achados ({{ selectedMessages().length }})</span
+        >
+      </div>
     <div class="search-container" [ngClass]="{ 'active': isInitialized() }">
       <app-search-component
         [chatHistory]="chatHistory"
