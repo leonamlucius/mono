@@ -42,31 +42,48 @@ export class BodyComponent {
   public activeSpeechIndex = signal<number | null>(null);
 
   public textoAtual = signal('');
+  public iconAtual = signal('');
 
   private indice = 0;
 
   public texts = [
     {
       text: 'Faça sua pergunta, dúvidas, curiosidades e conversas com o Mono!',
+      icon: `<span class="material-symbols-outlined">
+        question_mark
+        </span>`,
     },
     {
       text: 'O Mono é um assistente virtual inteligente, projetado para fornecer respostas rápidas e precisas às suas perguntas. Ele utiliza tecnologia avançada de processamento de linguagem natural para entender suas consultas e oferecer informações relevantes de forma eficiente.',
+      icon: `<span class="material-symbols-outlined">
+        flash_on
+        </span>`,
     },
     {
       text: 'Com o Mono, você pode obter respostas para uma ampla variedade de tópicos, desde informações gerais até questões específicas. Ele é capaz de compreender o contexto das suas perguntas e fornecer respostas personalizadas, tornando a interação mais fluida e satisfatória.',
+
+      icon: `<span class="material-symbols-outlined">
+      emoji_objects
+      </span>`,
     },
     {
       text: 'O Mono é uma ferramenta útil para quem busca informações rápidas e confiáveis, seja para resolver dúvidas do dia a dia, obter insights sobre um assunto específico ou simplesmente ter uma conversa interessante. Experimente o Mono e descubra como ele pode facilitar sua vida com respostas inteligentes e eficientes!',
+
+      icon: `<span class="material-symbols-outlined">
+        mood
+        </span`,
     },
   ];
 
   ngOnInit() {
     this.textoAtual.set(this.texts[0].text);
+    this.iconAtual.set(this.texts[0].icon);
     setInterval(() => {
       this.textoAtual.set('');
       setTimeout(() => {
         this.indice = (this.indice + 1) % this.texts.length;
         this.textoAtual.set(this.texts[this.indice].text);
+        this.iconAtual.set(this.texts[this.indice].icon);
       }, 50);
     }, 8000);
 

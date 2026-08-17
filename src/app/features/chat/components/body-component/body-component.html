@@ -1,7 +1,10 @@
 <ng-container *ngIf="!isInitialized">
   <div class="logo-container">
     <img src="/img/mono.svg" alt="Logo" class="logo" />
-    <p @fadeText>{{ textoAtual() }}</p>
+    <div class="logo-container-info" @fadeText>
+      <div class="icon" [innerHTML]="(iconAtual())"></div>
+      <p class="text">{{ textoAtual() }}</p>
+    </div>
   </div>
 </ng-container>
 <div *ngIf="isInitialized" class="chat-container">
@@ -12,9 +15,7 @@
     [class.loading]="item.loading"
     class="message"
   >
-    <p
-      [innerHTML]="item.text | markdown"
-    ></p>
+    <p [innerHTML]="item.text | markdown"></p>
 
     <div class="actions">
       <span class="llm-type" *ngIf="item.llmType"> {{ item.llmType }} </span>
