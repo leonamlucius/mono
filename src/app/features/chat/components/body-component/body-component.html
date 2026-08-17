@@ -1,9 +1,18 @@
 <ng-container *ngIf="!isInitialized">
   <div class="logo-container">
     <img src="/img/mono.svg" alt="Logo" class="logo" />
-    <div class="logo-container-info" @fadeText>
-      <div class="icon" [innerHTML]="(iconAtual())"></div>
-      <p class="text">{{ textoAtual() }}</p>
+    <div class="logo-container-cards" @fadeText>
+      <div
+        class="logo-container-info"
+        *ngFor=" let card of texts; let i = index"
+      >
+        <div
+          class="icon"
+          [innerHTML]="card.icon"
+          [ngClass]="i % 2 === 0 ? 'orange' : 'blue' "
+        ></div>
+        <p class="text" [innerHTML]="card.text"></p>
+      </div>
     </div>
   </div>
 </ng-container>

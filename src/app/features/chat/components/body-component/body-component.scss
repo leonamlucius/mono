@@ -28,6 +28,11 @@ $grey-primary: #b8b7b7;
   height: 100dvh;
 }
 
+.logo-container .title {
+  margin: 0;
+  font-size: 1.2em;
+}
+
 .logo-container img {
   width: 150px;
   background-color: $white-primary;
@@ -37,20 +42,29 @@ $grey-primary: #b8b7b7;
   animation: popUp 0.5s ease;
 }
 
-.logo-container .logo-container-info {
+.logo-container .logo-container-cards {
+  display: grid;
+  grid-template-columns: 300px 300px;
   width: 40%;
   height: auto;
-  padding: 20px 25px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
+  padding: 20px 30px;
+  gap: 25px;
   background-color: $white-primary;
   border-radius: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   animation: fadeIn 1s ease;
   text-align: center;
+}
+
+.logo-container .logo-container-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.logo-container .logo-container-info p {
+  margin: 0;
 }
 
 .logo-container .logo-container-info .icon {
@@ -63,8 +77,18 @@ $grey-primary: #b8b7b7;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
+
   color: $white-primary;
+}
+
+.logo-container .logo-container-info .icon.orange {
+  background-color: $orange-primary;
+  border-radius: 10px;
+}
+
+.logo-container .logo-container-info .icon.blue {
+  background-color: $blue-primary;
+  border-radius: 50%;
 }
 
 .logo-container img:hover {
@@ -277,19 +301,16 @@ $grey-primary: #b8b7b7;
     right: 5%;
     top: 10px;
   }
-  .logo-container-info {
-    width: 80%;
+  .logo-container-cards {
+    width: 80% !important;
     height: fit-content;
     padding: 15px 30px;
-    display: flex;
+    display: flex !important;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: $white-primary;
-    border-radius: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    color: $blue-primary;
-    animation: fadeIn 1s ease;
-    text-align: center;
+    padding: 30px 40px;
+    font-size: 0.90em;
   }
 }
 
