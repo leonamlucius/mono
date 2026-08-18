@@ -90,14 +90,13 @@ public class SummarizeService {
 
     private String generateNewSummaryText(String userId) {
 
-        String prompt = "Escreva um título nominal (sem verbos conjugados) de no máximo 7 palavras representando o tema principal desta conversa.\r\n"
-                + 
-                " Responda em português brasileiro, sem aspas, sem formatação e apenas em texto corrido.\r\n"
-                + 
-                "Se não houver informações suficientes para gerar um título, responda com informações da pergunta.\r\n"
-                + 
-                "Evite usar a palavra \"nominal\" no título.\r\n"
-                +"Evite usar as instruções do prompt no título.";
+        String prompt = """
+                Escreva um título nominal (sem verbos conjugados) de no máximo 7 palavras representando o tema principal desta conversa
+                Responda em português brasileiro, sem aspas, sem formatação e apenas em texto corrido.
+                Se não houver informações suficientes para gerar um título, responda com informações da pergunta
+                Evite usar a palavra 'nominal' no título.
+                Evite usar as instruções do prompt no título.
+                """;
 
         String response = this.groqAiService.getSummary(prompt, userId);
         return response;

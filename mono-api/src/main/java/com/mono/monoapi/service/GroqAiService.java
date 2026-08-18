@@ -89,7 +89,7 @@ public class GroqAiService {
 
         String prompt = text;
 
-        List<Message> history = this.chatMemory.get(chatId, 100);
+        List<Message> history = this.chatMemory.get(chatId, 20);
 
         String responseString = this.chatClient.prompt()
                 .messages(history)

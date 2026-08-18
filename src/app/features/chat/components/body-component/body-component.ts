@@ -56,7 +56,7 @@ export class BodyComponent {
     {
       text: 'O Mono é um assistente virtual inteligente, projetado para fornecer respostas rápidas.',
       icon: `<span class="material-symbols-outlined">
-        flash_on
+        bolt
         </span>`,
     },
     {
@@ -70,8 +70,8 @@ export class BodyComponent {
       text: 'O Mono é uma ferramenta útil para quem busca informações rápidas e confiáveis.',
 
       icon: `<span class="material-symbols-outlined">
-        mood
-        </span`,
+      build
+      </span>`,
     },
   ];
 

@@ -63,7 +63,6 @@ $grey-primary: #b8b7b7;
 .logo-container .logo-container-info {
   display: flex;
   align-items: center;
-  justify-content: center;
   justify-content: flex-start;
   white-space: nowrap;
   overflow: hidden;
@@ -72,8 +71,10 @@ $grey-primary: #b8b7b7;
   background-color: $white-primary;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 10px 15px;
+  box-sizing: border-box;
   border-radius: 30px;
   user-select: none;
+  font-size: 0.95em;
   transition: all 0.3s ease;
 }
 .logo-container .logo-container-info p {
@@ -84,8 +85,8 @@ $grey-primary: #b8b7b7;
   background-color: $orange-primary;
   padding: 10px;
   box-sizing: border-box;
-  width: 33px;
-  height: 33px;
+  width: 30px;
+  height: 30px;
   font-size: 1px !important;
   display: flex;
   align-items: center;
@@ -317,9 +318,6 @@ $grey-primary: #b8b7b7;
   .logo-container-cards {
     width: 90% !important;
   }
-  .marquee-track {
-    animation: deslizarTextoMobile 60s linear infinite !important;
-  }
   .logo-container-info {
     font-size: 1.03em;
   }
@@ -392,18 +390,10 @@ $grey-primary: #b8b7b7;
 }
 @keyframes deslizarTexto {
   0% {
-    transform: translateX(45%);
+    transform: translateX(0);
   }
   100% {
-    transform: translateX(-105%);
+    transform: translateX(-50%);
   }
-}
 
-@keyframes deslizarTextoMobile {
-  0% {
-    transform: translateX(18%);
-  }
-  100% {
-    transform: translateX(-105%);
-  }
 }
