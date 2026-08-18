@@ -4,9 +4,13 @@ import {
   signal,
   effect,
   Output,
+  inject,
   EventEmitter,
 } from '@angular/core';
+import { selectSelectedMessages } from '../../../features/chat/states/chat-ui-selectors';
 
+import { Store } from '@ngrx/store';
+import { ChatUiActions } from '../../../features/chat/states/chat-ui.actions';
 @Component({
   selector: 'app-filter-button-component',
   imports: [],
@@ -14,7 +18,9 @@ import {
   styleUrls: ['./filter-button-component.scss'],
 })
 export class FilterButtonComponent {
-  @Input() selectedMessages = signal<number[]>([]);
+  private store = inject(Store);
+
+  protected selectedMessages = this.store.selectSignal(selectSelectedMessages);
 
   @Input() public sideBarExitSignal = new EventEmitter<boolean>();
 

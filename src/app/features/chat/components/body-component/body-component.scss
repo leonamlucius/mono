@@ -323,13 +323,6 @@ $grey-primary: #b8b7b7;
   }
 }
 
-@media (max-height: 500px) {
-  .logo-container {
-    gap: 15px;
-    flex-direction: row;
-    overflow-y: auto;
-  }
-}
 
 @keyframes popUp {
   0% {

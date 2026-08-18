@@ -146,9 +146,6 @@
       </div>
     <div class="search-container" [ngClass]="{ 'active': isInitialized() }">
       <app-search-component
-        [searchTerm]="searchTerm"
-        [showButton]="showButton"  
-        [selectedMessages]="selectedMessages"
         (sideBarExitSignal)="sideBarExit.set($event)"
         (showSidebarSignal)="showSidebar.set($event)"
       ></app-search-component>

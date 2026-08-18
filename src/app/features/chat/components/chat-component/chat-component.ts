@@ -33,6 +33,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { switchMap} from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { ChatUiActions } from '../../states/chat-ui.actions';
+import { selectSelectedMessages } from '../../states/chat-ui-selectors';
 
 @Component({
   selector: 'app-chat-component',
@@ -111,7 +112,7 @@ export class ChatComponent {
 
   public showButton = signal(false);
 
-  public selectedMessages = signal<number[]>([]);
+  protected selectedMessages = this.store.selectSignal(selectSelectedMessages);
 
   constructor(
     private chatService: ChatService,

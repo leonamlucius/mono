@@ -68,8 +68,6 @@ export class MenuComponent implements OnInit {
 
   public lastSearchIndex = signal(-1);
 
-  @Input() searchTerm = signal('');
-
   @Input() showButton = signal(false);
 
   @Input() selectedMessages = signal<number[]>([]);

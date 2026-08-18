@@ -22,11 +22,7 @@
       </div>
 
       <div class="search" [ngClass]="{ 'active': isInitialized() }">
-        <app-search-component
-          [searchTerm]="searchTerm"
-          [showButton]="showButton"
-          [selectedMessages]="selectedMessages"
-        >
+        <app-search-component>
            </app-search-component
         >
       </div>
@@ -78,8 +74,5 @@
 
 <app-menu
   [isInitialized]="isInitialized"
-  [searchTerm]="searchTerm"
-  [showButton]="showButton"
-  [selectedMessages]="selectedMessages"
 ></app-menu>
 

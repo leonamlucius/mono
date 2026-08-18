@@ -14,8 +14,14 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { WarningComponent } from '../warning-component/warning-component';
 import { FilterButtonComponent } from '../filter-button-component/filter-button-component';
-import { selectChatHistory } from '../../../features/chat/states/chat-ui-selectors';
+import {
+  selectChatHistory,
+  selectSearchTerm,
+  selectSelectedMessages,
+  selectShowButton,
+} from '../../../features/chat/states/chat-ui-selectors';
 import { Store } from '@ngrx/store';
+import { ChatUiActions } from '../../../features/chat/states/chat-ui.actions';
 
 @Component({
   selector: 'app-search-component',
@@ -26,11 +32,11 @@ import { Store } from '@ngrx/store';
 export class SearchComponent {
   public lastSearchIndex = signal(-1);
 
-  @Input() searchTerm = signal('');
+  private store = inject(Store);
 
-  @Input() showButton = signal(false);
+  protected searchTerm = this.store.selectSignal(selectSearchTerm);
 
-  @Input() selectedMessages = signal<number[]>([]);
+  protected showButton = this.store.selectSignal(selectShowButton);
 
   private searchSubject$ = new Subject<string>();
 
@@ -46,12 +52,9 @@ export class SearchComponent {
       });
   }
 
-  private store = inject(Store);
-
   protected chatHistory = this.store.selectSignal(selectChatHistory);
 
   @ViewChild(WarningComponent) warning!: WarningComponent;
-
 
   public closeSidebarOnNavigation(): void {
     this.sideBarExitSignal.emit(true);
@@ -61,11 +64,13 @@ export class SearchComponent {
   }
 
   public showButtons(): void {
-    this.showButton.set(true);
+    this.store.dispatch(ChatUiActions.toggleFilterButton({ showButton: true }));
   }
 
   public hideButtons(): void {
-    this.showButton.set(false);
+    this.store.dispatch(
+      ChatUiActions.toggleFilterButton({ showButton: false })
+    );
   }
   public scrollToBottom(): void {
     setTimeout(() => {
@@ -111,8 +116,11 @@ export class SearchComponent {
   public clearSearch(): void {
     this.hideButtons();
     this.lastSearchIndex.set(-1);
-    this.searchTerm.set('');
-    this.selectedMessages.set([]);
+
+    this.store.dispatch(ChatUiActions.clearSearchTerm({ searchTerm: '' }));
+    this.store.dispatch(
+      ChatUiActions.setSelectedMessage({ selectedMessages: [] })
+    );
 
     const chatContainer = document.querySelector(
       '.chat-container'
@@ -155,20 +163,29 @@ export class SearchComponent {
 
   public search(event: Event): void {
     const input = event.target as HTMLInputElement;
-    this.searchTerm.set(input.value.toLowerCase().trim());
 
-    console.log('Search term:', this.searchTerm());
+    this.store.dispatch(
+      ChatUiActions.setSearchTerm({
+        searchTerm: input.value.toLowerCase().trim(),
+      })
+    );
+
+    console.log('Search term:', this.store.selectSignal(selectSearchTerm));
 
     this.searchSubject$.next(this.searchTerm());
   }
 
   public performSearch(): void {
     this.disableMessageHighlighting();
-    this.selectedMessages.set([]);
+    this.store.dispatch(
+      ChatUiActions.setSelectedMessage({ selectedMessages: [] })
+    );
 
     if (!this.searchTerm()) {
       this.lastSearchIndex.set(-1);
-      this.selectedMessages.set([]);
+      this.store.dispatch(
+        ChatUiActions.setSelectedMessage({ selectedMessages: [] })
+      );
       this.disableMessageHighlighting();
       this.scrollToBottom();
       this.hideButtons();
@@ -196,9 +213,11 @@ export class SearchComponent {
         const index = this.chatHistory().indexOf(item);
         newIndices.push(index);
       });
-      this.selectedMessages.set(newIndices);
+      this.store.dispatch(
+        ChatUiActions.setSelectedMessage({ selectedMessages: newIndices })
+      );
     }
-    this.scrollToMessage(this.selectedMessages());
+    this.scrollToMessage(this.store.selectSignal(selectSelectedMessages)());
     this.sideBarExitSignal.emit(true);
     setTimeout(() => {
       this.showSidebarSignal.emit(false);

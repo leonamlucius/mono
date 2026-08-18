@@ -32,22 +32,22 @@ export const chatUiReducer = createReducer(
     ...state,
     searchTerm,
   })),
-  on(ChatUiActions.setSidebarVisible, (state, { showSidebar }) => ({
+
+  on(ChatUiActions.clearSearchTerm, (state, { searchTerm }) => ({
     ...state,
-    showSidebar,
-  })),
-  on(ChatUiActions.setSidebarExit, (state, { sidebarExit }) => ({
-    ...state,
-    sideBarExit: sidebarExit,
+    searchTerm: '',
   })),
   on(ChatUiActions.setSelectedMessage, (state, { selectedMessages }) => ({
     ...state,
     selectedMessages,
   })),
-  on(ChatUiActions.setInitialized, (state, { isInitialized }) => ({
+  on(ChatUiActions.deleteSelectedMessage, (state, { selectedMessages }) => ({
     ...state,
-    isInitialized,
+    selectedMessages: state.selectedMessages.filter(
+      (msg, index) => !selectedMessages.includes(index)
+    ),
   })),
+ 
   on(ChatUiActions.toggleFilterButton, (state, { showButton }) => ({
     ...state,
     showButton,
