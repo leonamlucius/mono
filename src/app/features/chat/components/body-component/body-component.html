@@ -32,7 +32,7 @@
 </ng-container>
 <div *ngIf="isInitialized" class="chat-container">
   <div
-    *ngFor="let item of chatHistory; let i = index"
+    *ngFor="let item of chatHistory(); let i = index"
     [class.bot]="item.sendBy === 'Bot'"
     [class.user]="item.sendBy === 'User'"
     [class.loading]="item.loading"

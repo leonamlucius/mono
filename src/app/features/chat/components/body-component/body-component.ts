@@ -6,6 +6,12 @@ import { MarkdownPipe } from './markdown.pipe';
 import { Router } from '@angular/router';
 import { WarningComponent } from '../../../../shared/components/warning-component/warning-component';
 import removeMarkdown from 'remove-markdown';
+import {
+  selectChatHistory,
+  selectSearchTerm,
+  selectSelectedMessages,
+} from '../../states/chat-ui-selectors';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-body-component',
@@ -28,14 +34,12 @@ export class BodyComponent {
   @ViewChild(WarningComponent) warning!: WarningComponent;
   private router = inject(Router);
 
+  private store = inject(Store);
+
+  protected chatHistory = this.store.selectSignal(selectChatHistory);
+
   @Input() isInitialized = false;
 
-  @Input() chatHistory: {
-    text: string;
-    sendBy: 'User' | 'Bot';
-    loading: boolean;
-    llmType?: 'OLLAMA' | 'GROQ' | 'ERROR';
-  }[] = [];
 
   constructor(public textToSpeechService: TextToSpeechService) {}
 
@@ -76,17 +80,6 @@ export class BodyComponent {
   ];
 
   ngOnInit() {
-    // this.textoAtual.set(this.texts[0].text);
-    // this.iconAtual.set(this.texts[0].icon);
-    // setInterval(() => {
-    //   this.textoAtual.set('');
-    //   setTimeout(() => {
-    //     this.indice = (this.indice + 1) % this.texts.length;
-    //     this.textoAtual.set(this.texts[this.indice].text);
-    //     this.iconAtual.set(this.texts[this.indice].icon);
-    //   }, 50);
-    // }, 8000);
-
     this.adjustTextAlignment();
   }
 

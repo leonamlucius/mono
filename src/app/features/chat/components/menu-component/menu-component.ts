@@ -8,6 +8,7 @@ import {
   effect,
   Input,
   Output,
+  inject,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgIf, NgClass } from '@angular/common';
@@ -15,8 +16,12 @@ import { MenuService } from '../../services/menu-service';
 import { SearchComponent } from '../../../../shared/components/search-component/search-component';
 import { WarningComponent } from '../../../../shared/components/warning-component/warning-component';
 import { Subject } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { switchMap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import {
+  selectChatHistory,
+  selectSearchTerm,
+  selectSelectedMessages,
+} from '../../states/chat-ui-selectors';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-menu',
@@ -46,14 +51,9 @@ export class MenuComponent implements OnInit {
 
   @Input() isInitialized = signal(false);
 
-  @Input() chatHistory = signal<
-    {
-      text: string;
-      sendBy: 'User' | 'Bot';
-      loading: boolean;
-      llmType?: 'OLLAMA' | 'GROQ' | 'ERROR';
-    }[]
-  >([]);
+  private store = inject(Store);
+
+  protected chatHistory = this.store.selectSignal(selectChatHistory);
 
   @ViewChild('nameAndSummaryInfo')
   nameAndSummaryInfo!: ElementRef<HTMLDivElement>;
@@ -148,11 +148,9 @@ export class MenuComponent implements OnInit {
     }
   }
   public openSidebar(): void {
-
     this.sideBarExit.set(false);
 
     this.showSidebar.set(true);
-    
 
     setTimeout(() => {
       this.verificarOverflowSidebar();

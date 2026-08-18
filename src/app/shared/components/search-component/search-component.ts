@@ -14,6 +14,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { WarningComponent } from '../warning-component/warning-component';
 import { FilterButtonComponent } from '../filter-button-component/filter-button-component';
+import { selectChatHistory } from '../../../features/chat/states/chat-ui-selectors';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-search-component',
@@ -44,16 +46,12 @@ export class SearchComponent {
       });
   }
 
+  private store = inject(Store);
+
+  protected chatHistory = this.store.selectSignal(selectChatHistory);
+
   @ViewChild(WarningComponent) warning!: WarningComponent;
 
-  @Input() chatHistory = signal<
-    {
-      text: string;
-      sendBy: 'User' | 'Bot';
-      loading: boolean;
-      llmType?: 'OLLAMA' | 'GROQ' | 'ERROR';
-    }[]
-  >([]);
 
   public closeSidebarOnNavigation(): void {
     this.sideBarExitSignal.emit(true);

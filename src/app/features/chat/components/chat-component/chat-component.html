@@ -23,7 +23,6 @@
 
       <div class="search" [ngClass]="{ 'active': isInitialized() }">
         <app-search-component
-          [chatHistory]="chatHistory"
           [searchTerm]="searchTerm"
           [showButton]="showButton"
           [selectedMessages]="selectedMessages"
@@ -68,7 +67,6 @@
 
 <app-body-component
   [isInitialized]="isInitialized()"
-  [chatHistory]="chatHistory()"
 ></app-body-component>
 <app-input-component
   (textoChange)="isTypeSomething.set($event)"
@@ -79,7 +77,6 @@
 <app-warning></app-warning>
 
 <app-menu
-  [chatHistory]="chatHistory"
   [isInitialized]="isInitialized"
   [searchTerm]="searchTerm"
   [showButton]="showButton"

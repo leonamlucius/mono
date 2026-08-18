@@ -22,6 +22,9 @@
     "@ng-icons/core": "^33.2.3",
     "@ng-icons/feather-icons": "^33.2.3",
     "@ng-icons/heroicons": "^33.2.3",
+    "@ngrx/effects": "^21.1.1",
+    "@ngrx/store": "^21.1.1",
+    "@ngrx/store-devtools": "^21.1.1",
     "@ngx-env/builder": "^21.0.1",
     "marked": "^18.0.5",
     "remove-markdown": "^0.6.4",
@@ -30,11 +33,11 @@
     "wavesurfer.js": "^7.12.10"
   },
   "devDependencies": {
-    "@angular-builders/jest": "^22.0.0",
+    "@angular-builders/jest": "^21.0.3",
     "@angular/build": "^21.2.13",
     "@angular/cli": "^21.2.13",
     "@angular/compiler-cli": "^21.2.0",
-    "@angular/platform-browser-dynamic": "^22.0.1",
+    "@angular/platform-browser-dynamic": "^21.0.1",
     "@types/jest": "^30.0.0",
     "@types/marked": "^5.0.2",
     "dotenv": "^17.4.2",
