@@ -3,9 +3,11 @@ import { NgFor, NgIf, NgClass } from '@angular/common';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { TextToSpeechService } from '../../../../core/services/text-to-speech.service';
 import { MarkdownPipe } from './markdown.pipe';
+import { HighlightPipe } from './highlight.pipe';
 import { Router } from '@angular/router';
 import { WarningComponent } from '../../../../shared/components/warning-component/warning-component';
 import removeMarkdown from 'remove-markdown';
+import { AsyncPipe } from '@angular/common';
 import {
   selectChatHistory,
   selectSearchTerm,
@@ -15,7 +17,7 @@ import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-body-component',
-  imports: [NgFor, NgIf, MarkdownPipe, WarningComponent, NgClass],
+  imports: [NgFor, NgIf, MarkdownPipe, WarningComponent, NgClass, HighlightPipe, AsyncPipe],
   templateUrl: './body-component.html',
   styleUrls: ['./body-component.scss'],
   animations: [
@@ -36,6 +38,8 @@ export class BodyComponent {
 
   private store = inject(Store);
 
+  readonly searchTerm$ = this.store.select(selectSearchTerm);
+
   protected chatHistory = this.store.selectSignal(selectChatHistory);
 
   @Input() isInitialized = false;
@@ -48,7 +52,6 @@ export class BodyComponent {
   public textoAtual = signal('');
   public iconAtual = signal('');
 
-  private indice = 0;
 
   public texts = [
     {
@@ -94,7 +97,7 @@ export class BodyComponent {
         const paragraph = message.querySelector('p');
 
         if (paragraph) {
-          if (width > 250) {
+          if (width > 350) {
             paragraph.style.textAlign = 'left';
           } else {
             paragraph.style.textAlign = 'center';

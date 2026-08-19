@@ -18,6 +18,11 @@ $grey-primary: #a8a5a5;
   transition: all 0.3s ease;
 }
 
+::highlight(search-highlight) {
+  background-color: #ffe066;
+  color: #000000;
+  border-radius: 2px;
+}
 input {
   border: none;
   background: none;

@@ -114,23 +114,35 @@ export class FilterButtonComponent {
           behavior: 'smooth',
           block: 'center',
         });
-        targetElement.style.boxShadow = '0 0 0 2px yellow';
       }
+
+      this.makeMessageHighlighted(index);
     }, 100);
   }
 
+  public makeMessageHighlighted(index: number[]): void {
+    const chatContainer = document.querySelector(
+      '.chat-container'
+    ) as HTMLElement;
+    const messageElements = chatContainer.querySelectorAll('.message');
+
+    index.forEach((i) => {
+      if (messageElements[i]) {
+        const targetElement = messageElements[i] as HTMLElement;
+        targetElement.classList.add('highlighted');
+      }
+    });
+  }
   public disableMessageHighlighting(): void {
     const chatContainer = document.querySelector(
       '.chat-container'
     ) as HTMLElement;
 
-    if (!chatContainer) return;
-
     const messageElements = chatContainer.querySelectorAll('.message');
 
     messageElements.forEach((messageElement) => {
       const targetElement = messageElement as HTMLElement;
-      targetElement.style.boxShadow = '';
+      targetElement.classList.remove('highlighted');
     });
   }
 }

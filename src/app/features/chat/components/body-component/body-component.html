@@ -38,7 +38,13 @@
     [class.loading]="item.loading"
     class="message"
   >
-    <p [innerHTML]="item.text | markdown"></p>
+    <p [innerHTML]="item.text | markdown | highlight: (searchTerm$ | async)" class="text"></p>
+
+    <div class="loading-indicator" *ngIf="item.loading">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
 
     <div class="actions">
       <span class="llm-type" *ngIf="item.llmType"> {{ item.llmType }} </span>

@@ -12,10 +12,7 @@ export class InfoComponent {
 
   public displayModal(): void {
 
-    // if (this.showModal()) {
-    //   this.showModal.set(false);
-    //   return;
-    // }
+
     this.showModal.set(true);
   }
 

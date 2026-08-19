@@ -94,7 +94,7 @@ export class SearchComponent {
 
     messageElements.forEach((messageElement) => {
       const targetElement = messageElement as HTMLElement;
-      targetElement.style.boxShadow = '';
+      targetElement.classList.remove('highlighted');
     });
   }
 
@@ -107,8 +107,7 @@ export class SearchComponent {
     index.forEach((i) => {
       if (messageElements[i]) {
         const targetElement = messageElements[i] as HTMLElement;
-        targetElement.style.boxShadow = '0 0 0 2px yellow';
-        targetElement.style.transition = 'box-shadow 0.3s ease';
+        targetElement.classList.add('highlighted');
       }
     });
   }
@@ -122,17 +121,7 @@ export class SearchComponent {
       ChatUiActions.setSelectedMessage({ selectedMessages: [] })
     );
 
-    const chatContainer = document.querySelector(
-      '.chat-container'
-    ) as HTMLElement;
-
-    if (chatContainer) {
-      const messageElements = chatContainer.querySelectorAll('.message');
-      messageElements.forEach((messageElement) => {
-        const targetElement = messageElement as HTMLElement;
-        targetElement.style.boxShadow = '';
-      });
-    }
+    this.disableMessageHighlighting();
   }
 
   private scrollToMessage(index: number[]): void {
@@ -177,6 +166,7 @@ export class SearchComponent {
 
   public performSearch(): void {
     this.disableMessageHighlighting();
+
     this.store.dispatch(
       ChatUiActions.setSelectedMessage({ selectedMessages: [] })
     );
@@ -187,6 +177,7 @@ export class SearchComponent {
         ChatUiActions.setSelectedMessage({ selectedMessages: [] })
       );
       this.disableMessageHighlighting();
+
       this.scrollToBottom();
       this.hideButtons();
       return;
