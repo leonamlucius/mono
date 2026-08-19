@@ -31,41 +31,49 @@
   </div>
 </ng-container>
 <div *ngIf="isInitialized" class="chat-container">
-  <div
-    *ngFor="let item of chatHistory(); let i = index"
-    [class.bot]="item.sendBy === 'Bot'"
-    [class.user]="item.sendBy === 'User'"
-    [class.loading]="item.loading"
-    class="message"
-  >
-    <p [innerHTML]="item.text | markdown | highlight: (searchTerm$ | async)" class="text"></p>
+  <div class="message-container" *ngFor="let item of chatHistory(); let i = index"  [class.container-bot]="item.sendBy === 'Bot'"
+      [class.container-user]="item.sendBy === 'User'">
+    <img src="/img/{{ item.sendBy === 'Bot' ? 'mono.svg' : 'user.svg' }}" alt="Logo" class="logo" />
+    <div
+      [class.bot]="item.sendBy === 'Bot'"
+      [class.user]="item.sendBy === 'User'"
+      [class.loading]="item.loading"
+      class="message"
+    >
+      <p
+        [innerHTML]="item.text | markdown | highlight: (searchTerm$ | async)"
+        class="text"
+      ></p>
 
-    <div class="loading-indicator" *ngIf="item.loading">
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-    </div>
+      <div class="loading-indicator" *ngIf="item.loading">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
 
-    <div class="actions">
-      <span class="llm-type" *ngIf="item.llmType"> {{ item.llmType }} </span>
+      <div class="actions">
+        <span class="llm-type" *ngIf="item.llmType"> {{ item.llmType }} </span>
 
-      <div class="actions-buttons">
-        <button (click)="copyToClipboard(item.text)">
-          <span class="material-symbols-outlined"> content_copy </span>
-        </button>
+        <div class="actions-buttons">
+          <button (click)="copyToClipboard(item.text)">
+            <span class="material-symbols-outlined"> content_copy </span>
+          </button>
 
-        <button
-          *ngIf="activeSpeechIndex() !== i"
-          type="button"
-          (click)="speechText(item.text, i)"
-          [class.disabled]="activeSpeechIndex() !== i && !this.textToSpeechService.isSpeechEnabled()"
-        >
-          <span class="material-symbols-outlined"> volume_up </span>
-        </button>
+          <button
+            *ngIf="activeSpeechIndex() !== i"
+            type="button"
+            (click)="speechText(item.text, i)"
+            [class.disabled]="activeSpeechIndex() !== i && !this.textToSpeechService.isSpeechEnabled()"
+          >
+            <span class="material-symbols-outlined"> volume_up </span>
+          </button>
 
-        <button *ngIf="activeSpeechIndex() === i" (click)="cancelSpeak()">
-          <span class="material-symbols-outlined" id="stop"> stop_circle </span>
-        </button>
+          <button *ngIf="activeSpeechIndex() === i" (click)="cancelSpeak()">
+            <span class="material-symbols-outlined" id="stop">
+              stop_circle
+            </span>
+          </button>
+        </div>
       </div>
     </div>
   </div>

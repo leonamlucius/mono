@@ -15,7 +15,7 @@ $grey-primary: #b8b7b7;
   overflow-y: auto;
   transition: all 0.3s ease;
   scrollbar-color: $grey-primary transparent;
-  padding: 0px 7px;
+  padding: 0px 10px;
   box-sizing: border-box;
 }
 
@@ -109,6 +109,32 @@ $grey-primary: #b8b7b7;
 
 .logo-container img:hover {
   scale: 1.1;
+}
+
+.message-container {
+  display: flex;
+  width: 100%;
+  gap: 5px;
+}
+.message-container.container-bot{
+  align-self: flex-start;
+}
+
+.message-container.container-user{
+  flex-direction: row-reverse;
+  align-self: flex-end;
+}
+
+
+.message-container img {
+  width: 33px;
+  height: 33px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: $white-primary;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 .message {
   display: flex;
@@ -274,6 +300,7 @@ $grey-primary: #b8b7b7;
   color: transparent;
   animation: pulseLoading 1s infinite;
   width: 60%;
+  height: 5em;
   min-height: 9%;
 }
 
@@ -370,7 +397,10 @@ $grey-primary: #b8b7b7;
     height: auto;
     padding: 10px 15px;
     font-weight: 300;
-    font-size: 15px;
+    font-size: 13px !important;
+  }
+  .llm-type {
+    font-size: 11px !important;
   }
 
   .modalWarningBody {
