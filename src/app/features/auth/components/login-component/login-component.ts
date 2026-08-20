@@ -90,13 +90,17 @@ export class LoginComponent implements AfterViewInit {
   private handleGoogleCallback(response: any): void {
     const idToken = response.credential;
 
+    this.showLoadingIndicator();
+
     if (idToken) {
       this.loginService
         .loginGoogle(idToken)
         .then((response) => {
           this.warning.openModal(response);
+          this.hideLoadingIndicator();
         })
         .catch((error) => {
+          this.hideLoadingIndicator();
           console.error('Erro durante o login do Google:', error);
           this.warning.openModal(
             'Erro no login do Google. Verifique suas credenciais e tente novamente.'

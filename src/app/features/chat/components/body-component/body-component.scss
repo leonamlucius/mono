@@ -116,15 +116,14 @@ $grey-primary: #b8b7b7;
   width: 100%;
   gap: 5px;
 }
-.message-container.container-bot{
+.message-container.container-bot {
   align-self: flex-start;
 }
 
-.message-container.container-user{
+.message-container.container-user {
   flex-direction: row-reverse;
   align-self: flex-end;
 }
-
 
 .message-container img {
   width: 33px;
@@ -397,10 +396,18 @@ $grey-primary: #b8b7b7;
     height: auto;
     padding: 10px 15px;
     font-weight: 300;
-    font-size: 13px !important;
+    font-size: 15px !important;
   }
   .llm-type {
-    font-size: 11px !important;
+    font-size: 13px !important;
+  }
+
+  .loading {
+    height: 4em;
+  }
+  .message-container img {
+    width: 40px;
+    height: 40px;
   }
 
   .modalWarningBody {
