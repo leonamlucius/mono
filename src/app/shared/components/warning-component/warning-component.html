@@ -1,11 +1,16 @@
 <div
- *ngIf="showModalWarning()"
+  *ngIf="showModalWarning()"
   class="modalWarningBody"
   [ngClass]="{'exit': isClosingModal() }"
+  (touchstart)="onTouchStart($event)"
+  (touchend)="onTouchEnd($event)"
 >
-  <span #modalWarning class="close" (click)="closeModal()"
-    >&times;</span
-  >
+  <div class="modalHeader">
+    <button (click)="closeModal()">
+      <span class="material-symbols-outlined"> close </span>
+    </button>
+  </div>
+
   <div class="modalContent">
     <p>{{ modalWarningText }}</p>
   </div>
