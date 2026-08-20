@@ -30,7 +30,7 @@ import { WarningComponent } from '../../../../shared/components/warning-componen
 import { MenuComponent } from '../../../../features/chat/components/menu-component/menu-component';
 import { SelectLlmComponent } from '../../../../shared/components/select-llm-component/select-llm-component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { switchMap} from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { ChatUiActions } from '../../states/chat-ui.actions';
 import { selectSelectedMessages } from '../../states/chat-ui-selectors';
@@ -162,16 +162,18 @@ export class ChatComponent {
       }
 
       history.forEach((item: any) => {
-       this.store.dispatch(ChatUiActions.setChatHistory({
-         chatHistory: [
-           {
-             text: item.message,
-             sendBy: item.model == 'USER' ? 'User' : 'Bot',
-             loading: false,
-             llmType: item.model == 'USER' ? undefined : item.model,
-           },
-         ],
-       }));
+        this.store.dispatch(
+          ChatUiActions.setChatHistory({
+            chatHistory: [
+              {
+                text: item.message,
+                sendBy: item.model == 'USER' ? 'User' : 'Bot',
+                loading: false,
+                llmType: item.model == 'USER' ? undefined : item.model,
+              },
+            ],
+          })
+        );
       });
     });
   }
@@ -271,32 +273,38 @@ export class ChatComponent {
       return;
     }
 
-    this.store.dispatch(ChatUiActions.setChatHistory({
-      chatHistory: [
-        ...this.chatHistory(),
-        { text: this.textoValue(), sendBy: 'User', loading: false },
-      ],
-    }));
-
-    this.store.dispatch(ChatUiActions.setChatHistory({
-      chatHistory: [
-        ...this.chatHistory(),
-        { text: '', sendBy: 'Bot', loading: true, llmType: this.llmType() },
-      ],
-    }));
-
     try {
       if (this.textoValue().trim() === '') {
         this.warning.openModal('Digite algo para continuar a conversa');
-        this.store.dispatch(ChatUiActions.setChatHistory({
-          chatHistory: this.chatHistory().slice(0, -2),
-        }));
+        this.store.dispatch(
+          ChatUiActions.setChatHistory({
+            chatHistory: this.chatHistory().slice(0, -2),
+          })
+        );
         if (!this.dontShowSkeleton()) {
           this.hideSkeletonLoading();
         }
         this.scrollToBottom();
         return;
       }
+
+      this.store.dispatch(
+        ChatUiActions.setChatHistory({
+          chatHistory: [
+            ...this.chatHistory(),
+            { text: this.textoValue(), sendBy: 'User', loading: false },
+          ],
+        })
+      );
+
+      this.store.dispatch(
+        ChatUiActions.setChatHistory({
+          chatHistory: [
+            ...this.chatHistory(),
+            { text: '', sendBy: 'Bot', loading: true, llmType: this.llmType() },
+          ],
+        })
+      );
 
       this.textValueSend.set(this.textoValue());
       this.makeTextAreaDisabled(textArea as HTMLTextAreaElement);
@@ -312,18 +320,19 @@ export class ChatComponent {
               this.warning.openModal(
                 'Desculpe, ocorreu um erro ao processar sua mensagem.'
               );
-            
-              this.store.dispatch(ChatUiActions.setChatHistory({
-                chatHistory: [
-                  ...this.chatHistory().slice(0, -1),
-                  {
-                    text: 'Erro ao enviar a mensagem.',
-                    sendBy: 'Bot',
-                    loading: false,
-                    llmType: 'ERROR',
-                  },
-                ],
-              }));
+
+              this.store.dispatch(
+                ChatUiActions.replaceLastChatHistory({
+                  chatHistory: [
+                    {
+                      text: 'Erro ao enviar a mensagem.',
+                      sendBy: 'Bot',
+                      loading: false,
+                      llmType: 'ERROR',
+                    },
+                  ],
+                })
+              );
 
               this.makeTextAreaEnabled(textArea as HTMLTextAreaElement);
               this.scrollToBottom();
@@ -334,29 +343,19 @@ export class ChatComponent {
               return;
             }
 
-      
-            this.store.dispatch(ChatUiActions.deleteLastChatHistory({
-              chatHistory: [
-                {
-                  text: '',
-                  sendBy: 'Bot',
-                  loading: true,
-                  llmType: this.llmType(),
-                },
-              ],
-            }));
-            
-            this.store.dispatch(ChatUiActions.setChatHistory({
-              chatHistory: [
-                ...this.chatHistory(),
-                {
-                  text: response.message,
-                  sendBy: 'Bot',
-                  loading: false,
-                  llmType: response.model,
-                },
-              ],
-            }));
+            this.store.dispatch(
+              ChatUiActions.replaceLastChatHistory({
+                chatHistory: [
+                  {
+                    text: response.message,
+                    sendBy: 'Bot',
+                    loading: false,
+                    llmType: response.model,
+                  },
+                ],
+              })
+            );
+
             console.log('Chat History:', this.chatHistory());
             this.makeTextAreaEnabled(textArea as HTMLTextAreaElement);
             this.adjustTextAlignment();

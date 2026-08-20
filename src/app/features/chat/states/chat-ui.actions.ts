@@ -24,5 +24,14 @@ export const ChatUiActions = createActionGroup({
         llmType?: 'OLLAMA' | 'GROQ' | 'ERROR';
       }[];
     }>(),
+
+    'Replace Last Chat History': props<{
+      chatHistory: {
+        text: string;
+        sendBy: 'User' | 'Bot';
+        loading: boolean;
+        llmType?: 'OLLAMA' | 'GROQ' | 'ERROR';
+      }[];
+    }>(),
   },
 });

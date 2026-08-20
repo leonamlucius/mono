@@ -15,7 +15,7 @@ $grey-primary: #b8b7b7;
   overflow-y: auto;
   transition: all 0.3s ease;
   scrollbar-color: $grey-primary transparent;
-  padding: 0px 10px;
+  padding: 5px 15px;
   box-sizing: border-box;
 }
 
@@ -391,15 +391,15 @@ $grey-primary: #b8b7b7;
     height: calc(99dvh - 150px);
   }
   .message {
-    max-width: 70%;
+    max-width: 60%;
     margin-top: 30px;
     height: auto;
     padding: 10px 15px;
     font-weight: 300;
-    font-size: 15px !important;
+    font-size: 13px !important;
   }
   .llm-type {
-    font-size: 13px !important;
+    font-size: 11px !important;
   }
 
   .loading {

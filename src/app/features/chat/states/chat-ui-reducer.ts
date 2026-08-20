@@ -56,8 +56,13 @@ export const chatUiReducer = createReducer(
     ...state,
     chatHistory: [...state.chatHistory, ...chatHistory],
   })),
-  on(ChatUiActions.deleteLastChatHistory, (state, { chatHistory }) => ({
+  on(ChatUiActions.deleteLastChatHistory, (state) => ({
     ...state,
-    chatHistory: state.chatHistory.slice(0, -chatHistory.length),
+    chatHistory: state.chatHistory.slice(0, -1),
+  })),
+
+  on(ChatUiActions.replaceLastChatHistory, (state, { chatHistory }) => ({
+    ...state,
+    chatHistory: [...state.chatHistory.slice(0, -1), ...chatHistory],
   }))
 );
