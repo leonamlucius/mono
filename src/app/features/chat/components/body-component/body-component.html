@@ -31,6 +31,10 @@
   </div>
 </ng-container>
 <div *ngIf="isInitialized" class="chat-container">
+
+  <div class="button-filter-container" [ngClass]="{'active': (searchTerm$ | async) !== ''}">
+    <app-filter-button-component></app-filter-button-component>
+  </div>
   <div class="message-container" *ngFor="let item of chatHistory(); let i = index"  [class.container-bot]="item.sendBy === 'Bot'"
       [class.container-user]="item.sendBy === 'User'"
       appIsVisible

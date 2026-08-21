@@ -29,6 +29,7 @@ import { ChatService } from '../../services/chat-service';
 import { WarningComponent } from '../../../../shared/components/warning-component/warning-component';
 import { MenuComponent } from '../../../../features/chat/components/menu-component/menu-component';
 import { SelectLlmComponent } from '../../../../shared/components/select-llm-component/select-llm-component';
+import { FilterButtonComponent } from '../../../../shared/components/filter-button-component/filter-button-component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
@@ -46,6 +47,7 @@ import { selectSelectedMessages } from '../../states/chat-ui-selectors';
     MenuComponent,
     SearchComponent,
     SelectLlmComponent,
+    FilterButtonComponent,
   ],
   templateUrl: './chat-component.html',
   styleUrls: ['./chat-component.scss'],

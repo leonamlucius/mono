@@ -18,6 +18,7 @@ import {
   selectToggleScrollButton,
 } from '../../states/chat-ui-selectors';
 import { Store } from '@ngrx/store';
+import { FilterButtonComponent } from "../../../../shared/components/filter-button-component/filter-button-component";
 
 @Component({
   selector: 'app-body-component',
@@ -31,7 +32,8 @@ import { Store } from '@ngrx/store';
     AsyncPipe,
     IsVisibleDirective,
     ScrollButtonComponent,
-  ],
+    FilterButtonComponent
+],
   templateUrl: './body-component.html',
   styleUrls: ['./body-component.scss'],
   animations: [
@@ -52,7 +54,7 @@ export class BodyComponent {
 
   private store = inject(Store);
 
-  readonly searchTerm$ = this.store.select(selectSearchTerm);
+  protected searchTerm$ = this.store.select(selectSearchTerm);
 
   protected chatHistory = this.store.selectSignal(selectChatHistory);
 
