@@ -4,20 +4,34 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { TextToSpeechService } from '../../../../core/services/text-to-speech.service';
 import { MarkdownPipe } from './markdown.pipe';
 import { HighlightPipe } from './highlight.pipe';
+import { IsVisibleDirective } from './is-visible.directive';
 import { Router } from '@angular/router';
 import { WarningComponent } from '../../../../shared/components/warning-component/warning-component';
+import { ScrollButtonComponent } from '../../../chat/components/scroll-button-component/scroll-button-component';
 import removeMarkdown from 'remove-markdown';
+
 import { AsyncPipe } from '@angular/common';
 import {
   selectChatHistory,
   selectSearchTerm,
   selectSelectedMessages,
+  selectToggleScrollButton,
 } from '../../states/chat-ui-selectors';
 import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-body-component',
-  imports: [NgFor, NgIf, MarkdownPipe, WarningComponent, NgClass, HighlightPipe, AsyncPipe],
+  imports: [
+    NgFor,
+    NgIf,
+    MarkdownPipe,
+    WarningComponent,
+    NgClass,
+    HighlightPipe,
+    AsyncPipe,
+    IsVisibleDirective,
+    ScrollButtonComponent,
+  ],
   templateUrl: './body-component.html',
   styleUrls: ['./body-component.scss'],
   animations: [
@@ -42,8 +56,11 @@ export class BodyComponent {
 
   protected chatHistory = this.store.selectSignal(selectChatHistory);
 
-  @Input() isInitialized = false;
+  protected showScrollButton = this.store.selectSignal(
+    selectToggleScrollButton
+  );
 
+  @Input() isInitialized = false;
 
   constructor(public textToSpeechService: TextToSpeechService) {}
 
@@ -51,7 +68,6 @@ export class BodyComponent {
 
   public textoAtual = signal('');
   public iconAtual = signal('');
-
 
   public texts = [
     {
@@ -86,6 +102,19 @@ export class BodyComponent {
     this.adjustTextAlignment();
   }
 
+  public divVisiblechange(isVisible: boolean, index: number): boolean {
+    const lastMensagemIndex = this.chatHistory().length - 1;
+
+    if (index !== lastMensagemIndex) {
+      return false;
+    }
+
+    this.store.dispatch({
+      type: '[Chat UI] Toggle Scroll Button',
+      showScrollButton: !isVisible,
+    });
+    return true;
+  }
   private adjustTextAlignment(): void {
     setTimeout(() => {
       const messageDiv = document.querySelectorAll(

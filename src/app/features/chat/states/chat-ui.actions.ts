@@ -33,5 +33,7 @@ export const ChatUiActions = createActionGroup({
         llmType?: 'OLLAMA' | 'GROQ' | 'ERROR';
       }[];
     }>(),
+
+    'Toggle Scroll Button': props<{ showScrollButton: boolean }>(),
   },
 });

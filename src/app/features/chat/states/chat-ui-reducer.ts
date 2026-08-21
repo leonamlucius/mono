@@ -14,6 +14,7 @@ export interface ChatUiState {
   selectedMessages: any[];
   showSidebar: boolean;
   sideBarExit: boolean;
+  showScrollButton?: boolean;
 }
 
 export const initialChatUiState: ChatUiState = {
@@ -24,6 +25,7 @@ export const initialChatUiState: ChatUiState = {
   selectedMessages: [],
   showSidebar: false,
   sideBarExit: false,
+  showScrollButton: false,
 };
 
 export const chatUiReducer = createReducer(
@@ -47,7 +49,7 @@ export const chatUiReducer = createReducer(
       (msg, index) => !selectedMessages.includes(index)
     ),
   })),
- 
+
   on(ChatUiActions.toggleFilterButton, (state, { showButton }) => ({
     ...state,
     showButton,
@@ -64,5 +66,10 @@ export const chatUiReducer = createReducer(
   on(ChatUiActions.replaceLastChatHistory, (state, { chatHistory }) => ({
     ...state,
     chatHistory: [...state.chatHistory.slice(0, -1), ...chatHistory],
+  })),
+
+  on(ChatUiActions.toggleScrollButton, (state, { showScrollButton }) => ({
+    ...state,
+    showScrollButton,
   }))
 );

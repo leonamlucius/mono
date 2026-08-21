@@ -97,17 +97,26 @@ $grey-primary: #a8a5a5;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 0;
   box-sizing: border-box;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease-out;
   user-select: none;
   overflow: hidden;
   font-size: 0;
   flex-shrink: 0;
 }
 
+.left-container .search-count .search-num {
+  transition: all 0.3s ease-out;
+  font-size: 0;
+}
+
 .left-container .search-count.active {
   width: fit-content;
   padding: 10px 20px;
   text-wrap: nowrap;
+  font-size: 0.95em;
+}
+
+.left-container .search-count.active .search-num {
   font-size: 0.95em;
 }
 

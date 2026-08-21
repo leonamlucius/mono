@@ -1,0 +1,53 @@
+$orange-primary: #f95903;
+$white-primary: #fcfcfc;
+$blue-primary: #071a45;
+
+:host {
+  position: fixed;
+  bottom: 130px;
+  right: 30px;
+}
+
+button {
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 0px;
+  height: 0px;
+  border-radius: 0%;
+  background-color: transparent;
+  pointer-events: none;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  span {
+    transition: all 0.2s ease-in-out;
+    font-size: 0;
+  }
+}
+
+button.active {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: auto;
+  background-color: $white-primary;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  span {
+    font-size: 1.7em;
+  }
+}
+
+
+@media (max-width: 600px) {
+    :host {
+        bottom: 120px;
+        right: 20px;
+    }
+}

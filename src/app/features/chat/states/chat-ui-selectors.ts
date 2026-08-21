@@ -20,3 +20,8 @@ export const selectSelectedMessages = createSelector(
   selectChatUiState,
   (s) => s.selectedMessages
 );
+
+export const selectToggleScrollButton = createSelector(
+  selectChatUiState,
+  (s) => s.showScrollButton
+);
