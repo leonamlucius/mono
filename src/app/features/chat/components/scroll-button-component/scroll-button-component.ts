@@ -9,7 +9,7 @@ import { Store } from '@ngrx/store';
 import { NgFor, NgIf, NgClass } from '@angular/common';
 @Component({
   selector: 'app-scroll-button-component',
-  imports: [ScrollButtonComponent, NgClass],
+  imports: [NgClass],
   templateUrl: './scroll-button-component.html',
   styleUrls: ['./scroll-button-component.scss'],
 })
