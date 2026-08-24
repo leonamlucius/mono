@@ -1,9 +1,12 @@
 import { Injectable, signal } from '@angular/core';
 
+declare const puter: any;
+
 @Injectable({
   providedIn: 'root',
 })
 export class TextToSpeechService {
+  private currentAudio?: HTMLAudioElement;
   public isSpeechEnabled = signal(true);
 
   public speechEnabled(): void {
@@ -14,40 +17,48 @@ export class TextToSpeechService {
     this.isSpeechEnabled.set(false);
   }
 
-  public speak(text: string): Promise<void> {
+  public speak(text: string): Promise<boolean> {
     return new Promise((resolve) => {
-      if (this.isSpeechEnabled() && 'speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
+      this.speechDisabled();
+      puter.quiet == true;
+      puter.ai
+        .txt2speech(text, {
+          voice: 'Ricardo',
+          engine: 'standard',
+          language: 'pt-BR',
+        })
+        .then((audio: HTMLAudioElement) => {
+          this.currentAudio = audio;
 
-        this.speechDisabled();
+          audio.onended = () => {
+            this.currentAudio = undefined;
+            this.speechEnabled();
+            resolve(true);
+          };
 
-        const utterance = new SpeechSynthesisUtterance(text);
+          audio.onerror = (error) => {
+            console.error('Erro na reprodução do áudio:', error);
+            this.currentAudio = undefined;
+            this.speechEnabled();
+            resolve(false);
+          };
 
-        utterance.lang = 'pt-BR';
-        utterance.rate = 1.3;
-        utterance.pitch = 1;
-        utterance.volume = 1;
-
-        utterance.onend = () => {
-          this.speechEnabled();
-          resolve();
-        };
-
-        utterance.onerror = (error) => {
-          this.speechEnabled();
-          resolve();
-        };
-
-        window.speechSynthesis.speak(utterance);
-      } else {
-        resolve();
-      }
+          audio.play().catch((error) => {
+            console.error('Erro ao tentar reproduzir o áudio:', error);
+            this.currentAudio = undefined;
+            this.speechEnabled();
+            resolve(false);
+          });
+        });
     });
   }
 
   public cancelSpeak(): void {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
+    if (this.currentAudio) {
+      this.currentAudio.pause();
+      this.currentAudio.currentTime = 0;
+      this.currentAudio = undefined;
     }
+    this.speechEnabled();
   }
 }
