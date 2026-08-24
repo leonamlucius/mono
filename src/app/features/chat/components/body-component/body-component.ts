@@ -141,8 +141,6 @@ export class BodyComponent {
   public async speechText(text: any, index: number): Promise<void> {
     let textSpeak = String(text);
 
-    console.log('index number:', index);
-
     if (/\p{Emoji_Presentation}/gu.test(textSpeak)) {
       textSpeak = textSpeak.replace(/\p{Emoji_Presentation}/gu, '');
     }
