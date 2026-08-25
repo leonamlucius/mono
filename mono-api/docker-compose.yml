@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  piper-faber:
+    build: .
+    container_name: piper-faber
+    ports:
+      - "127.0.0.1:5001:5000"
+    volumes:
+      - ./models:/models
+    command: --model /models/pt_BR-faber-medium.onnx --port 5000
+    restart: unless-stopped
+
+  piper-cadu:
+    build: .
+    container_name: piper-cadu
+    ports:
+      - "127.0.0.1:5002:5000"
+    volumes:
+      - ./models:/models
+    command: --model /models/pt_BR-cadu-medium.onnx --port 5000
+    restart: unless-stopped

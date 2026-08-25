@@ -17,6 +17,7 @@ import com.mono.monoapi.service.AssemblyAiService;
 import com.mono.monoapi.service.SummarizeService;
 import com.mono.monoapi.service.FactsService;
 import com.mono.monoapi.service.CookieService;
+import com.mono.monoapi.service.TtsService;
 import org.springframework.http.ResponseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,10 @@ import com.mono.monoapi.dto.FactsResponse;
 import java.util.List;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/mono")
@@ -60,6 +65,9 @@ public class MonoController {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private TtsService ttsService;
 
     @PostMapping("/chat")
     public ResponseEntity<ChatResponseDTO> chat(@RequestBody String message,
@@ -190,6 +198,23 @@ public class MonoController {
         List<ChatResponseDTO> response = historyService.getHistorico(ChatId);
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping(value = "/tts", produces = "audio/wav")
+    public ResponseEntity<byte[]> getTts(@RequestParam String text,
+            @RequestParam(defaultValue = "cadu") String voice) {
+
+        try {
+
+            byte[] audioBytes = ttsService.generateAudio(text, voice);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType("audio/wav"))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"audio.wav\"")
+                    .body(audioBytes);
+        } catch (Exception e) {
+            logger.error("Erro ao gerar áudio TTS: {}", e.getMessage());
+            return ResponseEntity.status(500).body(null);
+        }
     }
 
 }
