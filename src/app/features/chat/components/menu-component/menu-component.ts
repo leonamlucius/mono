@@ -11,28 +11,43 @@ import {
   inject,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgIf, NgClass } from '@angular/common';
+import { NgIf, NgClass, NgFor } from '@angular/common';
 import { MenuService } from '../../services/menu-service';
 import { SearchComponent } from '../../../../shared/components/search-component/search-component';
 import { WarningComponent } from '../../../../shared/components/warning-component/warning-component';
 import { Subject } from 'rxjs';
 import {
   selectChatHistory,
-  selectSearchTerm,
-  selectSelectedMessages,
 } from '../../states/chat-ui-selectors';
 import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-menu',
-  imports: [NgIf, NgClass, FormsModule, WarningComponent, SearchComponent],
+  imports: [
+    NgIf,
+    NgClass,
+    NgFor,
+    FormsModule,
+    WarningComponent,
+    SearchComponent,
+  ],
   templateUrl: './menu-component.html',
   styleUrls: ['./menu-component.scss'],
 })
 export class MenuComponent implements OnInit {
+  public vozes = [
+    {
+      title: 'Voz A',
+      name: 'Cadu',
+    },
+    {
+      title: 'Voz B',
+      name: 'Faber',
+    },
+  ];
   public showModalInfo = signal(false);
 
-  public activeModal = signal<'info' | 'perfil' | null>(null);
+  public activeModal = signal<'info' | 'perfil' | 'settings' | null>(null);
 
   public showSidebar = signal(false);
 
@@ -83,6 +98,13 @@ export class MenuComponent implements OnInit {
         this.userEmail.set(userInfo.email || '');
         this.userDate.set(this.formatDate(userInfo.createdAt) || '');
       }
+    });
+  }
+
+  public changeVoice(voiceName: string): void {
+    this.store.dispatch({
+      type: '[Chat UI] Set Voice Selected',
+      voiceSelected: voiceName.toLowerCase(),
     });
   }
 
@@ -178,6 +200,14 @@ export class MenuComponent implements OnInit {
       return;
     }
     this.activeModal.set('perfil');
+  }
+
+  public createModalSettings(): void {
+    if (this.activeModal() === 'settings') {
+      this.activeModal.set(null);
+      return;
+    }
+    this.activeModal.set('settings');
   }
 
   public closeModal(): void {

@@ -25,3 +25,8 @@ export const selectToggleScrollButton = createSelector(
   selectChatUiState,
   (s) => s.showScrollButton
 );
+
+export const selectVoiceSelected = createSelector(
+  selectChatUiState,
+  (s) => s.voiceSelected
+);

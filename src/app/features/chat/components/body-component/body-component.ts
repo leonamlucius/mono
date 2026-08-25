@@ -100,6 +100,8 @@ export class BodyComponent {
     },
   ];
 
+  
+
   ngOnInit() {
     this.adjustTextAlignment();
   }

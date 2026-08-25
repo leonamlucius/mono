@@ -15,6 +15,7 @@ export interface ChatUiState {
   showSidebar: boolean;
   sideBarExit: boolean;
   showScrollButton?: boolean;
+  voiceSelected: string;
 }
 
 export const initialChatUiState: ChatUiState = {
@@ -26,6 +27,7 @@ export const initialChatUiState: ChatUiState = {
   showSidebar: false,
   sideBarExit: false,
   showScrollButton: false,
+  voiceSelected: '',
 };
 
 export const chatUiReducer = createReducer(
@@ -71,5 +73,10 @@ export const chatUiReducer = createReducer(
   on(ChatUiActions.toggleScrollButton, (state, { showScrollButton }) => ({
     ...state,
     showScrollButton,
+  })),
+
+  on(ChatUiActions.setVoiceSelected, (state, { voiceSelected }) => ({
+    ...state,
+    voiceSelected,
   }))
 );

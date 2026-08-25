@@ -111,6 +111,34 @@
     </div>
   </div>
 
+  <div div class="modalSidebarOverlay" *ngIf="activeModal() === 'settings'">
+    <div class="modalSidebar">
+      <div class="modalContent">
+        <div class="modalHeader">
+          <span class="material-symbols-outlined"> settings </span>
+          <span class="close">
+            <button type="button" (click)="closeModal()">
+              <span class="material-symbols-outlined"> close </span>
+            </button>
+          </span>
+        </div>
+
+        <div class="settings-content">
+          <p class="settings-title">Escolha a voz do Mono</p>
+
+          <div class="settings-options">
+            <div class="voices" *ngFor="let voz of vozes">
+              <span class="circle"> </span>
+              <p class="voice-title">{{ voz.title }}</p>
+              <p class="voice-name">{{ voz.name }}</p>
+              <input type="radio" name="voice" [value]="voz.name" [checked]="voz.name === 'Cadu'" (change)="changeVoice(voz.name)" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div
     class="sidebar"
     [ngClass]="{'show': showSidebar(), 'closing': sideBarExit() }"
@@ -137,13 +165,13 @@
     </div>
 
     <div
-        class="search-count"
-        [ngClass]="{ 'active': selectedMessages().length > 0 }"
+      class="search-count"
+      [ngClass]="{ 'active': selectedMessages().length > 0 }"
+    >
+      <span class="search-num"
+        >Itens achados ({{ selectedMessages().length }})</span
       >
-        <span class="search-num"
-          >Itens achados ({{ selectedMessages().length }})</span
-        >
-      </div>
+    </div>
     <div class="search-container" [ngClass]="{ 'active': isInitialized() }">
       <app-search-component
         (sideBarExitSignal)="sideBarExit.set($event)"
@@ -154,6 +182,10 @@
     <span class="module" (click)="createModalPerfil()">
       <span class="material-symbols-outlined"> person </span>
       Perfil
+    </span>
+    <span class="module pass" (click)="createModalSettings()">
+      <span class="material-symbols-outlined"> settings </span>
+      Configurações
     </span>
 
     <span class="module pass" (click)="createModalInfo()">

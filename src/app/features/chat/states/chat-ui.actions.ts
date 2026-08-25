@@ -35,5 +35,7 @@ export const ChatUiActions = createActionGroup({
     }>(),
 
     'Toggle Scroll Button': props<{ showScrollButton: boolean }>(),
+
+    'Set Voice Selected': props<{ voiceSelected: string }>(),
   },
 });
