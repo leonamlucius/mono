@@ -26,7 +26,7 @@ Mono é uma aplicação de chat alimentada por IA que oferece uma experiência c
 - **Framework:** Angular 21.2.0
 - **Linguagem:** TypeScript 5.9.2
 - **Estilização:** SCSS
-- **Gerenciamento de Estado:** Signals (Angular)
+- **Gerenciamento de Estado:** ngRx
 - **Roteamento:** Angular Router
 - **Testing:** Jest 30.4.2, Vitest 4.0.8
 
