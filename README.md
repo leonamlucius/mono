@@ -12,6 +12,8 @@ Aplicação full-stack de chat inteligente com suporte a múltiplos provedores d
 - [Tecnologias](#-tecnologias)
 - [Arquitetura](#-arquitetura)
 - [Funcionalidades](#-funcionalidades)
+- [Licença](#-licença)
+
 
 ## 🎯 Visão Geral
 
@@ -137,7 +139,11 @@ Mono é uma aplicação de chat alimentada por IA que oferece uma experiência c
 - **Cache de resumos (2 horas)**
 - **Títulos automáticos**
 
+## 📝 Licença
 
+Este projeto está licenciado sob a Licença Pública Geral GNU versão 3 (GPLv3). Para mais detalhes, consulte o arquivo [LICENSE](LICENSE).
 
+###  Bibliotecas de Licença
 
+- **Piper** - Desenvolvida por [Open Home Foundation](https://www.openhomefoundation.org/) e licenciada sob a [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html). Acesse o repositório oficial do [Pipper](https://www.openhomefoundation.org/).
  

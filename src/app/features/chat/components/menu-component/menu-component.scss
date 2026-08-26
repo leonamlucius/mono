@@ -213,17 +213,90 @@ form .form-group {
   width: 100%;
   margin-bottom: 10px;
 }
+
+.info-content {
+  width: 100%;
+  height: calc(100dvh - 81px);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  white-space: normal;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  text-indent: 0;
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.info-content .info-title {
+  font-size: 1.35em;
+  margin-bottom: 5px;
+}
+
+.info-content .info-description {
+  font-size: 1.03em;
+}
+
+.info-content .info-description code {
+  font-size: 1.2em;
+}
+.info-content a {
+  color: $orange-primary;
+}
+.info-content p {
+  margin: 0;
+}
+.info-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.info-links img {
+  width: 3.1em;
+  height: auto;
+}
+
+.info-links span {
+  align-items: flex-end;
+  justify-content: center;
+  display: flex;
+  gap: 10px;
+}
+
 .settings-content {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 15px;
   align-items: flex-start;
   justify-content: center;
+  white-space: wrap;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  text-indent: 0;
+}
+
+.settings-content p {
+  margin: 0;
 }
 
 .settings-content .settings-title {
-  font-size: 1.25em;
+  font-size: 1.35em;
+  margin-bottom: 5px;
+}
+
+.settings-content .settings-subtitle {
+  font-size: 1.03em;
 }
 
 .settings-content .settings-options {
@@ -232,6 +305,7 @@ form .form-group {
   align-items: center;
   justify-content: flex-start;
   padding: 10px 15px;
+  box-sizing: border-box;
   gap: 35px;
   text-indent: 0;
 }
@@ -244,12 +318,33 @@ form .form-group {
   gap: 15px;
 }
 
+.settings-content .settings-options .voices.disabled {
+  opacity: 0.2;
+  pointer-events: none;
+}
+
 .settings-content .settings-options .voices .circle {
-  width: 65px;
-  height: 65px;
+  width: 75px;
+  height: 75px;
   border-radius: 50%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
- background: linear-gradient(37deg,rgba(249, 89, 3, 1) 20%, rgba(227, 218, 195, 1) 78%);
+  background: linear-gradient(
+    37deg,
+    rgba(249, 89, 3, 1) 20%,
+    rgba(227, 218, 195, 1) 78%
+  );
+  scale: 1;
+  transition: all 0.3s ease-in-out;
+}
+
+.settings-content .settings-options .voices span {
+  color: $disabled-color;
+  transition: all 0.3s ease-in-out;
+  scale: 0;
+}
+
+.settings-content .settings-options .voices span.active {
+  scale: 1;
 }
 
 .settings-content .settings-options .voices .voice-title {
@@ -464,6 +559,33 @@ form .form-group {
   .form-buttons-save-edit {
     gap: 5px;
     width: auto;
+  }
+
+  .settings-content .settings-title {
+    font-size: 1.15em;
+  }
+
+  .settings-content .settings-subtitle {
+    font-size: 0.93em;
+  }
+
+  .settings-content .settings-options {
+    justify-content: center;
+    gap: 45px;
+  }
+
+  .settings-content .settings-options .voices .circle {
+    width: 95px;
+    height: 95px;
+  }
+
+
+  .info-content .info-title {
+    font-size: 1.15em;
+  }
+
+  .info-content .info-description {
+    font-size: 0.93em;
   }
 }
 

@@ -10,21 +10,83 @@
             </button>
           </span>
         </div>
-        <p>
-          Mono é um chatbot de inteligência artificial para ajudar no dia a dia,
-          desenvolvido com uma interface moderna e reativa em Angular e um
-          backend robusto em Spring Boot
-        </p>
-        <p>
-          Utilizando o Spring AI para orquestração de dados, o projeto adota uma
-          arquitetura híbrida de modelos: consome a infraestrutura da Groq para
-          inferência ultrarrápida em nuvem utilizando o
-          <code>gpt-oss-20b</code>, e integra o
-          <code>qwen2.5:0.5b</code> localmente através do Ollama. Essa
-          combinação entrega respostas fluidas com baixíssima latência, unindo a
-          robustez do ecossistema Java à agilidade dos modelos de linguagem de
-          última geração.
-        </p>
+        <div class="info-content">
+          <p class="info-title">Sobre o Mono</p>
+
+          <p class="info-description">
+            Mono é uma aplicação de chat alimentada por IA que oferece uma
+            experiência conversacional rica e inteligente. O sistema integra
+            dois modelos de IA, possui transcrição de áudio em tempo real,
+            geração de resumos automáticos e um sistema robusto de gerenciamento
+            de usuário, sistema voz personalizável, <i>text-to-speech</i> nas
+            mensagens, e muito mais. O Mono é projetado para fornecer respostas
+            rápidas e precisas, tornando a interação com a IA mais natural e
+            eficiente.
+          </p>
+
+          <p class="info-title">Como funciona a IA?</p>
+
+          <p class="info-description">
+            Atualmente, o projeto contém duas IA's presentes,
+            <code>gpt-oss-20b</code> e <code>qwen2.5:0.5b</code>. O
+            <code>gpt-oss-20b</code> roda por meio de uma api disponibilizada
+            pelo
+            <a href="https://www.groq.com/cloud" target="_blank">Groq Cloud</a>,
+            enquanto o <code>qwen2.5:0.5b</code> é executado
+            <i>server-side</i> através do
+            <a href="https://ollama.com/" target="_blank">Ollama</a>. Quer saber
+            mais sobre essas IA's? Acesse os links abaixo:
+          </p>
+
+          <div class="info-links">
+            <span>
+              <img src="/img/groq-text.svg" alt="Groq Logo" />
+              <a href="https://www.groq.com/cloud" target="_blank"
+                >Clique aqui!</a
+              >
+            </span>
+
+            <span>
+              <img src="/img/ollama.svg" alt="Ollama Logo" />
+              <a href="https://ollama.com/" target="_blank">Clique aqui!</a>
+            </span>
+          </div>
+
+          <p class="info-title">Licenças</p>
+
+          <p class="info-description">
+            Uma das partes pricipais do Mono é a utilização de TSS
+            (<i>text-to-speech</i>) para leitura das mensagens, e para isso
+            usamos o
+            <a href="https://github.com/OHF-Voice/piper1-gpl" target="_blank"
+              >Pipper</a
+            >, ferramenta 100% código livre e feita com Python. O
+            <a href="https://github.com/OHF-Voice/piper1-gpl" target="_blank"
+              >Pipper</a
+            >
+            é mantido pela
+            <a href="https://www.openhomefoundation.org/" target="_blank"
+              >Open Home Foundation</a
+            >, fundação que desenvolve e mantém softwares de código aberto para
+            casas inteligentes. Clique no abaixo para saber mais!
+          </p>
+
+          <div class="info-links">
+            <span>
+              Open home foundation:
+              <a href="https://www.openhomefoundation.org/" target="_blank"
+                >Clique aqui!</a
+              >
+            </span>
+
+            <span>
+             Repositório do Pipper:
+              <a href="https://github.com/OHF-Voice/piper1-gpl?tab=GPL-3.0-1-ov-file" target="_blank"
+                >Clique aqui!</a
+              >
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -125,13 +187,35 @@
 
         <div class="settings-content">
           <p class="settings-title">Escolha a voz do Mono</p>
+          <p class="settings-subtitle">
+            Selecione a voz que deseja ouvir ao interagir, conversando, tirando
+            dúvidas ou pedindo informações. A voz escolhida será aplicada em
+            todas as interações e conversas com o Mono, proporcionando uma
+            experiência personalizada e envolvente.
+          </p>
 
           <div class="settings-options">
-            <div class="voices" *ngFor="let voz of vozes">
+            <div
+              class="voices"
+              *ngFor="let voz of vozes , index as i"
+              [ngClass]="{'disabled': showIconSound() !== null && showIconSound() !== i }"
+            >
               <span class="circle"> </span>
               <p class="voice-title">{{ voz.title }}</p>
               <p class="voice-name">{{ voz.name }}</p>
-              <input type="radio" name="voice" [value]="voz.name" [checked]="voz.name === 'Cadu'" (change)="changeVoice(voz.name)" />
+              <input
+                type="radio"
+                name="voice"
+                [value]="voz.name"
+                [checked]="voz.name === 'Cadu'"
+                (change)="changeVoice(voz.name, i)"
+              />
+              <span
+                class="material-symbols-outlined"
+                [ngClass]="{'active': showIconSound() === i}"
+              >
+                volume_up
+              </span>
             </div>
           </div>
         </div>

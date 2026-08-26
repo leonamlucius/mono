@@ -13,12 +13,11 @@ import {
 import { FormsModule } from '@angular/forms';
 import { NgIf, NgClass, NgFor } from '@angular/common';
 import { MenuService } from '../../services/menu-service';
+import { TextToSpeechService } from '../../../../core/services/text-to-speech.service';
 import { SearchComponent } from '../../../../shared/components/search-component/search-component';
 import { WarningComponent } from '../../../../shared/components/warning-component/warning-component';
 import { Subject } from 'rxjs';
-import {
-  selectChatHistory,
-} from '../../states/chat-ui-selectors';
+import { selectChatHistory } from '../../states/chat-ui-selectors';
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -50,6 +49,8 @@ export class MenuComponent implements OnInit {
   public activeModal = signal<'info' | 'perfil' | 'settings' | null>(null);
 
   public showSidebar = signal(false);
+
+  public showIconSound = signal<number | null>(null);
 
   public sideBarExit = signal(false);
 
@@ -89,7 +90,10 @@ export class MenuComponent implements OnInit {
 
   private searchSubject$ = new Subject<string>();
 
-  constructor(private menuService: MenuService) {}
+  constructor(
+    private menuService: MenuService,
+    private textToSpeechService: TextToSpeechService
+  ) {}
 
   ngOnInit(): void {
     this.menuService.getUserInfo().then((userInfo) => {
@@ -101,10 +105,17 @@ export class MenuComponent implements OnInit {
     });
   }
 
-  public changeVoice(voiceName: string): void {
+  public changeVoice(voiceName: string, index: number): void {
+    this.showIconSound.set(index);
     this.store.dispatch({
       type: '[Chat UI] Set Voice Selected',
       voiceSelected: voiceName.toLowerCase(),
+    });
+
+    this.textToSpeechService.speak(
+      `Olá! A voz do Mono foi alterada para ${voiceName}.`
+    ).then(() => {
+      this.showIconSound.set(null);
     });
   }
 
