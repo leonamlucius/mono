@@ -80,6 +80,7 @@ export class InputComponent implements OnDestroy {
     this.waveSurfer?.destroy();
     this.waveSurfer = null;
     this.recordPlugin = null;
+    this.audioRecordingService.textTranscription.set(null);
   }
   public initializeWaveform(): void {
     if (!this.waveformContainer?.nativeElement) {
@@ -88,9 +89,9 @@ export class InputComponent implements OnDestroy {
     }
 
     if (this.waveSurfer) {
-      return; // Já foi inicializado
+      return;
     }
-    // 1. Inicializa o Wavesurfer básico apontando para a nossa div
+
     this.waveSurfer = WaveSurfer.create({
       container: this.waveformContainer.nativeElement,
       waveColor: '#4a4a4a', // Cor da linha guia de fundo
@@ -101,7 +102,6 @@ export class InputComponent implements OnDestroy {
       barRadius: 3,
     });
 
-    // 2. Inicializa e conecta o Plugin de Gravação (Microfone)
     this.recordPlugin = this.waveSurfer.registerPlugin(
       RecordPlugin.create({
         scrollingWaveform: true, // A onda vai correndo para o lado enquanto você fala
