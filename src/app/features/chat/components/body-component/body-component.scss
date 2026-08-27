@@ -192,6 +192,15 @@ $grey-primary: #b8b7b7;
   margin: 0;
   word-break: break-word;
   font-family: 'Arvo', serif;
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  white-space: normal !important;
+}
+
+::ng-deep .message .text table {
+  font-size: 0.9em !important;
 }
 
 ::ng-deep .message .text h2 {
