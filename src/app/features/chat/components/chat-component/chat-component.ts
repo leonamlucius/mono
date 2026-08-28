@@ -178,23 +178,7 @@ export class ChatComponent {
         );
       });
     });
-
-    this.store.dispatch(
-      ChatUiActions.setSelectedMessage({
-        selectedMessages: [],
-      })
-    );
-
-    this.store.dispatch(
-      ChatUiActions.setSearchTerm({
-        searchTerm: '',
-      })
-    );
-    this.store.dispatch(
-      ChatUiActions.toggleFilterButton({
-        showButton: false
-      })
-    );
+    this.store.dispatch(ChatUiActions.initializeChatUI());
   }
 
   private adjustTextAlignment(): void {

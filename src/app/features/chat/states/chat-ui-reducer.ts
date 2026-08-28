@@ -32,6 +32,19 @@ export const initialChatUiState: ChatUiState = {
 
 export const chatUiReducer = createReducer(
   initialChatUiState,
+
+  on(ChatUiActions.initializeChatUI, (state) => ({
+    ...state,
+    chatHistory: [],
+    isInitialized: true,
+    searchTerm: '',
+    showButton: false,
+    selectedMessages: [],
+    showSidebar: false,
+    sideBarExit: false,
+    showScrollButton: false,
+    voiceSelected: '',
+  })),
   on(ChatUiActions.setSearchTerm, (state, { searchTerm }) => ({
     ...state,
     searchTerm,

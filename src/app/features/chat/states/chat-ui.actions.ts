@@ -1,8 +1,9 @@
-import { createActionGroup, props } from '@ngrx/store';
+import { createActionGroup, props, emptyProps } from '@ngrx/store';
 
 export const ChatUiActions = createActionGroup({
   source: 'Chat UI',
   events: {
+    'Initialize Chat UI': emptyProps(),
     'Set Search Term': props<{ searchTerm: string }>(),
     'Clear Search Term': props<{ searchTerm: string }>(),
     'Set Selected Message': props<{ selectedMessages: any }>(),
