@@ -18,7 +18,8 @@ import {
   selectToggleScrollButton,
 } from '../../states/chat-ui-selectors';
 import { Store } from '@ngrx/store';
-import { FilterButtonComponent } from "../../../../shared/components/filter-button-component/filter-button-component";
+import { FilterButtonComponent } from '../../../../shared/components/filter-button-component/filter-button-component';
+import { CarouselModule, OwlOptions } from 'ngx-owl-carousel-o';
 
 @Component({
   selector: 'app-body-component',
@@ -32,8 +33,9 @@ import { FilterButtonComponent } from "../../../../shared/components/filter-butt
     AsyncPipe,
     IsVisibleDirective,
     ScrollButtonComponent,
-    FilterButtonComponent
-],
+    FilterButtonComponent,
+    CarouselModule,
+  ],
   templateUrl: './body-component.html',
   styleUrls: ['./body-component.scss'],
   animations: [
@@ -71,9 +73,33 @@ export class BodyComponent {
   public textoAtual = signal('');
   public iconAtual = signal('');
 
+  public customOptions: OwlOptions = {
+    autoHeight: true,
+    margin: 15,
+    loop: true,
+    mouseDrag: true,
+    touchDrag: true,
+    pullDrag: true,
+    dots: true,
+    navSpeed: 1000,
+    autoplay: true,
+    autoplayTimeout: 5000,
+    autoplayHoverPause: false,
+    autoplaySpeed: 1000,
+    navText: [
+      `<span class="material-symbols-outlined">
+      chevron_backward
+      </span>`,
+      `<span class="material-symbols-outlined">
+      chevron_forward
+      </span>`,
+    ],
+    items: 1,
+    nav: true,
+  };
   public texts = [
     {
-      text: 'Faça suas perguntas e conservas com o mono!',
+      text: 'Faça as suas perguntas, conservas, dúvidas e pergunte fatos divertidos com o mono',
       icon: `<span class="material-symbols-outlined">
         question_mark
         </span>`,
@@ -100,7 +126,6 @@ export class BodyComponent {
     },
   ];
 
-  
 
   ngOnInit() {
     this.adjustTextAlignment();

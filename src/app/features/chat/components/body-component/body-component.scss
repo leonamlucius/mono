@@ -24,7 +24,7 @@ $grey-primary: #b8b7b7;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 3px;
   transition: all 0.3s ease;
   width: 100%;
   height: 100dvh;
@@ -46,46 +46,107 @@ $grey-primary: #b8b7b7;
 
 .logo-container .logo-container-cards {
   display: flex;
-  width: 70%;
+  width: 100%;
   height: auto;
-  padding: 20px 30px;
-  gap: 25px;
+  padding: 10px 30px;
   text-align: center;
+  justify-content: center;
   overflow: hidden;
+  position: relative;
 }
-.logo-container .marquee-track {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: max-content;
-  white-space: nowrap;
-  animation: deslizarTexto 60s linear infinite;
+.logo-container .logo-container-cards owl-carousel-o {
+  width: 100%;
+  max-width: 55%;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
-.logo-container .logo-container-info {
+::ng-deep .logo-container .logo-container-cards .owl-stage-outer {
+  background-color: $white-primary !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 30px !important;
+  overflow: hidden;
+}
+
+::ng-deep .logo-container .logo-container-cards .owl-stage-outer::after {
+  content: '';
+  display: block;
+  width: 3em;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  background-color: $white-primary;
+}
+
+::ng-deep .logo-container .logo-container-cards .owl-stage-outer::before {
+  content: '';
+  display: block;
+  width: 3em;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  background-color: $white-primary;
+}
+
+::ng-deep .logo-container .logo-container-cards owl-carousel-o .owl-dot span {
+  background-color: $grey-primary;
+  transition: all 0.3s ease;
+}
+
+::ng-deep .owl-prev,
+::ng-deep .owl-next {
+  background-color: $orange-primary !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  height: 9px !important;
+  width: 9px !important;
+  padding: 17px !important;
+  box-sizing: border-box !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: absolute;
+}
+
+::ng-deep .owl-prev span,
+::ng-deep .owl-next span {
+  font-size: 1.6em;
+}
+
+::ng-deep .owl-prev {
+  left: 10px !important;
+}
+
+::ng-deep .owl-next {
+  right: 10px !important;
+}
+
+.logo-container .logo-container-cards owl-carousel-o .logo-container-info {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   white-space: nowrap;
   overflow: hidden;
   flex-shrink: 0;
-  gap: 10px;
-  background-color: $white-primary;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  gap: 20px;
   padding: 10px 15px;
   box-sizing: border-box;
-  border-radius: 30px;
   user-select: none;
-  font-size: 0.95em;
+  font-size: 0.9em;
   transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 .logo-container .logo-container-info p {
   margin: 0;
 }
 
 .logo-container .logo-container-info .icon {
-  background-color: $orange-primary;
-  padding: 10px;
+  padding: 15px;
   box-sizing: border-box;
   width: 30px;
   height: 30px;
@@ -93,17 +154,15 @@ $grey-primary: #b8b7b7;
   display: flex;
   align-items: center;
   justify-content: center;
-
   color: $white-primary;
+  background-color: $blue-primary;
 }
 
-.logo-container .logo-container-info .icon.orange {
-  background-color: $orange-primary;
+.logo-container .logo-container-info .icon.square {
   border-radius: 10px;
 }
 
-.logo-container .logo-container-info .icon.blue {
-  background-color: $blue-primary;
+.logo-container .logo-container-info .icon.circle {
   border-radius: 50%;
 }
 
@@ -439,10 +498,40 @@ $grey-primary: #b8b7b7;
     top: 10px;
   }
   .logo-container-cards {
-    width: 90% !important;
+    width: 140% !important;
   }
+
+  .logo-container .logo-container-cards owl-carousel-o {
+    max-width: 70%;
+  }
+
+  ::ng-deep .owl-prev,
+  ::ng-deep .owl-next {
+    display: none !important;
+  }
+
   .logo-container-info {
-    font-size: 1.03em;
+    width: 100% !important;
+    font-size: 0.8em !important;
+    white-space: normal !important;
+    padding: 15px 20px !important;
+    font-size: 0.8em !important;
+  }
+
+  ::ng-deep .logo-container-info .icon {
+    width: 25px;
+    height: 25px;
+  }
+
+  ::ng-deep .logo-container-info .icon span {
+    scale: 0.8;
+  }
+  ::ng-deep .logo-container .logo-container-cards .owl-stage-outer::after {
+    display: none;
+  }
+
+  ::ng-deep .logo-container .logo-container-cards .owl-stage-outer::before {
+    display: none;
   }
 }
 
