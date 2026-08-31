@@ -17,7 +17,7 @@ import { TextToSpeechService } from '../../../../core/services/text-to-speech.se
 import { SearchComponent } from '../../../../shared/components/search-component/search-component';
 import { WarningComponent } from '../../../../shared/components/warning-component/warning-component';
 import { Subject } from 'rxjs';
-import { selectChatHistory } from '../../states/chat-ui-selectors';
+import { selectChatHistory, selectSelectedMessages } from '../../states/chat-ui-selectors';
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -86,7 +86,7 @@ export class MenuComponent implements OnInit {
 
   @Input() showButton = signal(false);
 
-  @Input() selectedMessages = signal<number[]>([]);
+  @Input() selectedMessages = this.store.selectSignal(selectSelectedMessages);
 
   private searchSubject$ = new Subject<string>();
 
