@@ -17,7 +17,7 @@ Aplicação full-stack de chat inteligente com suporte a múltiplos provedores d
 
 ## 🎯 Visão Geral
 
-Mono é uma aplicação de chat alimentada por IA que oferece uma experiência conversacional rica e inteligente. O sistema integra múltiplos modelos de IA, possui transcrição de áudio em tempo real, geração de resumos automáticos e um sistema robusto de gerenciamento de usuários.
+Mono é uma aplicação de chat alimentada por IA que oferece uma experiência conversacional rica e inteligente. O sistema integra múltiplos modelos de IA, possui transcrição de áudio em tempo real, sistema TTS (Text to Speech), geração de resumos automáticos e um sistema robusto de gerenciamento de usuários.
 
 ## 🚀 Tecnologias
 
@@ -28,7 +28,6 @@ Mono é uma aplicação de chat alimentada por IA que oferece uma experiência c
 - **Estilização:** SCSS
 - **Gerenciamento de Estado:** ngRx
 - **Roteamento:** Angular Router
-- **Testing:** Jest 30.4.2, Vitest 4.0.8
 
 ### Backend
 
@@ -42,6 +41,8 @@ Mono é uma aplicação de chat alimentada por IA que oferece uma experiência c
 ### Infraestrutura
 
 - **Banco de Dados:** PostgreSQL 16-Alpine
+- **VPS:** OCI (Oracle Cloud Infrastructure)
+- **Containerização:** Docker
 
 ## 📚 Bibliotecas e Dependências
 
@@ -135,9 +136,92 @@ Mono é uma aplicação de chat alimentada por IA que oferece uma experiência c
 
 ### 📝 Resumos Automáticos
 
-- **Geração de resumos de conversas**
-- **Cache de resumos (2 horas)**
+- **Geração de títulos de conversas**
+- **Cache de títulos (2 horas)**
 - **Títulos automáticos**
+
+### 🗣️ TTS (Text to Speech)
+
+- **Leitura de mensagens recebidas e enviadas**
+- **Reprodução de vozes pelo Piper**
+- **Escolha de vozes**
+
+
+## 💻 Passos para Rodar o Projeto
+
+### Angular
+
+1. Certifique-se de ter o Node.js instalado.
+2. Certifique-se de ter o Angular CLI instalado globalmente:
+   ```bash
+   npm install -g @angular/cli
+   ```
+3. Navegue até o diretório do projeto Angular.
+4. Instale as dependências:
+   ```bash
+   npm install
+   ```
+5. Inicie o servidor de desenvolvimento:
+   ```bash
+   ng serve
+   ```
+6. Acesse o aplicativo em `http://localhost:4200/`.
+
+### Spring Boot
+
+1. Certifique-se de ter o Java 17 ou superior instalado.
+2. Navegue até o diretório do projeto Spring Boot.
+3. Instale as dependências e compile o projeto:
+   ```bash
+   ./mvnw clean install
+   ```
+4. Inicie o servidor Spring Boot:
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+
+   ou use sua IDE favorita para executar a aplicação, selecionando a classe principal MonoApiApplication.
+5. Acesse a API em `http://localhost:8080/`.
+
+
+### Docker
+
+Para o projeto rodar no ambiente de desenvolvimento, precisamos do Docker para containerizar o nosso banco de dados, o postgreSQL, e o nosso Piper para o TTS.
+
+
+#### PostgreSQL
+
+1. Certifique-se de ter o Docker instalado.
+2. Esteja na raiz do projeto.
+3. Execute os containers necessários:
+   ```bash
+   docker-compose up -d
+   ```
+
+#### Piper (TTS)
+
+1. Navegue até a pasta /mono-api
+2. Execute o container do Piper:
+   ```bash
+   docker-compose up -d
+   ```
+
+### OLLAMA
+
+Para utilizar as IA's que rodam no Ollama, certifique-se de ter o Ollama instalado e configurado corretamente no seu sistema.
+
+
+1. Instale o Ollama seguindo as instruções oficiais disponíveis em [no site](https://ollama.com/download).
+2. Instale o modelo Qwen no Ollama seguindo as instruções oficiais.
+```bash
+ollama pull qwen2.5:0.5b 
+```
+3. Com o modelo instalado, você pode iniciar o Qwen no Ollama conforme necessário.
+```bash
+ollama run qwen2.5:0.5b
+```
+
+
 
 ## 📝 Licença
 
