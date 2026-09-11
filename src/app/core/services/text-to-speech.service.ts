@@ -20,8 +20,52 @@ export class TextToSpeechService {
     this.isSpeechEnabled.set(false);
   }
 
-  public async speak(text: string): Promise<void> {
-    return new Promise(async (resolve) => {
+  public async speakMute(text: string, voice: string): Promise<Blob> {
+    return new Promise(async (resolve: (value: Blob) => void) => {
+      if (this.isSpeechEnabled()) {
+        this.speechDisabled();
+
+        try {
+          const apiBase = environment.apiUrl;
+
+          const response = await fetch(
+            `${apiBase}/mono/tts?text=${encodeURIComponent(text)}&voice=${voice}`,
+            {
+              method: 'POST',
+              headers: {
+                Accept: 'audio/wav, audio/*',
+              },
+              credentials: 'include',
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error(`ERROR ${response.status}`);
+          }
+
+          const audioBlob = await response.blob();
+
+          const audioUrl = URL.createObjectURL(audioBlob);
+
+          const cleanUp = () => {
+            URL.revokeObjectURL(audioUrl);
+            this.speechEnabled();
+            resolve(audioBlob);
+          };
+          cleanUp();
+        } catch (e) {
+          console.error('Error during speech synthesis:', e);
+          this.speechEnabled();
+          resolve(new Blob());
+        }
+      } else {
+        resolve(new Blob());
+      }
+    });
+  }
+
+  public async speak(text: string): Promise<Blob> {
+    return new Promise(async (resolve: (value: Blob) => void) => {
       if (this.isSpeechEnabled()) {
         this.speechDisabled();
 
@@ -53,7 +97,7 @@ export class TextToSpeechService {
           const cleanUp = () => {
             URL.revokeObjectURL(audioUrl);
             this.speechEnabled();
-            resolve();
+            resolve(audioBlob);
           };
 
           this.audio.onended = cleanUp;
@@ -67,10 +111,10 @@ export class TextToSpeechService {
         } catch (e) {
           console.error('Error during speech synthesis:', e);
           this.speechEnabled();
-          resolve();
+          resolve(new Blob());
         }
       } else {
-        resolve();
+        resolve(new Blob());
       }
     });
   }

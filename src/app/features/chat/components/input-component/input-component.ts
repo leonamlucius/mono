@@ -35,6 +35,7 @@ export class InputComponent implements OnDestroy {
   public micIsON = signal(false);
   public micValue = '';
   private jaEnviou = false;
+  
 
   @Input() llmType = signal<'OLLAMA' | 'GROQ' | 'ERROR'>('GROQ');
 
@@ -94,11 +95,10 @@ export class InputComponent implements OnDestroy {
 
     this.waveSurfer = WaveSurfer.create({
       container: this.waveformContainer.nativeElement,
-      waveColor: '#4a4a4a', // Cor da linha guia de fundo
-      progressColor: '#00ff80', // Verde Mono do progresso
+      waveColor: '#4a4a4a', 
       height: 50,
-      barWidth: 3, // Efeito moderno de barrinhas separadas
-      barGap: 3, // Espaçamento entre as barrinhas
+      barWidth: 3,
+      barGap: 3,
       barRadius: 3,
     });
 

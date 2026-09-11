@@ -2,6 +2,7 @@ import {
   Component,
   signal,
   OnInit,
+  OnDestroy,
   ViewChild,
   ElementRef,
   DestroyRef,
@@ -9,6 +10,8 @@ import {
   Input,
   Output,
   inject,
+  QueryList,
+  ViewChildren,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgIf, NgClass, NgFor } from '@angular/common';
@@ -17,8 +20,12 @@ import { TextToSpeechService } from '../../../../core/services/text-to-speech.se
 import { SearchComponent } from '../../../../shared/components/search-component/search-component';
 import { WarningComponent } from '../../../../shared/components/warning-component/warning-component';
 import { Subject } from 'rxjs';
-import { selectChatHistory, selectSelectedMessages } from '../../states/chat-ui-selectors';
+import {
+  selectChatHistory,
+  selectSelectedMessages,
+} from '../../states/chat-ui-selectors';
 import { Store } from '@ngrx/store';
+import WaveSurfer from 'wavesurfer.js';
 
 @Component({
   selector: 'app-menu',
@@ -33,7 +40,7 @@ import { Store } from '@ngrx/store';
   templateUrl: './menu-component.html',
   styleUrls: ['./menu-component.scss'],
 })
-export class MenuComponent implements OnInit {
+export class MenuComponent implements OnInit, OnDestroy {
   public vozes = [
     {
       title: 'Voz A',
@@ -59,11 +66,20 @@ export class MenuComponent implements OnInit {
   public userName = signal('');
 
   public userEmail = signal('');
+
   public userDate = signal('');
 
   public editName = signal(false);
 
   public showLoading = signal<boolean>(false);
+
+  private waveSurfer: WaveSurfer | null = null;
+
+  public showWaveform = signal<number | null>(null);
+
+  @ViewChildren('waveformContainerMenu') waveformContainers!: QueryList<
+    ElementRef<HTMLDivElement>
+  >;
 
   @Input() isInitialized = signal(false);
 
@@ -88,8 +104,6 @@ export class MenuComponent implements OnInit {
 
   @Input() selectedMessages = this.store.selectSignal(selectSelectedMessages);
 
-  private searchSubject$ = new Subject<string>();
-
   constructor(
     private menuService: MenuService,
     private textToSpeechService: TextToSpeechService
@@ -105,18 +119,59 @@ export class MenuComponent implements OnInit {
     });
   }
 
-  public changeVoice(voiceName: string, index: number): void {
+  ngOnDestroy(): void {
+    if (this.waveSurfer) {
+      this.waveSurfer.destroy();
+      this.waveSurfer = null;
+    }
+  }
+
+  public initializeWaveformMenu(index: number): void {
+    let waveformContainer =
+      this.waveformContainers?.toArray()[index].nativeElement;
+
+    if (this.waveformContainers?.toArray()[index]) {
+      waveformContainer =
+        this.waveformContainers?.toArray()[index].nativeElement;
+      waveformContainer.innerHTML = '';
+    }
+
+    if (!waveformContainer) {
+      console.error('Waveform container not found for index:', index);
+      return;
+    }
+
+    this.waveSurfer = WaveSurfer.create({
+      container: waveformContainer,
+      interact: false,
+      waveColor: '#4a4a4a',
+      progressColor: 'none',
+      height: 50,
+      barWidth: 3,
+      barGap: 3,
+      barRadius: 3,
+      peaks: [[0.1, 0.5, 0.8, 0.3, 0.2]],
+    });
+  }
+  public changeVoice(voiceName: string, index: number): any {
+
+    this.showWaveform.set(null);
+    this.initializeWaveformMenu(index);
+
     this.showIconSound.set(index);
     this.store.dispatch({
       type: '[Chat UI] Set Voice Selected',
       voiceSelected: voiceName.toLowerCase(),
     });
 
-    this.textToSpeechService.speak(
-      `Olá! A voz do Mono foi alterada para ${voiceName}.`
-    ).then(() => {
-      this.showIconSound.set(null);
-    });
+    this.textToSpeechService
+      .speak(`Olá! A voz do Mono foi alterada para ${voiceName}.`)
+      .then((res) => {
+        this.showIconSound.set(null);
+        this.showWaveform.set(index);
+        const audioUrl = URL.createObjectURL(res);
+        this.waveSurfer?.load(audioUrl);
+      });
   }
 
   public showLoadingIndicator(): void {

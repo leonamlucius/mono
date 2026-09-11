@@ -80,8 +80,10 @@
             </span>
 
             <span>
-             Repositório do Pipper:
-              <a href="https://github.com/OHF-Voice/piper1-gpl?tab=GPL-3.0-1-ov-file" target="_blank"
+              Repositório do Pipper:
+              <a
+                href="https://github.com/OHF-Voice/piper1-gpl?tab=GPL-3.0-1-ov-file"
+                target="_blank"
                 >Clique aqui!</a
               >
             </span>
@@ -200,22 +202,27 @@
               *ngFor="let voz of vozes , index as i"
               [ngClass]="{'disabled': showIconSound() !== null && showIconSound() !== i }"
             >
-              <span class="circle"> </span>
-              <p class="voice-title">{{ voz.title }}</p>
-              <p class="voice-name">{{ voz.name }}</p>
-              <input
-                type="radio"
-                name="voice"
-                [value]="voz.name"
-                [checked]="voz.name === 'Cadu'"
-                (change)="changeVoice(voz.name, i)"
-              />
-              <span
-                class="material-symbols-outlined"
-                [ngClass]="{'active': showIconSound() === i}"
-              >
-                volume_up
-              </span>
+              <div class="voice-option">
+                <span class="circle"> </span>
+                <p class="voice-title">{{ voz.title }}</p>
+                <p class="voice-name">{{ voz.name }}</p>
+                <input
+                  type="radio"
+                  name="voice"
+                  [value]="voz.name"
+                  [checked]="voz.name === 'Cadu'"
+                  (click)="changeVoice(voz.name, i)"
+                />
+                <span
+                  class="material-symbols-outlined"
+                  [ngClass]="{'active': showIconSound() === i}"
+                >
+                  volume_up
+                </span>
+              </div>
+
+
+              <div #waveformContainerMenu class="waveform-visualizer"></div>
             </div>
           </div>
         </div>

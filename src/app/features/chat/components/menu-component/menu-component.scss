@@ -302,20 +302,43 @@ form .form-group {
 .settings-content .settings-options {
   width: 100%;
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 10px 15px;
+  box-sizing: border-box;
+  gap: 5px;
+  text-indent: 0;
+}
+
+.settings-content .voice-option {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   padding: 10px 15px;
   box-sizing: border-box;
-  gap: 35px;
+  gap: 5px;
   text-indent: 0;
 }
 
 .settings-content .settings-options .voices {
   display: flex;
-  flex-direction: column;
+  width: 100%;
   align-items: center;
   justify-content: center;
   gap: 15px;
+}
+
+.settings-content .waveform-visualizer {
+  flex: 1;
+  width: 100% !important;
+  height: 50px;
+}
+
+.settings-content hr {
+  width: 100%;
+  border: 1px dashed #4a4a4a;
 }
 
 .settings-content .settings-options .voices.disabled {
@@ -579,13 +602,16 @@ form .form-group {
     height: 95px;
   }
 
-
   .info-content .info-title {
     font-size: 1.15em;
   }
 
   .info-content .info-description {
     font-size: 0.93em;
+  }
+
+  .settings-content .settings-options .voices {
+    flex-direction: column;
   }
 }
 

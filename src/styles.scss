@@ -12,8 +12,8 @@ body {
   margin: 0;
   background-color: $beige-primary;
   background-image:
-    linear-gradient(to right, rgba(0, 0, 0, 0.2) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.2) 1px, transparent 1px);
+    linear-gradient(to right, #00000033 1px, transparent 1px),
+    linear-gradient(to bottom, #00000033 1px, transparent 1px);
   background-size: 20px 20px;
   font-family: 'Arvo', serif;
 }
