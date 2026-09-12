@@ -275,15 +275,18 @@ form .form-group {
 
 .settings-content {
   width: 100%;
+  height: calc(100dvh - 81px);
   display: flex;
   flex-direction: column;
   gap: 15px;
   align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
   white-space: wrap;
   padding: 10px 20px;
   box-sizing: border-box;
   text-indent: 0;
+  overflow: hidden;
+  overflow-y: auto;
 }
 
 .settings-content p {
@@ -328,12 +331,19 @@ form .form-group {
   align-items: center;
   justify-content: center;
   gap: 15px;
+  position: relative;
 }
 
 .settings-content .waveform-visualizer {
   flex: 1;
   width: 100% !important;
   height: 50px;
+  transition: all 0.3s ease-in-out;
+}
+
+.settings-content .waveform-visualizer.loading {
+  background-color: #dddcdc;
+  animation: skeleton-loading 1.2s infinite alternate;
 }
 
 .settings-content hr {
@@ -643,6 +653,15 @@ form .form-group {
   }
   100% {
     transform: translateX(-105%);
+  }
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-color: $white-primary;
+  }
+  100% {
+    background-color: #dddcdc;
   }
 }
 

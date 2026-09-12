@@ -201,6 +201,7 @@
               class="voices"
               *ngFor="let voz of vozes , index as i"
               [ngClass]="{'disabled': showIconSound() !== null && showIconSound() !== i }"
+              (click)="changeVoice(voz.name, i)"
             >
               <div class="voice-option">
                 <span class="circle"> </span>
@@ -210,8 +211,8 @@
                   type="radio"
                   name="voice"
                   [value]="voz.name"
-                  [checked]="voz.name === 'Cadu'"
-                  (click)="changeVoice(voz.name, i)"
+                  
+                  [checked]="showChecked() === i"
                 />
                 <span
                   class="material-symbols-outlined"
@@ -221,8 +222,9 @@
                 </span>
               </div>
 
+              
 
-              <div #waveformContainerMenu class="waveform-visualizer"></div>
+              <div #waveformContainerMenu class="waveform-visualizer" [ngClass]="{'loading': showSkeleton() === i}"></div>
             </div>
           </div>
         </div>

@@ -22,7 +22,6 @@ export class TextToSpeechService {
 
   public async speakMute(text: string, voice: string): Promise<Blob> {
     return new Promise(async (resolve: (value: Blob) => void) => {
-      if (this.isSpeechEnabled()) {
         this.speechDisabled();
 
         try {
@@ -58,9 +57,7 @@ export class TextToSpeechService {
           this.speechEnabled();
           resolve(new Blob());
         }
-      } else {
-        resolve(new Blob());
-      }
+      
     });
   }
 

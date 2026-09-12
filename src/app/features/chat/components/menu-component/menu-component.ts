@@ -59,6 +59,10 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   public showIconSound = signal<number | null>(null);
 
+  public showSkeleton = signal<number | null>(null);
+
+  public showChecked = signal<number | null>(0);
+
   public sideBarExit = signal(false);
 
   public isOverflowingInfo = signal(false);
@@ -73,9 +77,8 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   public showLoading = signal<boolean>(false);
 
-  private waveSurfer: WaveSurfer | null = null;
-
-  public showWaveform = signal<number | null>(null);
+  private waveSurfers: Array<WaveSurfer | null> = [];
+  private audioUrls: Array<string | null> = [];
 
   @ViewChildren('waveformContainerMenu') waveformContainers!: QueryList<
     ElementRef<HTMLDivElement>
@@ -120,58 +123,72 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.waveSurfer) {
-      this.waveSurfer.destroy();
-      this.waveSurfer = null;
-    }
+    this.waveSurfers.forEach((waveSurferInstance) => {
+      waveSurferInstance?.destroy();
+    });
+
+    this.audioUrls.forEach((audioUrl) => {
+      if (audioUrl) {
+        URL.revokeObjectURL(audioUrl);
+      }
+    });
+    this.waveSurfers = [];
+    this.audioUrls = [];
   }
 
-  public initializeWaveformMenu(index: number): void {
-    let waveformContainer =
-      this.waveformContainers?.toArray()[index].nativeElement;
-
-    if (this.waveformContainers?.toArray()[index]) {
-      waveformContainer =
-        this.waveformContainers?.toArray()[index].nativeElement;
-      waveformContainer.innerHTML = '';
-    }
-
-    if (!waveformContainer) {
+  public initializeWaveformMenu(index: number): WaveSurfer | null {
+    const container = this.waveformContainers?.toArray()[index];
+    if (!container) {
       console.error('Waveform container not found for index:', index);
-      return;
+      return null;
     }
 
-    this.waveSurfer = WaveSurfer.create({
+    if (!this.waveSurfers[index]) {
+      this.waveSurfers[index] = null;
+    }
+
+    this.waveSurfers[index]?.destroy();
+
+    const waveformContainer = container.nativeElement;
+  
+
+    const waveSurferInstance = WaveSurfer.create({
       container: waveformContainer,
       interact: false,
       waveColor: '#4a4a4a',
-      progressColor: 'none',
+      progressColor: '#f95903',
       height: 50,
       barWidth: 3,
       barGap: 3,
       barRadius: 3,
-      peaks: [[0.1, 0.5, 0.8, 0.3, 0.2]],
+      normalize: true,
     });
+
+    this.waveSurfers[index] = waveSurferInstance;
+    return waveSurferInstance;
   }
   public changeVoice(voiceName: string, index: number): any {
-
-    this.showWaveform.set(null);
-    this.initializeWaveformMenu(index);
-
     this.showIconSound.set(index);
+    this.showChecked.set(index);
     this.store.dispatch({
       type: '[Chat UI] Set Voice Selected',
       voiceSelected: voiceName.toLowerCase(),
     });
 
     this.textToSpeechService
-      .speak(`Olá! A voz do Mono foi alterada para ${voiceName}.`)
+      .speakMute(
+        `Olá! A voz do Mono foi alterada para ${voiceName}.`,
+        voiceName.toLowerCase()
+      )
       .then((res) => {
-        this.showIconSound.set(null);
-        this.showWaveform.set(index);
-        const audioUrl = URL.createObjectURL(res);
-        this.waveSurfer?.load(audioUrl);
+        this.waveSurfers[index]?.play().then(() => {});
       });
+
+    this.waveSurfers[index]?.once('finish', () => {
+      this.waveSurfers[index]?.seekTo(0);
+      this.showIconSound.set(null);
+      this.showChecked.set(null);
+    });
   }
 
   public showLoadingIndicator(): void {
@@ -274,6 +291,32 @@ export class MenuComponent implements OnInit, OnDestroy {
       return;
     }
     this.activeModal.set('settings');
+
+    setTimeout(async () => {
+      for (const [index, voz] of this.vozes.entries()) {
+        this.showSkeleton.set(index);
+        const waveSurfer = this.initializeWaveformMenu(index);
+
+        if (!waveSurfer) {
+          continue;
+        }
+
+        const blob = await this.textToSpeechService.speakMute(
+          `Olá! A voz do Mono foi alterada para ${voz.name}.`,
+          voz.name
+        );
+
+        if (!blob.size) {
+          console.warn(`Áudio vazio para ${voz.name}`);
+          continue;
+        }
+        const audioUrl = URL.createObjectURL(blob);
+        this.audioUrls[index] = audioUrl;
+
+        waveSurfer.load(audioUrl);
+        this.showSkeleton.set(null);
+      }
+    }, 0);
   }
 
   public closeModal(): void {
