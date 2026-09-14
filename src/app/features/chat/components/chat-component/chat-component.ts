@@ -163,20 +163,31 @@ export class ChatComponent {
         return;
       }
 
-      history.forEach((item: any) => {
-        this.store.dispatch(
-          ChatUiActions.setChatHistory({
-            chatHistory: [
-              {
-                text: item.message,
-                sendBy: item.model == 'USER' ? 'User' : 'Bot',
-                loading: false,
-                llmType: item.model == 'USER' ? undefined : item.model,
-              },
-            ],
-          })
-        );
+
+      history.forEach((historyItem: any) => {
+        historyItem.content.forEach((contentItem: any) => {
+          contentItem.messages.forEach((msg: any) => {
+            this.store.dispatch(
+              ChatUiActions.setChatHistory({
+                chatHistory: [
+                  {
+                    text: msg.message,
+                    sendBy:
+                      msg.model == 'USER' ? 'User' : 'Bot',
+                    loading: false,
+                    llmType:
+                      msg.model == 'USER'
+                        ? undefined
+                        : msg.model,
+                    date: contentItem.date,
+                  },
+                ],
+              })
+            );
+          });
+        });
       });
+
     });
     this.store.dispatch(ChatUiActions.initializeChatUI());
   }
@@ -317,7 +328,7 @@ export class ChatComponent {
         .sendMessage(this.textValueSend(), this.llmType())
         .then((response) => {
           setTimeout(() => {
-            console.log('Response:', response);
+            
 
             if (response === 'ERROR SENDING MESSAGE') {
               this.warning.openModal(
@@ -359,7 +370,6 @@ export class ChatComponent {
               })
             );
 
-            console.log('Chat History:', this.chatHistory());
             this.makeTextAreaEnabled(textArea as HTMLTextAreaElement);
             this.adjustTextAlignment();
             this.scrollToBottom();
@@ -398,7 +408,6 @@ export class ChatComponent {
       console.error('Error:', error);
       this.scrollToBottom();
     }
-    console.log('Iniciar');
     this.isInitialized.set(true);
     this.menu.isInitialized.set(true);
   }

@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mono.monoapi.config.JwtUtil;
 import com.mono.monoapi.dto.ChatResponseDTO;
+import com.mono.monoapi.dto.GroupedHistoryReponseDTO;
 import com.mono.monoapi.dto.FactsResponse;
 import java.util.List;
 import jakarta.servlet.http.Cookie;
@@ -172,7 +173,7 @@ public class MonoController {
     }
 
     @GetMapping("/history")
-    public ResponseEntity<List<ChatResponseDTO>> getHistory(HttpServletRequest request) {
+    public ResponseEntity<List<GroupedHistoryReponseDTO>> getHistory(HttpServletRequest request) {
         String token = cookieService.getJwtCookieFromRequest(request) != null
                 ? cookieService.getJwtCookieFromRequest(request).getValue()
                 : null;
@@ -195,9 +196,9 @@ public class MonoController {
             return ResponseEntity.status(401).body(null);
         }
 
-        List<ChatResponseDTO> response = historyService.getHistorico(ChatId);
+        GroupedHistoryReponseDTO response = historyService.getHistorico(ChatId);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(List.of(response));
     }
 
     @PostMapping(value = "/tts", produces = "audio/wav")

@@ -73,6 +73,8 @@ export class BodyComponent {
   public textoAtual = signal('');
   public iconAtual = signal('');
 
+  public actualDate = signal('');
+
   public customOptions: OwlOptions = {
     autoHeight: true,
     margin: 15,
@@ -126,9 +128,41 @@ export class BodyComponent {
     },
   ];
 
-
   ngOnInit() {
     this.adjustTextAlignment();
+  }
+
+  public formatDate(date: string | undefined): any {
+    let actualDate: string = new Date().toLocaleDateString('pt-BR');
+
+    let day = parseInt(date?.slice(0, 2) || '0', 10);
+    let month = parseInt(date?.slice(3, 5) || '0', 10);
+    let year = parseInt(date?.slice(6, 10) || '0', 10);
+
+    const formattedDay = String(day).padStart(2, '0');
+    const formattedMonth = String(month).padStart(2, '0');
+
+    if (!date) {
+      return '';
+    }
+
+    if (actualDate && day === new Date().getDate() - 1) {
+      return 'Ontem';
+    }
+
+    if (!date || date === actualDate) {
+      return 'Hoje';
+    }
+
+    if (month < new Date().getMonth() + 1) {
+      return `${formattedDay}/${formattedMonth}/${year}`;
+    }
+
+    const weekday = new Intl.DateTimeFormat('pt-BR', {
+      weekday: 'long',
+    }).format(new Date(year, month - 1, day));
+
+    return `${weekday.charAt(0).toUpperCase() + weekday.slice(1)}, ${formattedDay}/${formattedMonth}`;
   }
 
   public divVisiblechange(isVisible: boolean, index: number): boolean {

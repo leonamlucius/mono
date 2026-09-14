@@ -125,7 +125,6 @@ export class SearchComponent {
   }
 
   private scrollToMessage(index: number[]): void {
-    console.log('Scrolling to message at index:', index);
     setTimeout(() => {
       const chatContainer = document.querySelector(
         '.chat-container'
@@ -159,7 +158,6 @@ export class SearchComponent {
       })
     );
 
-    console.log('Search term:', this.store.selectSignal(selectSearchTerm));
 
     this.searchSubject$.next(this.searchTerm());
   }
@@ -195,7 +193,6 @@ export class SearchComponent {
       return;
     }
 
-    console.log('Filtered messages:', filterMessages);
 
     if (filterMessages.length > 0) {
       this.showButtons();
