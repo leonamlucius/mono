@@ -86,6 +86,10 @@ export class LoginService {
         body: JSON.stringify({ idToken }),
       });
 
+      if (response.status === 500) {
+        throw new Error(`Conta não cadastrada, cadastre sua conta Google.`);
+      }
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -97,6 +101,7 @@ export class LoginService {
       }
     } catch (error) {
       console.error('Error during Google login:', error);
+      return error;
     }
   }
 }
