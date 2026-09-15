@@ -59,9 +59,9 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   public showIconSound = signal<number | null>(null);
 
-  public showSkeleton = signal<number | null>(null);
-
   public showChecked = signal<number | null>(0);
+
+  public isChangingVoice = signal(false);
 
   public sideBarExit = signal(false);
 
@@ -77,8 +77,12 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   public showLoading = signal<boolean>(false);
 
-  private waveSurfers: Array<WaveSurfer | null> = [];
-  private audioUrls: Array<string | null> = [];
+  public loopCounter = 0;
+
+  public audioUrl: string = '';
+
+  public waveSurfers: Array<WaveSurfer | null> = [];
+  private audioUrls: Array<string> = [];
 
   @ViewChildren('waveformContainerMenu') waveformContainers!: QueryList<
     ElementRef<HTMLDivElement>
@@ -143,6 +147,8 @@ export class MenuComponent implements OnInit, OnDestroy {
       return null;
     }
 
+    container.nativeElement.innerHTML = '';
+
     if (!this.waveSurfers[index]) {
       this.waveSurfers[index] = null;
     }
@@ -150,7 +156,6 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.waveSurfers[index]?.destroy();
 
     const waveformContainer = container.nativeElement;
-  
 
     const waveSurferInstance = WaveSurfer.create({
       container: waveformContainer,
@@ -168,12 +173,18 @@ export class MenuComponent implements OnInit, OnDestroy {
     return waveSurferInstance;
   }
   public changeVoice(voiceName: string, index: number): any {
+    if (this.isChangingVoice()) {
+      return;
+    }
+
     this.showIconSound.set(index);
     this.showChecked.set(index);
     this.store.dispatch({
       type: '[Chat UI] Set Voice Selected',
       voiceSelected: voiceName.toLowerCase(),
     });
+
+    this.isChangingVoice.set(true);
 
     this.textToSpeechService
       .speakMute(
@@ -188,6 +199,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       this.waveSurfers[index]?.seekTo(0);
       this.showIconSound.set(null);
       this.showChecked.set(null);
+      this.isChangingVoice.set(false);
     });
   }
 
@@ -287,36 +299,49 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   public createModalSettings(): void {
     if (this.activeModal() === 'settings') {
-      this.activeModal.set(null);
       return;
     }
     this.activeModal.set('settings');
 
     setTimeout(async () => {
-      for (const [index, voz] of this.vozes.entries()) {
-        this.showSkeleton.set(index);
-        const waveSurfer = this.initializeWaveformMenu(index);
+      try {
+        for (const [index, voz] of this.vozes.entries()) {
+          this.loopCounter++;
+          const waveSurfer = this.initializeWaveformMenu(index);
 
-        if (!waveSurfer) {
-          continue;
+          if (!waveSurfer) {
+            continue;
+          }
+          if (this.loopCounter <= this.vozes.length) {
+            const blob = await this.textToSpeechService.speakMute(
+              `Olá! A voz do Mono foi alterada para ${voz.name}.`,
+              voz.name
+            );
+
+            if (!blob.size) {
+              console.warn(`Áudio vazio para ${voz.name}`);
+              continue;
+            }
+            this.audioUrl = URL.createObjectURL(blob);
+            this.audioUrls[index] = this.audioUrl;
+
+            waveSurfer.load(this.audioUrl);
+          } else {
+            this.audioUrls.forEach((url, i) => {
+              console.log(`Loading audio URL for index ${i}: ${url}`);
+              const waveSurfer = this.waveSurfers[i];
+              if (waveSurfer) {
+                waveSurfer.load(url);
+              }
+            });
+          }
         }
-
-        const blob = await this.textToSpeechService.speakMute(
-          `Olá! A voz do Mono foi alterada para ${voz.name}.`,
-          voz.name
-        );
-
-        if (!blob.size) {
-          console.warn(`Áudio vazio para ${voz.name}`);
-          continue;
-        }
-        const audioUrl = URL.createObjectURL(blob);
-        this.audioUrls[index] = audioUrl;
-
-        waveSurfer.load(audioUrl);
-        this.showSkeleton.set(null);
+      } catch (error) {
+        console.error('Error opening settings modal:', error);
       }
-    }, 0);
+    }, 500);
+
+    this.waveSurfers = [];
   }
 
   public closeModal(): void {
