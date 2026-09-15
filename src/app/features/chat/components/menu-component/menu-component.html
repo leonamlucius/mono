@@ -1,5 +1,5 @@
 <div class="side-bar-overlay" [ngClass]="{'active': showSidebar()}">
-  <div class="modalSidebarOverlay" *ngIf="activeModal() === 'info'">
+  <div class="modalSidebarOverlay" [ngClass]="{'active': activeModal() === 'info'}">
     <div class="modalSidebar">
       <div class="modalContent">
         <div class="modalHeader">
@@ -93,7 +93,7 @@
     </div>
   </div>
 
-  <div class="modalSidebarOverlay" *ngIf="activeModal() === 'perfil'">
+  <div class="modalSidebarOverlay" [ngClass]="{'active': activeModal() === 'perfil'}">
     <div class="modalSidebar">
       <div class="modalContent">
         <div class="modalHeader">
@@ -175,7 +175,7 @@
     </div>
   </div>
 
-  <div div class="modalSidebarOverlay" *ngIf="activeModal() === 'settings'">
+  <div class="modalSidebarOverlay" [ngClass]="{'active': activeModal() === 'settings'}">
     <div class="modalSidebar">
       <div class="modalContent">
         <div class="modalHeader">
@@ -224,7 +224,8 @@
 
               
 
-              <div #waveformContainerMenu class="waveform-visualizer" [ngClass]="{'loading': showSkeleton() === i}"></div>
+              <div #waveformContainerMenu class="waveform-visualizer" [ngClass]="{'active': waveSurfers.length == vozes.length }"></div>
+              <div class="loading" [ngClass]="{'active': waveSurfers.length < vozes.length}"></div>
             </div>
           </div>
         </div>
