@@ -8,7 +8,6 @@ import { IsVisibleDirective } from '../../diretives/is-visible.directive';
 import { Router } from '@angular/router';
 import { WarningComponent } from '../../../../shared/components/warning-component/warning-component';
 import { ScrollButtonComponent } from '../../../chat/components/scroll-button-component/scroll-button-component';
-import { FilterSeparatorComponent } from '../../../chat/components/filter-separator-component/filter-separator-component';
 import removeMarkdown from 'remove-markdown';
 
 import { AsyncPipe } from '@angular/common';
@@ -34,7 +33,6 @@ import { CarouselModule, OwlOptions } from 'ngx-owl-carousel-o';
     AsyncPipe,
     IsVisibleDirective,
     ScrollButtonComponent,
-    FilterSeparatorComponent,
     FilterButtonComponent,
     CarouselModule,
   ],
@@ -77,7 +75,6 @@ export class BodyComponent {
 
   public actualDate = signal('');
 
- 
   public customOptions: OwlOptions = {
     autoHeight: true,
     margin: 15,
@@ -136,15 +133,10 @@ export class BodyComponent {
   }
 
   public resolveDateKey(date: string | undefined): string | undefined {
-
-    console.log('Resolving date key for date:', date);
-
-  
     return date || new Date().toLocaleDateString('pt-BR');
   }
 
   public formatDate(date: string | undefined): any {
-
     let actualDate: string = new Date().toLocaleDateString('pt-BR');
 
     let day = parseInt(date?.slice(0, 2) || '0', 10);
@@ -154,7 +146,6 @@ export class BodyComponent {
     const formattedDay = String(day).padStart(2, '0');
     const formattedMonth = String(month).padStart(2, '0');
 
-    
     if (actualDate && day === new Date().getDate() - 1) {
       return 'Ontem';
     }
@@ -171,7 +162,7 @@ export class BodyComponent {
       weekday: 'long',
     }).format(new Date(year, month - 1, day));
 
-    return `${weekday.charAt(0).toUpperCase() + weekday.slice(1)}, ${formattedDay}/${formattedMonth}`;
+    return `${weekday.slice(0, 3).charAt(0).toUpperCase()}${weekday.slice(1, 3)}, ${formattedDay}/${formattedMonth}`;
   }
 
   public divVisiblechange(isVisible: boolean, index: number): boolean {

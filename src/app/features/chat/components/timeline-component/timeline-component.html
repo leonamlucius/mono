@@ -1,0 +1,17 @@
+<div
+  *ngFor="let date of availableDates; let index = index"
+  class="component-list"
+>
+  <div class="date">{{ formatDate(date.date) }}</div>
+
+  <div class="body" [class.reversed]="index % 2 === 1">
+    <div class="line" [class.reversed]="index % 2 === 0"></div>
+
+    <div class="content" [class.reversed]="index % 2 === 1">
+      {{ date.firstText }}
+      <div class="hour"> às {{ date.timestamp }}</div>
+    </div>
+  </div>
+
+  <div *ngIf="availableDates.length === index + 1" class="circle"></div>
+</div>

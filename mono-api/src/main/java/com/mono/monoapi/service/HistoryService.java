@@ -90,7 +90,9 @@ public class HistoryService {
         return new ChatResponseDTO(
                 msg.getText(),
                 modelName,
-                "SUCCESS");
+                "SUCCESS",
+                msg.getMetadata().get("hour").toString()
+            );
     }
 
 }

@@ -1,4 +1,25 @@
 <div class="side-bar-overlay" [ngClass]="{'active': showSidebar()}">
+  <div class="modalSidebarOverlay" *ngIf="activeModal() === 'timeline'">
+    <div class="modalSidebar">
+      <div class="modalContent">
+        <div class="modalHeader">
+          <span class="material-symbols-outlined"> line_end </span>
+          <span class="close">
+            <button type="button" (click)="closeModal()">
+              <span class="material-symbols-outlined"> close </span>
+            </button>
+          </span>
+        </div>
+
+        <div class="timeline-content">
+          <p class="timeline-title">Consulte sua linha do tempo</p>
+           <div class="timeline-body">
+            <app-timeline-component></app-timeline-component>
+           </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="modalSidebarOverlay" *ngIf="activeModal() === 'info'">
     <div class="modalSidebar">
       <div class="modalContent">
@@ -211,7 +232,6 @@
                   type="radio"
                   name="voice"
                   [value]="voz.name"
-                  
                   [checked]="showChecked() === i"
                 />
                 <span
@@ -222,9 +242,11 @@
                 </span>
               </div>
 
-              
-
-              <div #waveformContainerMenu class="waveform-visualizer" [ngClass]="{'loading': showSkeleton() === i}"></div>
+              <div
+                #waveformContainerMenu
+                class="waveform-visualizer"
+                [ngClass]="{'loading': showSkeleton() === i}"
+              ></div>
             </div>
           </div>
         </div>
@@ -276,6 +298,12 @@
       <span class="material-symbols-outlined"> person </span>
       Perfil
     </span>
+
+    <span class="module pass" (click)="createModalTimeline()">
+      <span class="material-symbols-outlined"> line_end </span>
+      Linha do Tempo
+    </span>
+
     <span class="module pass" (click)="createModalSettings()">
       <span class="material-symbols-outlined"> settings </span>
       Configurações

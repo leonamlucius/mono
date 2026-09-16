@@ -50,6 +50,7 @@ public class PgSqlChatMemory implements ChatMemory {
                 .stream()
                 .<Message>map(e -> {
                     Map<String, Object> metadata = Map.of(
+                            "hour", e.getCreatedAt().format(DateTimeFormatter.ofPattern("HH:mm")),
                             "timestamp", e.getCreatedAt().format(formatter),
                             "model", e.getModelName() != null
                                     ? e.getModelName()

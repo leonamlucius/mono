@@ -93,38 +93,38 @@ public class MonoController {
                 logger.info("ID do usuário extraído do token: '{}'", ChatId);
             } catch (Exception e) {
                 logger.info("Erro ao extrair o ID do usuário do token: {}", e.getMessage());
-                return ResponseEntity.status(401).body(new ChatResponseDTO(null, null, "ERROR: Token inválido."));
+                return ResponseEntity.status(401).body(new ChatResponseDTO(null, null, "ERROR: Token inválido.", null));
             }
         } else {
             logger.info("Nenhum token de autorização fornecido. Usando ID de chat padrão: '{}'", ChatId);
             return ResponseEntity.status(401)
-                    .body(new ChatResponseDTO(null, null, "ERROR: Nenhum token de autorização fornecido."));
+                    .body(new ChatResponseDTO(null, null, "ERROR: Nenhum token de autorização fornecido.", null));
         }
 
         if ("OLLAMA".equalsIgnoreCase(provider)) {
 
             try {
                 String response = ollamaAiService.chat(message, ChatId);
-                return ResponseEntity.ok(new ChatResponseDTO(response, "OLLAMA-qwen2.5:0.5b", "SUCCESS"));
+                return ResponseEntity.ok(new ChatResponseDTO(response, "OLLAMA-qwen2.5:0.5b", "SUCCESS", null));
             } catch (Exception e) {
                 logger.info("Erro ao processar a mensagem com Ollama, passando para Groq: '{}'. Detalhes do erro: {}",
                         message, e.getMessage());
                 String response = groqAiService.chat(message, ChatId);
                 return ResponseEntity.ok(new ChatResponseDTO(response, "GROQ-openai/gpt-oss-20b",
-                        "ERROR: Ollama falhou, mas Groq respondeu com sucesso."));
+                        "ERROR: Ollama falhou, mas Groq respondeu com sucesso.", null));
             }
 
         } else {
 
             try {
                 String response = groqAiService.chat(message, ChatId);
-                return ResponseEntity.ok(new ChatResponseDTO(response, "GROQ-openai/gpt-oss-20b", "SUCCESS"));
+                return ResponseEntity.ok(new ChatResponseDTO(response, "GROQ-openai/gpt-oss-20b", "SUCCESS", null));
             } catch (Exception e) {
                 logger.info("Erro ao processar a mensagem com Groq: '{}'. Detalhes do erro: {}", message,
                         e.getMessage());
                 String response = ollamaAiService.chat(message, ChatId);
                 return ResponseEntity.ok(new ChatResponseDTO(response, "OLLAMA-qwen2.5:0.5b",
-                        "ERROR: Groq falhou, mas Ollama respondeu com sucesso."));
+                        "ERROR: Groq falhou, mas Ollama respondeu com sucesso.", null));
             }
         }
     }
