@@ -8,6 +8,7 @@ import { IsVisibleDirective } from '../../diretives/is-visible.directive';
 import { Router } from '@angular/router';
 import { WarningComponent } from '../../../../shared/components/warning-component/warning-component';
 import { ScrollButtonComponent } from '../../../chat/components/scroll-button-component/scroll-button-component';
+import { FilterSeparatorComponent } from '../../../chat/components/filter-separator-component/filter-separator-component';
 import removeMarkdown from 'remove-markdown';
 
 import { AsyncPipe } from '@angular/common';
@@ -33,6 +34,7 @@ import { CarouselModule, OwlOptions } from 'ngx-owl-carousel-o';
     AsyncPipe,
     IsVisibleDirective,
     ScrollButtonComponent,
+    FilterSeparatorComponent,
     FilterButtonComponent,
     CarouselModule,
   ],
