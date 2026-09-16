@@ -52,5 +52,6 @@ mono-api/.mvn/wrapper/maven-wrapper.jar
 mono-api/.env  
 
 
-/pgdata
+pgdata/
+pgadmin/
 .env
