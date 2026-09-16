@@ -32,7 +32,7 @@
   <div class="item-message" *ngFor="let item of chatHistory(); let i = index">
     <div
       class="separator"
-      *ngIf="item?.date !== chatHistory()[i - 1]?.date && formatDate(item.date) != ''"
+      *ngIf="i === 0 || resolveDateKey(item?.date) !== resolveDateKey(chatHistory()[i - 1]?.date)"
     >
       <hr class="line" />
 

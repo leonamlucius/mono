@@ -75,6 +75,7 @@ export class BodyComponent {
 
   public actualDate = signal('');
 
+ 
   public customOptions: OwlOptions = {
     autoHeight: true,
     margin: 15,
@@ -132,7 +133,16 @@ export class BodyComponent {
     this.adjustTextAlignment();
   }
 
+  public resolveDateKey(date: string | undefined): string | undefined {
+
+    console.log('Resolving date key for date:', date);
+
+  
+    return date || new Date().toLocaleDateString('pt-BR');
+  }
+
   public formatDate(date: string | undefined): any {
+
     let actualDate: string = new Date().toLocaleDateString('pt-BR');
 
     let day = parseInt(date?.slice(0, 2) || '0', 10);
@@ -142,10 +152,7 @@ export class BodyComponent {
     const formattedDay = String(day).padStart(2, '0');
     const formattedMonth = String(month).padStart(2, '0');
 
-    if (!date) {
-      return '';
-    }
-
+    
     if (actualDate && day === new Date().getDate() - 1) {
       return 'Ontem';
     }
