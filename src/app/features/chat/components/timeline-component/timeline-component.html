@@ -1,8 +1,8 @@
 <div
-  *ngFor="let date of availableDates; let index = index"
+  *ngFor="let date of availableDates(); let index = index"
   class="component-list"
 >
-  <div class="date">{{ formatDate(date.date) }}</div>
+  <div class="date" [innerHTML]="formatDate(date.date)"></div>
 
   <div class="body" [class.reversed]="index % 2 === 1">
     <div class="line" [class.reversed]="index % 2 === 0"></div>
@@ -13,5 +13,5 @@
     </div>
   </div>
 
-  <div *ngIf="availableDates.length === index + 1" class="circle"></div>
+  <div *ngIf="availableDates().length === index + 1" class="circle"></div>
 </div>

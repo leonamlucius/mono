@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { NgFor, NgIf, NgClass } from '@angular/common';
 import { ChatService } from '../../services/chat-service';
 
@@ -11,27 +11,36 @@ import { ChatService } from '../../services/chat-service';
 export class TimelineComponent implements OnInit {
   constructor(private chatService: ChatService) {}
 
-  protected availableDates: {
-    date: string;
-    firstText: string;
-    timestamp: string;
-  }[] = [];
+  protected availableDates = signal<
+    { date: string; firstText: string; timestamp: string }[]
+  >([]);
 
   ngOnInit(): void {
-    this.chatService.getChatHistory().then((date) => {
-      date?.forEach((item: any) => {
-        item.content.forEach((dateItem: any, index: number) => {
-          if (!this.availableDates.some((d) => d.date === dateItem.date)) {
-            this.availableDates.push({
-              date: dateItem.date,
-              firstText: dateItem.messages[0].message,
-              timestamp: dateItem.messages[0].timestamp,
-            });
-          }
+
+    console.log(this.availableDates().length > 0);
+    if (this.availableDates().length === 0) {
+      this.chatService.getChatHistory().then((date) => {
+        date?.forEach((item: any) => {
+          item.content.forEach((dateItem: any, index: number) => {
+            if (!this.availableDates().some((d) => d.date === dateItem.date)) {
+              this.availableDates.set([
+                ...this.availableDates(),
+                {
+                  date: dateItem.date,
+                  firstText: dateItem.messages[0].message,
+                  timestamp: dateItem.messages[0].timestamp,
+                },
+              ]);
+            }
+          });
         });
       });
-    });
+    }
   }
+
+  // ngOnDestroy(): void {
+  //   this.availableDates.set([]);
+  // }
 
   public formatDate(date: string | undefined): any {
     let actualDate: string = new Date().toLocaleDateString('pt-BR');
@@ -59,6 +68,6 @@ export class TimelineComponent implements OnInit {
       weekday: 'long',
     }).format(new Date(year, month - 1, day));
 
-   return `${weekday.slice(0, 3).charAt(0).toUpperCase()}${weekday.slice(1, 3)}, ${formattedDay}/${formattedMonth}`;
+    return `${weekday.slice(0, 3).charAt(0).toUpperCase()}${weekday.slice(1, 3)}, ${formattedDay}/${formattedMonth}`;
   }
 }
