@@ -170,11 +170,45 @@ $grey-primary: #b8b7b7;
   scale: 1.1;
 }
 
+.item-message {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.item-message .separator {
+  width: 100%;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.item-message .separator .line {
+  width: 100%;
+  height: 1px;
+  border-top: 0.13em dashed rgb(114, 114, 114);
+  border-bottom: transparent;
+}
+
+.item-message .separator .date {
+  background-color: $white-primary;
+  padding: 5px 10px;
+  border-radius: 25px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+  margin: 0 10px;
+  white-space: nowrap;
+}
+
 .message-container {
   display: flex;
   width: 100%;
   gap: 5px;
+  position: relative;
 }
+
 .message-container.container-bot {
   align-self: flex-start;
 }
@@ -533,6 +567,10 @@ $grey-primary: #b8b7b7;
   ::ng-deep .logo-container .logo-container-cards .owl-stage-outer::before {
     display: none;
   }
+  .item-message .separator .date {
+  font-size: 12px;
+  
+}
 }
 
 @keyframes slideTop {

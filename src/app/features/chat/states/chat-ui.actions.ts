@@ -15,6 +15,7 @@ export const ChatUiActions = createActionGroup({
         sendBy: 'User' | 'Bot';
         loading: boolean;
         llmType?: 'OLLAMA' | 'GROQ' | 'ERROR';
+        date?: string;
       }[];
     }>(),
     'Delete Last Chat History': props<{
@@ -23,6 +24,7 @@ export const ChatUiActions = createActionGroup({
         sendBy: 'User' | 'Bot';
         loading: boolean;
         llmType?: 'OLLAMA' | 'GROQ' | 'ERROR';
+        date?: string;
       }[];
     }>(),
 
@@ -32,6 +34,7 @@ export const ChatUiActions = createActionGroup({
         sendBy: 'User' | 'Bot';
         loading: boolean;
         llmType?: 'OLLAMA' | 'GROQ' | 'ERROR';
+        date?: string;
       }[];
     }>(),
 

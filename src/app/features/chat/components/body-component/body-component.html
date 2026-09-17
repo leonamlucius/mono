@@ -2,34 +2,12 @@
   <div class="logo-container">
     <img src="/img/mono.svg" alt="Logo" class="logo" />
     <div class="logo-container-cards">
-      <!-- <div class="marquee-track">
-        <div
-          class="logo-container-info"
-          *ngFor=" let card of texts; let i = index"
-        >
-          <div
-            class="icon"
-            [innerHTML]="card.icon"
-            [ngClass]="i % 2 === 0 ? 'orange' : 'blue' "
-          ></div>
-          <p class="text" [innerHTML]="card.text"></p>
-        </div>
-
-        <div
-          class="logo-container-info"
-          *ngFor=" let card of texts; let i = index"
-        >
-          <div
-            class="icon"
-            [innerHTML]="card.icon"
-            [ngClass]="i % 2 === 0 ? 'orange' : 'blue' "
-          ></div>
-          <p class="text" [innerHTML]="card.text"></p>
-        </div>
-      </div> -->
-
       <owl-carousel-o [options]="customOptions">
-        <ng-template carouselSlide *ngFor="let card of texts; let i = index" [(ngModel)]="actualItemCarousel">
+        <ng-template
+          carouselSlide
+          *ngFor="let card of texts; let i = index"
+          [(ngModel)]="actualItemCarousel"
+        >
           <div class="logo-container-info">
             <div
               class="icon"
@@ -50,58 +28,72 @@
   >
     <app-filter-button-component></app-filter-button-component>
   </div>
-  <div
-    class="message-container"
-    *ngFor="let item of chatHistory(); let i = index"
-    [class.container-bot]="item.sendBy === 'Bot'"
-    [class.container-user]="item.sendBy === 'User'"
-    appIsVisible
-    (isVisibleChange)="divVisiblechange($event, i)"
-  >
-    <img
-      src="/img/{{ item.sendBy === 'Bot' ? 'mono.svg' : 'user.svg' }}"
-      alt="Logo"
-      class="logo"
-    />
+
+  <div class="item-message" *ngFor="let item of chatHistory(); let i = index">
     <div
-      [class.bot]="item.sendBy === 'Bot'"
-      [class.user]="item.sendBy === 'User'"
-      [class.loading]="item.loading"
-      class="message"
+      class="separator"
+      *ngIf="i === 0 || resolveDateKey(item?.date) !== resolveDateKey(chatHistory()[i - 1]?.date)"
     >
-      <p
-        [innerHTML]="item.text | markdown | highlight: (searchTerm$ | async)"
-        class="text"
-      ></p>
+      <hr class="line" />
 
-      <div class="loading-indicator" *ngIf="item.loading">
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-      </div>
+      <div class="date" [innerHTML]="formatDate(item.date)"></div>
 
-      <div class="actions">
-        <span class="llm-type" *ngIf="item.llmType"> {{ item.llmType }} </span>
+      <hr class="line" />
+    </div>
+    <div
+      class="message-container"
+      [class.container-bot]="item.sendBy === 'Bot'"
+      [class.container-user]="item.sendBy === 'User'"
+      appIsVisible
+      (isVisibleChange)="divVisiblechange($event, i)"
+    >
+      <img
+        src="/img/{{ item.sendBy === 'Bot' ? 'mono.svg' : 'user.svg' }}"
+        alt="Logo"
+        class="logo"
+      />
+      <div
+        [class.bot]="item.sendBy === 'Bot'"
+        [class.user]="item.sendBy === 'User'"
+        [class.loading]="item.loading"
+        class="message"
+      >
+        <p
+          [innerHTML]="item.text | markdown | highlight: (searchTerm$ | async)"
+          class="text"
+        ></p>
 
-        <div class="actions-buttons">
-          <button (click)="copyToClipboard(item.text)">
-            <span class="material-symbols-outlined"> content_copy </span>
-          </button>
+        <div class="loading-indicator" *ngIf="item.loading">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
 
-          <button
-            *ngIf="activeSpeechIndex() !== i"
-            type="button"
-            (click)="speechText(item.text, i)"
-            [class.disabled]="activeSpeechIndex() !== i && !this.textToSpeechService.isSpeechEnabled()"
-          >
-            <span class="material-symbols-outlined"> volume_up </span>
-          </button>
+        <div class="actions">
+          <span class="llm-type" *ngIf="item.llmType">
+            {{ item.llmType }}
+          </span>
 
-          <button *ngIf="activeSpeechIndex() === i" (click)="cancelSpeak()">
-            <span class="material-symbols-outlined" id="stop">
-              stop_circle
-            </span>
-          </button>
+          <div class="actions-buttons">
+            <button (click)="copyToClipboard(item.text)">
+              <span class="material-symbols-outlined"> content_copy </span>
+            </button>
+
+            <button
+              *ngIf="activeSpeechIndex() !== i"
+              type="button"
+              (click)="speechText(item.text, i)"
+              [class.disabled]="activeSpeechIndex() !== i && !this.textToSpeechService.isSpeechEnabled()"
+            >
+              <span class="material-symbols-outlined"> volume_up </span>
+            </button>
+
+            <button *ngIf="activeSpeechIndex() === i" (click)="cancelSpeak()">
+              <span class="material-symbols-outlined" id="stop">
+                stop_circle
+              </span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -109,5 +101,4 @@
 
   <app-scroll-button-component></app-scroll-button-component>
 </div>
-
 <app-warning></app-warning>

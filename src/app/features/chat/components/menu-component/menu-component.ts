@@ -19,6 +19,7 @@ import { MenuService } from '../../services/menu-service';
 import { TextToSpeechService } from '../../../../core/services/text-to-speech.service';
 import { SearchComponent } from '../../../../shared/components/search-component/search-component';
 import { WarningComponent } from '../../../../shared/components/warning-component/warning-component';
+import { TimelineComponent } from '../timeline-component/timeline-component';
 import { Subject } from 'rxjs';
 import {
   selectChatHistory,
@@ -36,6 +37,7 @@ import WaveSurfer from 'wavesurfer.js';
     FormsModule,
     WarningComponent,
     SearchComponent,
+    TimelineComponent,
   ],
   templateUrl: './menu-component.html',
   styleUrls: ['./menu-component.scss'],
@@ -53,7 +55,9 @@ export class MenuComponent implements OnInit, OnDestroy {
   ];
   public showModalInfo = signal(false);
 
-  public activeModal = signal<'info' | 'perfil' | 'settings' | null>(null);
+  public activeModal = signal<
+    'info' | 'perfil' | 'settings' | 'timeline' | null
+  >(null);
 
   public showSidebar = signal(false);
 
@@ -295,6 +299,14 @@ export class MenuComponent implements OnInit, OnDestroy {
       return;
     }
     this.activeModal.set('perfil');
+  }
+
+  public createModalTimeline(): void {
+    if (this.activeModal() === 'timeline') {
+      this.activeModal.set(null);
+      return;
+    }
+    this.activeModal.set('timeline');
   }
 
   public createModalSettings(): void {

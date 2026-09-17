@@ -6,6 +6,7 @@ import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
+import java.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -43,16 +44,28 @@ public class PgSqlChatMemory implements ChatMemory {
         List<ChatMessage> entities = repository.findByConversationIdOrderByCreatedAtAsc(conversationId);
 
         int start = Math.max(0, entities.size() - lastN);
-        List<ChatMessage> recentEntities = entities.subList(start, entities.size());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        return recentEntities.stream()
-                .map(e -> {
+        return entities.subList(start, entities.size())
+                .stream()
+                .<Message>map(e -> {
+                    Map<String, Object> metadata = Map.of(
+                            "hour", e.getCreatedAt().format(DateTimeFormatter.ofPattern("HH:mm")),
+                            "timestamp", e.getCreatedAt().format(formatter),
+                            "model", e.getModelName() != null
+                                    ? e.getModelName()
+                                    : "ASSISTANT");
+
                     if ("USER".equalsIgnoreCase(e.getMessageType())) {
-                        return (Message) new UserMessage(e.getContent());
-                    } else {
-                        String model = e.getModelName() != null ? e.getModelName() : "ASSISTANT";
-                        return (Message) new AssistantMessage(e.getContent(), Map.of("model", model));
+                        return new UserMessage(
+                                e.getContent(),
+                                List.of(),
+                                metadata);
                     }
+
+                    return new AssistantMessage(
+                            e.getContent(),
+                            metadata);
                 })
                 .toList();
     }

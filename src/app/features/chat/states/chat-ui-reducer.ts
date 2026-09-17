@@ -7,6 +7,7 @@ export interface ChatUiState {
     sendBy: 'User' | 'Bot';
     loading: boolean;
     llmType?: 'OLLAMA' | 'GROQ' | 'ERROR';
+    date?: string;
   }[];
   isInitialized: boolean;
   searchTerm: string;

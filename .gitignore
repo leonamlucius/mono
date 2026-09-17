@@ -51,5 +51,7 @@ Thumbs.db
 mono-api/.mvn/wrapper/maven-wrapper.jar
 mono-api/.env  
 
-pgdata
-pgadmin
+
+pgdata/
+pgadmin/
+.env

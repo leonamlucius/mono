@@ -16,7 +16,6 @@ export class HighlightPipe implements PipeTransform {
 
     if (!searchTerm || !searchTerm.trim()) return htmlContent;
 
-    console.log('HighlightPipe: htmlContent:', htmlContent);
     const escaped = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
     let safeContent = htmlContent as any;
