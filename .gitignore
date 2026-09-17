@@ -55,3 +55,4 @@ mono-api/.env
 pgdata/
 pgadmin/
 .env
+pgadmin/pgadmin4.db
