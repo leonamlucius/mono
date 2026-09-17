@@ -43,7 +43,7 @@ import WaveSurfer from 'wavesurfer.js';
   styleUrls: ['./menu-component.scss'],
 })
 export class MenuComponent implements OnInit, OnDestroy {
-  public vozes = [
+  public vozes = signal([
     {
       title: 'Voz A',
       name: 'Cadu',
@@ -52,7 +52,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       title: 'Voz B',
       name: 'Faber',
     },
-  ];
+  ]);
   public showModalInfo = signal(false);
 
   public activeModal = signal<
@@ -85,7 +85,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   public audioUrl: string = '';
 
-  public waveSurfers: Array<WaveSurfer | null> = [];
+  public waveSurfers = signal<Array<WaveSurfer | null>>([]);
   private audioUrls: Array<string> = [];
 
   @ViewChildren('waveformContainerMenu') waveformContainers!: QueryList<
@@ -131,7 +131,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.waveSurfers.forEach((waveSurferInstance) => {
+    this.waveSurfers().forEach((waveSurferInstance) => {
       waveSurferInstance?.destroy();
     });
 
@@ -140,7 +140,7 @@ export class MenuComponent implements OnInit, OnDestroy {
         URL.revokeObjectURL(audioUrl);
       }
     });
-    this.waveSurfers = [];
+    this.waveSurfers.set([]);
     this.audioUrls = [];
   }
 
@@ -153,11 +153,11 @@ export class MenuComponent implements OnInit, OnDestroy {
 
     container.nativeElement.innerHTML = '';
 
-    if (!this.waveSurfers[index]) {
-      this.waveSurfers[index] = null;
+    if (!this.waveSurfers()[index]) {
+      this.waveSurfers()[index] = null;
     }
 
-    this.waveSurfers[index]?.destroy();
+    this.waveSurfers()[index]?.destroy();
 
     const waveformContainer = container.nativeElement;
 
@@ -173,7 +173,11 @@ export class MenuComponent implements OnInit, OnDestroy {
       normalize: true,
     });
 
-    this.waveSurfers[index] = waveSurferInstance;
+    this.waveSurfers.update((instances) => {
+      const updatedInstances = [...instances];
+      updatedInstances[index] = waveSurferInstance;
+      return updatedInstances;
+    });
     return waveSurferInstance;
   }
   public changeVoice(voiceName: string, index: number): any {
@@ -196,11 +200,13 @@ export class MenuComponent implements OnInit, OnDestroy {
         voiceName.toLowerCase()
       )
       .then((res) => {
-        this.waveSurfers[index]?.play().then(() => {});
+        this.waveSurfers()
+          [index]?.play()
+          .then(() => {});
       });
 
-    this.waveSurfers[index]?.once('finish', () => {
-      this.waveSurfers[index]?.seekTo(0);
+    this.waveSurfers()[index]?.once('finish', () => {
+      this.waveSurfers()[index]?.seekTo(0);
       this.showIconSound.set(null);
       this.showChecked.set(null);
       this.isChangingVoice.set(false);
@@ -317,14 +323,14 @@ export class MenuComponent implements OnInit, OnDestroy {
 
     setTimeout(async () => {
       try {
-        for (const [index, voz] of this.vozes.entries()) {
+        for (const [index, voz] of this.vozes().entries()) {
           this.loopCounter++;
           const waveSurfer = this.initializeWaveformMenu(index);
 
           if (!waveSurfer) {
             continue;
           }
-          if (this.loopCounter <= this.vozes.length) {
+          if (this.loopCounter <= this.vozes().length) {
             const blob = await this.textToSpeechService.speakMute(
               `Olá! A voz do Mono foi alterada para ${voz.name}.`,
               voz.name
@@ -337,13 +343,13 @@ export class MenuComponent implements OnInit, OnDestroy {
             this.audioUrl = URL.createObjectURL(blob);
             this.audioUrls[index] = this.audioUrl;
 
-            waveSurfer.load(this.audioUrl);
+            await waveSurfer.load(this.audioUrl);
           } else {
-            this.audioUrls.forEach((url, i) => {
+            this.audioUrls.forEach(async (url, i) => {
               console.log(`Loading audio URL for index ${i}: ${url}`);
-              const waveSurfer = this.waveSurfers[i];
+              const waveSurfer = this.waveSurfers()[i];
               if (waveSurfer) {
-                waveSurfer.load(url);
+                await waveSurfer.load(url);
               }
             });
           }
@@ -353,7 +359,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       }
     }, 500);
 
-    this.waveSurfers = [];
+    this.waveSurfers.set([]);
   }
 
   public closeModal(): void {

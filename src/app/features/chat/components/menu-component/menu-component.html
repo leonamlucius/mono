@@ -221,7 +221,7 @@
           <div class="settings-options">
             <div
               class="voices"
-              *ngFor="let voz of vozes , index as i"
+              *ngFor="let voz of vozes() , index as i"
               [ngClass]="{'disabled': showIconSound() !== null && showIconSound() !== i }"
               (click)="changeVoice(voz.name, i)"
             >
@@ -245,8 +245,8 @@
 
               
 
-              <div #waveformContainerMenu class="waveform-visualizer" [ngClass]="{'active': waveSurfers.length == vozes.length }"></div>
-              <div class="loading" [ngClass]="{'active': waveSurfers.length < vozes.length}"></div>
+              <div #waveformContainerMenu class="waveform-visualizer" [ngClass]="{'active': waveSurfers().length == vozes().length }"></div>
+              <div class="loading" [ngClass]="{'active': waveSurfers().length < vozes().length}"></div>
             </div>
           </div>
         </div>
