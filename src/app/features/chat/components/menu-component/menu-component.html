@@ -1,5 +1,8 @@
 <div class="side-bar-overlay" [ngClass]="{'active': showSidebar()}">
-  <div class="modalSidebarOverlay" [ngClass]="{'active': activeModal() === 'timeline'}">
+  <div
+    class="modalSidebarOverlay"
+    [ngClass]="{'active': activeModal() === 'timeline'}"
+  >
     <div class="modalSidebar">
       <div class="modalContent">
         <div class="modalHeader">
@@ -13,15 +16,24 @@
 
         <div class="timeline-content">
           <p class="timeline-title">Consulte sua linha do tempo</p>
-           <div class="timeline-body">
+
+          <p class="timeline-subtitle">
+            O mono registra a primeira interação do dia em que ocorreu e mantém
+            um histórico detalhado de todas as atividades subsequentes.
+          </p>
+
+          <div class="timeline-body">
             <app-timeline-component></app-timeline-component>
-           </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="modalSidebarOverlay" [ngClass]="{'active': activeModal() === 'info'}">
+  <div
+    class="modalSidebarOverlay"
+    [ngClass]="{'active': activeModal() === 'info'}"
+  >
     <div class="modalSidebar">
       <div class="modalContent">
         <div class="modalHeader">
@@ -115,7 +127,10 @@
     </div>
   </div>
 
-  <div class="modalSidebarOverlay" [ngClass]="{'active': activeModal() === 'perfil'}">
+  <div
+    class="modalSidebarOverlay"
+    [ngClass]="{'active': activeModal() === 'perfil'}"
+  >
     <div class="modalSidebar">
       <div class="modalContent">
         <div class="modalHeader">
@@ -127,77 +142,87 @@
           </span>
         </div>
 
-        <form (ngSubmit)="onSubmit(nameInput.value)" #userForm="ngForm">
-          <div class="form-group">
-            <label class="required" for="name">Nome:</label>
+        <div class="perfil-content">
+          <p class="perfil-title">Perfil</p>
+          <p class="perfil-subtitle">
+            Edite e visualize suas informações pessoais abaixo.
+          </p>
 
-            <input
-              #nameInput
-              type="text"
-              id="name"
-              [(ngModel)]="userName"
-              name="name"
-              required
-              [ngClass]="{'active': editName() }"
-            />
-          </div>
-
-          <div class="form-flex">
+          <form (ngSubmit)="onSubmit(nameInput.value)" #userForm="ngForm">
             <div class="form-group">
-              <label for="email">Email:</label>
+              <label class="required" for="name">Nome:</label>
 
               <input
-                type="email"
-                id="email"
-                [(ngModel)]="userEmail"
-                name="email"
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="date">Data :</label>
-
-              <input
-                type="date"
-                id="date"
-                [(ngModel)]="userDate"
-                name="date"
+                #nameInput
+                type="text"
+                id="name"
+                [(ngModel)]="userName"
+                name="name"
                 required
+                [ngClass]="{'active': editName() }"
               />
             </div>
-          </div>
 
-          <div class="form-buttons">
-            <button class="cancel" type="button" (click)="closeModal()">
-              Cancelar
-            </button>
+            <div class="form-flex">
+              <div class="form-group">
+                <label for="email">Email:</label>
 
-            <div class="form-buttons-save-edit">
-              <button class="edit" type="button" (click)="startEditName()">
-                Editar
-              </button>
-              <button
-                class="save"
-                type="submit"
-                [ngClass]="{'active': editName() }"
-              >
-                <span
-                  *ngIf="showLoading()"
-                  class="material-symbols-outlined"
-                  id="loadingIcon"
-                >
-                  progress_activity
-                </span>
-                <p *ngIf="!showLoading()">Salvar</p>
-              </button>
+                <input
+                  type="email"
+                  id="email"
+                  [(ngModel)]="userEmail"
+                  name="email"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="date">Data :</label>
+
+                <input
+                  type="date"
+                  id="date"
+                  [(ngModel)]="userDate"
+                  name="date"
+                  required
+                />
+              </div>
             </div>
-          </div>
-        </form>
+
+            <div class="form-buttons">
+              <button class="cancel" type="button" (click)="closeModal()">
+                Cancelar
+              </button>
+
+              <div class="form-buttons-save-edit">
+                <button class="edit" type="button" (click)="startEditName()">
+                  Editar
+                </button>
+                <button
+                  class="save"
+                  type="submit"
+                  [ngClass]="{'active': editName() }"
+                >
+                  <span
+                    *ngIf="showLoading()"
+                    class="material-symbols-outlined"
+                    id="loadingIcon"
+                  >
+                    progress_activity
+                  </span>
+                  <p *ngIf="!showLoading()">Salvar</p>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="modalSidebarOverlay" [ngClass]="{'active': activeModal() === 'settings'}">
+  <div
+    class="modalSidebarOverlay"
+    [ngClass]="{'active': activeModal() === 'settings'}"
+  >
     <div class="modalSidebar">
       <div class="modalContent">
         <div class="modalHeader">
@@ -243,10 +268,15 @@
                 </span>
               </div>
 
-              
-
-              <div #waveformContainerMenu class="waveform-visualizer" [ngClass]="{'active': waveSurfers().length == vozes().length }"></div>
-              <div class="loading" [ngClass]="{'active': waveSurfers().length < vozes().length}"></div>
+              <div
+                #waveformContainerMenu
+                class="waveform-visualizer"
+                [ngClass]="{'active': waveSurfers().length == vozes().length }"
+              ></div>
+              <div
+                class="loading"
+                [ngClass]="{'active': waveSurfers().length < vozes().length}"
+              ></div>
             </div>
           </div>
         </div>
