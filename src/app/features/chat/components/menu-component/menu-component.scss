@@ -141,7 +141,7 @@ $grey-primary: #a8a5a5;
   width: 100%;
 }
 
-.modalSidebarOverlay.active{
+.modalSidebarOverlay.active {
   display: block;
 }
 .modalSidebar {
@@ -153,9 +153,10 @@ $grey-primary: #a8a5a5;
   box-sizing: border-box;
   border-radius: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  white-space: pre-wrap;
+  white-space: normal;
   text-align: justify;
   text-indent: 10px;
+  hyphens: auto;
   display: flex;
   flex-direction: column;
 }
@@ -290,17 +291,20 @@ form .form-group {
   padding: 10px 20px;
   box-sizing: border-box;
   text-indent: 0;
-  text-align: justify;
+  text-align: left;
   hyphens: auto;
   -webkit-hyphens: auto;
   -ms-hyphens: auto;
   overflow: hidden;
   overflow-y: auto;
-  
 }
 
 .timeline-content .timeline-title {
   font-size: 1.35em;
+  margin: 0;
+}
+.timeline-content .timeline-subtitle {
+  font-size: 1.03em;
   margin: 0;
 }
 
@@ -341,6 +345,35 @@ form .form-group {
 }
 
 .settings-content .settings-subtitle {
+  font-size: 1.03em;
+}
+
+.perfil-content {
+  width: 100%;
+  height: calc(100dvh - 81px);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  white-space: wrap;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  text-indent: 0;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.perfil-content p {
+  margin: 0;
+}
+
+.perfil-title {
+  font-size: 1.35em;
+  margin-bottom: 5px;
+}
+
+.perfil-subtitle {
   font-size: 1.03em;
 }
 
@@ -652,11 +685,11 @@ form .form-group {
   }
 
   .settings-content .settings-title {
-    font-size: 1.15em;
+    font-size: 1.35em;
   }
 
   .settings-content .settings-subtitle {
-    font-size: 0.93em;
+    font-size: 0.8em;
   }
 
   .settings-content .settings-options {
@@ -679,6 +712,27 @@ form .form-group {
 
   .settings-content .settings-options .voices {
     flex-direction: column;
+  }
+
+
+  .perfil-content .perfil-title {
+    font-size: 1.35em;
+  }
+
+  .perfil-content .perfil-subtitle {
+    font-size: 0.8em;
+  }
+
+  .perfil-content form {
+    padding: 0;
+  }
+
+  .timeline-content .timeline-title {
+    font-size: 1.35em;
+  }
+
+  .timeline-content .timeline-subtitle {
+    font-size: 0.8em;
   }
 }
 
